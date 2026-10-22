@@ -195,6 +195,7 @@ export function normalizeQuestion(rawInput: unknown): Question {
     source,
     status,
     ...(officialAnswer ? { officialAnswer } : {}),
+    ...(Array.isArray(raw.adaptedFrom) ? { adaptedFrom: raw.adaptedFrom.filter((v): v is string => typeof v === 'string' && v.length > 0).slice(0, 5) } : {}),
     ...(raw.contextId ? { contextId: String(raw.contextId).trim() } : {})
   };
 }

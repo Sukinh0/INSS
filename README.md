@@ -1,5 +1,22 @@
 # Rumo ao INSS 🌻
 
+## Novidade — modo Alternativas A–E (treino adaptado)
+
+Em **Simulados → Formato**, a estudante pode escolher:
+
+- **Original • Certo ou Errado**: preserva cada item da banca, com opção de nota Cebraspe (+1/−1/0) ou treino leve.
+- **Alternativas A–E**: monta uma questão com **cinco afirmações C/E já cadastradas da mesma matéria**. Quatro têm uma classificação e apenas uma tem a classificação oposta. A pergunta pede para identificar a alternativa correta ou incorreta. Nota: +1 pelo exercício acertado; zero por erro ou branco.
+
+**Transparência:** A–E gerado **não é questão oficial aplicada na prova**, mesmo quando todas as afirmações foram retiradas de itens oficiais. O exercício fica marcado **"Treino adaptado"** e suas cinco questões de origem ficam em `adaptedFrom`; não é adicionado ao banco permanente.
+
+**Disponibilidade:** cada exercício exige 5 itens completos do mesmo assunto geral (matéria), com gabaritos compatíveis; contextos incompletos/anulados/revisão não entram. A quantidade máxima pode ser menor que no modo Certo/Errado. Para mais exercícios, selecione "Todas misturadas".
+
+**Histórico:** tentativas antigas são interpretadas como Certo/Errado; novas têm `exerciseFormat`. O gráfico de evolução pode ser filtrado por formato. O ranking permanece amistoso: 10 pontos por exercício correto em ambos os modos, sem alegação de equivalência pedagógica.
+
+**Validar antes do deploy:** `npm ci && npm test && npm run build`. Testar geração A–E com uma única alternativa válida, ausência de repetição das afirmações na mesma sessão, filtros de origem/matéria, apresentação da correção, backup/restore, smartphone e sessões antigas.
+
+---
+
 Um aplicativo simples, mobile-first, para praticar questões e acompanhar a evolução dos estudos para **Técnico do Seguro Social (INSS)**.
 
 > **Não é um produto oficial do INSS ou do Cebraspe.** As 234 questões que já acompanham o aplicativo (114 base + 120 da expansão Certo/Errado) são **autorais, de treino**, não são transcrições de provas. Legislação e editais podem mudar. Confira tudo em fontes atuais antes de estudar para um concurso futuro.

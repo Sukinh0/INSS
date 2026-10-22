@@ -1,6 +1,7 @@
 export type Answer = 'A' | 'B' | 'C' | 'D' | 'E';
 export type Selection = Answer | null;
 export type GradeMode = 'normal' | 'cebraspe';
+export type ExerciseFormat = 'ce' | 'alternatives';
 
 export type OriginKind = 'official' | 'authorial' | 'unverified';
 export type Verification = 'verified' | 'pending';
@@ -40,6 +41,7 @@ export type Question = {
   source: SourceInfo;
   status: PublicationStatus;
   officialAnswer?: 'C' | 'E' | 'X'; // X para itens anulados em gabarito definitivo
+  adaptedFrom?: string[]; // IDs dos 5 itens C/E usados em exercício adaptado A–E
   contextId?: string; // enunciado dependente de texto ou tabela compartilhada
 };
 
@@ -58,6 +60,7 @@ export type Attempt = {
   finishedAt: string;
   elapsedSeconds: number;
   gradeMode: GradeMode;
+  exerciseFormat?: ExerciseFormat; // ausente em históricos antigos: C/E
   originFilter?: OriginFilter;
   questionIds: string[];
   snapshots: Question[];
@@ -74,6 +77,7 @@ export type ActiveQuiz = {
   profileId: string;
   startedAt: string;
   gradeMode: GradeMode;
+  exerciseFormat?: ExerciseFormat;
   originFilter?: OriginFilter;
   snapshots: Question[];
   answers: Record<string, Selection>;

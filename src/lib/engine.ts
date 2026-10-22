@@ -66,6 +66,7 @@ export function calculateResult(quiz: ActiveQuiz, now: string): Attempt {
     id: crypto.randomUUID(), profileId: quiz.profileId, profileName: '',
     startedAt: quiz.startedAt, finishedAt: now, elapsedSeconds: Math.round(dateDelta),
     gradeMode: quiz.gradeMode,
+    exerciseFormat: quiz.exerciseFormat ?? 'ce',
     originFilter: quiz.originFilter,
     questionIds: quiz.snapshots.map(q => q.id),
     snapshots: quiz.snapshots, answers: quiz.answers,
