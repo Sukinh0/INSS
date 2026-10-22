@@ -5,3 +5,4 @@ dist
 coverage
 *.log
 *.tsbuildinfo
+public/inss_2022_60_para_importar.json

@@ -84,6 +84,33 @@ export function parseQuestions(content: string, fileName: string): Question[] {
       throw new Error(`Questão ${index + 1}: preencha id, subject, topic, statement e explanation.`);
     }
 
+    // Validação estrita de contexto para o caderno oficial INSS 2022 (760_INSS_001_01)
+    const itemNum = Number((q.source as Record<string,unknown>)?.itemNumber || q.itemNumber);
+    const isBooklet760 = String((q.source as Record<string,unknown>)?.bookletCode || q.bookletCode || '').includes('760_INSS_001_01') || id.includes('760-001') || id.includes('inss-oficial-cebraspe-2022');
+    const isOfficialCandidate = (q.source as Record<string,unknown>)?.kind === 'official' || q.kind === 'official' || isBooklet760;
+
+    if (isOfficialCandidate ? statement.length < 25 : statement.length < 5) {
+      throw new Error(`Questão ${index + 1}: enunciado muito curto ou incompleto.`);
+    }
+
+    // Impede itens sintéticos gerados ou parafraseados por IA
+    if (/(?:como intelig[eê]ncia artificial|par[áa]frase gerada|reescrita por ia|enunciado simulado por ia|gerado por chatgpt|gerado por claude|gerado por llm)/i.test(statement)) {
+      throw new Error(`Questão ${index + 1}: paráfrase sintética de IA não é permitida como item de prova oficial.`);
+    }
+
+    if (isBooklet760 || (itemNum >= 51 && itemNum <= 120)) {
+      if (itemNum >= 91 && itemNum <= 95) {
+        if (!/defeso/i.test(statement) || !/Determinada regi/i.test(statement)) {
+          throw new Error(`Questão ${index + 1}: os itens 91 a 95 exigem o enunciado de contexto compartilhado sobre o seguro-defeso.`);
+        }
+      }
+      if (itemNum === 107) {
+        if (!/103\/2019/i.test(statement)) {
+          throw new Error(`Questão ${index + 1}: o item 107 exige o contexto da Emenda Constitucional 103/2019.`);
+        }
+      }
+    }
+
     if (!isAnnulled) {
       if (options ? (options.length < 4 || options.length > 5 || options.some(x => !x || x.length > 1000) || !'ABCDE'.slice(0,options.length).includes(correctRaw)) : !['C','E'].includes(correctRaw)) {
         throw new Error(`Questão ${index + 1}: gabarito inválido para o formato de alternativas.`);

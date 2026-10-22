@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
-  ArrowLeft, ArrowRight, Award, BookOpen, Brain, CalendarDays, ChartNoAxesCombined,
+  ArrowLeft, ArrowRight, Award, BookOpen, Brain, Building2, CalendarDays, ChartNoAxesCombined,
   Check, CheckCircle2, ChevronDown, ChevronRight, CircleHelp, Clock3, Cloud,
   Download, ExternalLink, FileQuestion, FileUp, GraduationCap, Heart, Home,
   Lightbulb, LogOut, Medal, Menu, Plus, RotateCcw, Search, Settings2, ShieldCheck,
@@ -190,6 +190,10 @@ export default function App() {
       const currentMap = new Map(custom.map(q => [q.id,q]));
       for (const item of items) {
         if (BASE.some(q => q.id === item.id)) throw new Error(`ID ${item.id} pertence à base original. Use outro ID.`);
+        const existing = currentMap.get(item.id);
+        if (existing && (existing.correct !== item.correct || existing.statement !== item.statement)) {
+          throw new Error(`Conflito no item ${item.id}: texto ou gabarito divergem do registro existente.`);
+        }
         currentMap.set(item.id,item);
       }
       const next = [...currentMap.values()];
@@ -200,6 +204,34 @@ export default function App() {
       setBankTab('questions');
       if (authUid === activeId && profile.cloud) saveCloudCustom(activeId,next).catch(() => setToast('Importadas localmente, mas a sincronização falhou.'));
     } catch(e) {setToast((e as Error).message);} finally { if (fileInput.current) fileInput.current.value = ''; }
+  }
+  async function loadOfficialBatch() {
+    if (!profile) return;
+    try {
+      const res = await fetch('/inss_2022_60_para_importar.json');
+      if (!res.ok) throw new Error('Arquivo de lote oficial não encontrado. Use o botão "Selecionar arquivo" para importar o JSON gerado pelo extrator.');
+      const text = await res.text();
+      const items = parseQuestions(text, 'inss_2022_60_para_importar.json');
+      const report = analyzeImport(items);
+      const currentMap = new Map(custom.map(q => [q.id,q]));
+      for (const item of items) {
+        if (BASE.some(q => q.id === item.id)) throw new Error(`ID ${item.id} pertence à base original. Use outro ID.`);
+        const existing = currentMap.get(item.id);
+        if (existing && (existing.correct !== item.correct || existing.statement !== item.statement)) {
+          throw new Error(`Conflito no item ${item.id}: texto ou gabarito divergem do registro existente.`);
+        }
+        currentMap.set(item.id,item);
+      }
+      const next = [...currentMap.values()];
+      if (next.length > 400) throw new Error('Limite de 400 questões personalizadas por perfil.');
+      if (!storage.saveCustom(activeId,next)) throw new Error('Espaço local insuficiente. Exporte antes seus dados.');
+      setCustom(next);
+      setToast(`${items.length} questões oficiais carregadas (${report.official} oficiais verificadas, 0 anuladas)!`);
+      setBankTab('questions');
+      if (authUid === activeId && profile.cloud) saveCloudCustom(activeId,next).catch(() => setToast('Importadas localmente, mas a sincronização falhou.'));
+    } catch(e) {
+      setToast((e as Error).message);
+    }
   }
   function clearCustom() {
     if (!custom.length || !confirm(`Apagar as ${custom.length} questões personalizadas? O histórico dos simulados será preservado.`)) return;
@@ -382,12 +414,34 @@ export default function App() {
             ) : (
               <div className="question-list">{qInBank.slice(0,100).map((q,i) => {
                 const badge = formatOriginBadge(q.source, q.status);
-                return <div key={q.id} className="bank-question"><div className="bank-question-top"><span>QUESTÃO {i+1}</span><Badge tone={badge.tone}>{badge.icon} {badge.short}</Badge></div><strong>{q.statement}</strong>{q.options?.length && <ol className="bank-options">{q.options.map((option,i)=><li key={i}><b>{String.fromCharCode(65+i)}.</b> {option}</li>)}</ol>}<div className="bank-question-footer"><span>{q.subject} · {q.topic}</span><details><summary>Ver gabarito</summary><p><b>{formatAnswer(q.correct,q.options)}.</b> {q.explanation}</p></details></div></div>;
+                return <div key={q.id} className="bank-question">
+                  <div className="bank-question-top">
+                    <span>QUESTÃO {i+1}</span>
+                    <Badge tone={badge.tone}>{badge.icon} {badge.short}</Badge>
+                    {q.source.kind === 'official' && (
+                      <span className="official-item-tag">
+                        🏛️ Cebraspe · INSS {q.source.examYear || 2022} · item {q.source.itemNumber}
+                      </span>
+                    )}
+                    {q.source.questionPaperUrl && (
+                      <a href={q.source.questionPaperUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Caderno <ExternalLink size={12}/></a>
+                    )}
+                    {q.source.definitiveKeyUrl && (
+                      <a href={q.source.definitiveKeyUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Gabarito definitivo <ExternalLink size={12}/></a>
+                    )}
+                  </div>
+                  <strong>{q.statement}</strong>
+                  {q.options?.length && <ol className="bank-options">{q.options.map((option,i)=><li key={i}><b>{String.fromCharCode(65+i)}.</b> {option}</li>)}</ol>}
+                  <div className="bank-question-footer">
+                    <span>{q.subject} · {q.topic}</span>
+                    <details><summary>Ver gabarito</summary><p><b>{formatAnswer(q.correct,q.options)}.</b> {q.explanation}</p></details>
+                  </div>
+                </div>;
               })}{qInBank.length>100 && <p className="helper-center">Exibindo 100 de {qInBank.length} questões. Refine sua busca para encontrar outras.</p>}{!qInBank.length && <Empty title="Nenhuma questão encontrada" detail="Tente outra palavra-chave ou outra matéria."/>}</div>
             )}
           </section>}
           {bankTab==='sources' && <section className="panel bank-panel"><div className="panel-header"><div><h3>Provas e materiais de referência</h3><p className="muted">Links para consultar documentos externos.</p></div></div><div className="sources-list">{SOURCES.map(s=><a href={s.url} key={s.title} target="_blank" rel="noopener noreferrer"><span className="source-icon"><FileQuestion size={21}/></span><span><strong>{s.title}</strong><small>{s.desc}</small></span><Badge tone="neutral">{s.year}</Badge><ExternalLink size={16}/></a>)}</div><p className="bank-warning"><CircleHelp size={17}/> Links incluem sites oficiais e índices de terceiros. A importação automática de PDFs de provas e gabaritos ainda não está incluída: para adicionar questões ao treino, utilize o formato JSON ou CSV da aba Importar e confira os gabaritos.</p></section>}
-          {bankTab==='import' && <section className="panel bank-panel"><div className="import-hero"><span className="import-icon"><FileUp size={29}/></span><h3>Monte sua própria biblioteca</h3><p>Adicione questões de materiais que você possui em JSON ou CSV, com enunciado, matéria, gabarito e explicação. O sistema aceita Certo/Errado e múltipla escolha (4 ou 5 alternativas). As questões serão integradas aos simulados.</p><input ref={fileInput} type="file" accept=".json,.csv,application/json,text/csv" hidden onChange={e => importFile(e.target.files?.[0])}/><button className="btn btn-primary" onClick={() => fileInput.current?.click()}><FileUp size={18}/> Selecionar arquivo</button><div className="import-actions"><button className="text-link" onClick={() => download(JSON.stringify(exampleQuestions,null,2),'modelo-questoes-inss.json')}>Baixar modelo JSON <Download size={15}/></button><button className="text-link" onClick={() => download('id,subject,topic,statement,correct,explanation,origin,sourceUrl,optionA,optionB,optionC,optionD,optionE\nminha-001,Seguridade Social,Conceitos,\"A seguridade social inclui saúde previdência e assistência social.\",C,\"Conforme artigo 194 da Constituição.\",Meu material,,,,,,\nminha-002,Português,Interpretação,Marque a alternativa correta.,B,Explicação da alternativa B,Prova antiga,,Opção 1,Opção 2,Opção 3,Opção 4,Opção 5','modelo-questoes-inss.csv','text/csv;charset=utf-8')}>Baixar modelo CSV <Download size={15}/></button></div></div>{custom.length>0 && <div className="import-footer"><span><CheckCircle2 size={17}/> {custom.length} questões personalizadas cadastradas.</span><div><button className="text-link" onClick={() => download(JSON.stringify(custom,null,2),'minhas-questoes-inss.json')}>Exportar questões <Download size={16}/></button><button className="text-link danger" onClick={clearCustom}><Trash2 size={16}/> Apagar questões</button></div></div>}<div className="bank-warning"><ShieldCheck size={17}/> No modo Google, as questões personalizadas também são sincronizadas. Arquivos com dados incorretos ou gabaritos desatualizados podem afetar o resultado; revise antes de importar.</div></section>}
+          {bankTab==='import' && <section className="panel bank-panel"><div className="import-hero"><span className="import-icon"><FileUp size={29}/></span><h3>Monte sua própria biblioteca</h3><p>Adicione questões de materiais que você possui em JSON ou CSV, com enunciado, matéria, gabarito e explicação. O sistema aceita Certo/Errado e múltipla escolha (4 ou 5 alternativas). As questões serão integradas aos simulados.</p><input ref={fileInput} type="file" accept=".json,.csv,application/json,text/csv" hidden onChange={e => importFile(e.target.files?.[0])}/><div style={{display:'flex',gap:'10px',flexWrap:'wrap',justifyContent:'center'}}><button className="btn btn-primary" onClick={() => fileInput.current?.click()}><FileUp size={18}/> Selecionar arquivo</button><button className="btn btn-outline" onClick={loadOfficialBatch}><Building2 size={18}/> Carregar Lote Oficial (60 itens INSS 2022)</button></div><div className="import-actions"><button className="text-link" onClick={() => download(JSON.stringify(exampleQuestions,null,2),'modelo-questoes-inss.json')}>Baixar modelo JSON <Download size={15}/></button><button className="text-link" onClick={() => download('id,subject,topic,statement,correct,explanation,origin,sourceUrl,optionA,optionB,optionC,optionD,optionE\nminha-001,Seguridade Social,Conceitos,\"A seguridade social inclui saúde previdência e assistência social.\",C,\"Conforme artigo 194 da Constituição.\",Meu material,,,,,,\nminha-002,Português,Interpretação,Marque a alternativa correta.,B,Explicação da alternativa B,Prova antiga,,Opção 1,Opção 2,Opção 3,Opção 4,Opção 5','modelo-questoes-inss.csv','text/csv;charset=utf-8')}>Baixar modelo CSV <Download size={15}/></button></div></div>{custom.length>0 && <div className="import-footer"><span><CheckCircle2 size={17}/> {custom.length} questões personalizadas cadastradas.</span><div><button className="text-link" onClick={() => download(JSON.stringify(custom,null,2),'minhas-questoes-inss.json')}>Exportar questões <Download size={16}/></button><button className="text-link danger" onClick={clearCustom}><Trash2 size={16}/> Apagar questões</button></div></div>}<div className="bank-warning"><ShieldCheck size={17}/> No modo Google, as questões personalizadas também são sincronizadas. Arquivos com dados incorretos ou gabaritos desatualizados podem afetar o resultado; revise antes de importar.</div></section>}
         </>}
       </main>
     </div>
@@ -406,7 +460,7 @@ function QuizView({quiz,onAnswer,onCurrent,onFinish,onExit}:{quiz:ActiveQuiz,onA
   const last = quiz.current === quiz.snapshots.length - 1;
   const originBadge = formatOriginBadge(q.source, q.status);
   function finish() {if (answered < quiz.snapshots.length && !confirm(`Você deixou ${quiz.snapshots.length-answered} questão(ões) em branco. Deseja finalizar assim mesmo?`)) return;onFinish();}
-  return <><div className="quiz-top"><div><button className="text-link" onClick={onExit}><ArrowLeft size={17}/> Salvar e sair</button><h1>Hora de praticar! <span>🧠</span></h1><p>Leia com calma. Você consegue!</p></div><div className="quiz-timer"><Clock3 size={18}/>{formatTime(elapsed)}</div></div><div className="quiz-layout"><section className="panel quiz-card"><div className="quiz-progress-head"><span>QUESTÃO {quiz.current+1} DE {quiz.snapshots.length}</span><span>{Math.round(answered/quiz.snapshots.length*100)}% respondidas</span></div><div className="progress-track"><div style={{width:`${answered/quiz.snapshots.length*100}%`}}/></div><div className="question-meta"><Badge tone={originBadge.tone}>{originBadge.icon} {originBadge.short}</Badge><Badge>{q.subject}</Badge><Badge tone="neutral">{q.topic}</Badge>{q.source.questionPaperUrl && <a href={q.source.questionPaperUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Caderno <ExternalLink size={12}/></a>}</div><h2>{q.statement}</h2><p className="question-prompt">{q.options?.length ? 'Assinale a alternativa correta.' : 'Julgue a afirmação acima como certa ou errada.'}</p><div className="answer-list">{q.options?.length ? q.options.map((option,i) => {const letter = String.fromCharCode(65+i) as Selection;return <button key={letter} className={`answer-option ${selection===letter?'chosen':''}`} onClick={() => onAnswer(selection===letter?null:letter)}><span className="answer-letter">{letter}</span><div><strong>{option}</strong></div><span className="answer-radio">{selection===letter&&<Check size={17}/>}</span></button>;}) : <><button className={`answer-option ${selection==='C'?'chosen':''}`} onClick={() => onAnswer(selection==='C'?null:'C')}><span className="answer-letter">C</span><div><strong>Certo</strong><small>A afirmação está correta</small></div><span className="answer-radio">{selection==='C'&&<Check size={17}/>}</span></button><button className={`answer-option ${selection==='E'?'chosen':''}`} onClick={() => onAnswer(selection==='E'?null:'E')}><span className="answer-letter">E</span><div><strong>Errado</strong><small>A afirmação está incorreta</small></div><span className="answer-radio">{selection==='E'&&<Check size={17}/>}</span></button></>}</div><div className="quiz-controls"><button className="btn btn-outline" disabled={quiz.current===0} onClick={()=>onCurrent(quiz.current-1)}><ArrowLeft size={17}/> Anterior</button><div className="question-counter">{quiz.current+1} / {quiz.snapshots.length}</div>{last?<button className="btn btn-primary" onClick={finish}>Finalizar <Check size={17}/></button>:<button className="btn btn-primary" onClick={()=>onCurrent(quiz.current+1)}>Próxima <ArrowRight size={17}/></button>}</div></section><aside className="panel quiz-aside"><div className="panel-header"><h3>Seu simulado</h3><Badge tone="neutral">{summarizeMode(quiz.gradeMode)}</Badge></div><div className="quiz-progress-label"><span>Respondidas</span><strong>{answered}/{quiz.snapshots.length}</strong></div><div className="question-navigator">{quiz.snapshots.map((item,i)=><button key={item.id} aria-label={`Ir para questão ${i+1}`} className={`${i===quiz.current?'current':''} ${quiz.answers[item.id]!=null?'answered':''}`} onClick={()=>onCurrent(i)}>{i+1}</button>)}</div><div className="navigator-legend"><span><i className="legend-done"/> Respondida</span><span><i className="legend-current"/> Atual</span><span><i className="legend-blank"/> Em branco</span></div><button className="btn btn-outline full" onClick={finish}>Finalizar simulado <Check size={17}/></button><p className="helper-center">Suas respostas são salvas automaticamente.</p></aside></div></>;
+  return <><div className="quiz-top"><div><button className="text-link" onClick={onExit}><ArrowLeft size={17}/> Salvar e sair</button><h1>Hora de praticar! <span>🧠</span></h1><p>Leia com calma. Você consegue!</p></div><div className="quiz-timer"><Clock3 size={18}/>{formatTime(elapsed)}</div></div><div className="quiz-layout"><section className="panel quiz-card"><div className="quiz-progress-head"><span>QUESTÃO {quiz.current+1} DE {quiz.snapshots.length}</span><span>{Math.round(answered/quiz.snapshots.length*100)}% respondidas</span></div><div className="progress-track"><div style={{width:`${answered/quiz.snapshots.length*100}%`}}/></div><div className="question-meta"><Badge tone={originBadge.tone}>{originBadge.icon} {originBadge.short}</Badge>{q.source.kind === 'official' && <span className="official-item-tag">🏛️ Cebraspe · INSS {q.source.examYear || 2022} · item {q.source.itemNumber || q.id}</span>}<Badge>{q.subject}</Badge><Badge tone="neutral">{q.topic}</Badge>{q.source.questionPaperUrl && <a href={q.source.questionPaperUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Caderno <ExternalLink size={12}/></a>}{q.source.definitiveKeyUrl && <a href={q.source.definitiveKeyUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Gabarito oficial <ExternalLink size={12}/></a>}</div><h2>{q.statement}</h2><p className="question-prompt">{q.options?.length ? 'Assinale a alternativa correta.' : 'Julgue a afirmação acima como certa ou errada.'}</p><div className="answer-list">{q.options?.length ? q.options.map((option,i) => {const letter = String.fromCharCode(65+i) as Selection;return <button key={letter} className={`answer-option ${selection===letter?'chosen':''}`} onClick={() => onAnswer(selection===letter?null:letter)}><span className="answer-letter">{letter}</span><div><strong>{option}</strong></div><span className="answer-radio">{selection===letter&&<Check size={17}/>}</span></button>;}) : <><button className={`answer-option ${selection==='C'?'chosen':''}`} onClick={() => onAnswer(selection==='C'?null:'C')}><span className="answer-letter">C</span><div><strong>Certo</strong><small>A afirmação está correta</small></div><span className="answer-radio">{selection==='C'&&<Check size={17}/>}</span></button><button className={`answer-option ${selection==='E'?'chosen':''}`} onClick={() => onAnswer(selection==='E'?null:'E')}><span className="answer-letter">E</span><div><strong>Errado</strong><small>A afirmação está incorreta</small></div><span className="answer-radio">{selection==='E'&&<Check size={17}/>}</span></button></>}</div><div className="quiz-controls"><button className="btn btn-outline" disabled={quiz.current===0} onClick={()=>onCurrent(quiz.current-1)}><ArrowLeft size={17}/> Anterior</button><div className="question-counter">{quiz.current+1} / {quiz.snapshots.length}</div>{last?<button className="btn btn-primary" onClick={finish}>Finalizar <Check size={17}/></button>:<button className="btn btn-primary" onClick={()=>onCurrent(quiz.current+1)}>Próxima <ArrowRight size={17}/></button>}</div></section><aside className="panel quiz-aside"><div className="panel-header"><h3>Seu simulado</h3><Badge tone="neutral">{summarizeMode(quiz.gradeMode)}</Badge></div><div className="quiz-progress-label"><span>Respondidas</span><strong>{answered}/{quiz.snapshots.length}</strong></div><div className="question-navigator">{quiz.snapshots.map((item,i)=><button key={item.id} aria-label={`Ir para questão ${i+1}`} className={`${i===quiz.current?'current':''} ${quiz.answers[item.id]!=null?'answered':''}`} onClick={()=>onCurrent(i)}>{i+1}</button>)}</div><div className="navigator-legend"><span><i className="legend-done"/> Respondida</span><span><i className="legend-current"/> Atual</span><span><i className="legend-blank"/> Em branco</span></div><button className="btn btn-outline full" onClick={finish}>Finalizar simulado <Check size={17}/></button><p className="helper-center">Suas respostas são salvas automaticamente.</p></aside></div></>;
 }
 
 function ResultView({result,filter,setFilter,onReturn,onAgain,onReview}:{result:Attempt,filter:'wrong'|'all',setFilter:(v:'wrong'|'all')=>void,onReturn:()=>void,onAgain:()=>void,onReview:()=>void}) {
@@ -421,7 +475,15 @@ function ResultView({result,filter,setFilter,onReturn,onAgain,onReview}:{result:
     return <div className={`review-item ${good?'good':'bad'}`} key={q.id}>
       <div className="review-top">
         <Badge tone={badge.tone}>{badge.icon} {badge.short}</Badge>
+        {q.source.kind === 'official' && (
+          <span className="official-item-tag">
+            🏛️ Cebraspe · INSS {q.source.examYear || 2022} · item {q.source.itemNumber || q.id}
+          </span>
+        )}
         <Badge tone="neutral">{q.subject}</Badge>
+        {q.source.kind === 'official' && q.source.questionPaperUrl && (
+          <a href={q.source.questionPaperUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Caderno <ExternalLink size={12}/></a>
+        )}
         {q.source.kind === 'official' && q.source.definitiveKeyUrl && (
           <a href={q.source.definitiveKeyUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Gabarito definitivo <ExternalLink size={12}/></a>
         )}
@@ -431,6 +493,9 @@ function ResultView({result,filter,setFilter,onReturn,onAgain,onReview}:{result:
       <div className="answer-comparison">
         <span>Sua resposta: <strong>{formatAnswer(response,q.options)}</strong></span>
         <span>Gabarito: <strong>{formatAnswer(q.correct,q.options)}</strong></span>
+        {q.source.kind === 'official' && (
+          <span className="official-key-pill">🏛️ Gabarito oficial Cebraspe: {q.officialAnswer || q.correct}</span>
+        )}
       </div>
       <button className="text-link" onClick={()=>setExpanded(prev=>open?prev.filter(id=>id!==q.id):[...prev,q.id])}>{open?'Ocultar explicação':'Entender a resposta'} <ChevronDown size={15}/></button>
       {open && <div className="answer-explanation">
