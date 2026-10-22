@@ -39,7 +39,8 @@ export function parseBackup(raw: string, targetProfileId: string, targetName: st
     const originFilter: OriginFilter | undefined = (entry.originFilter === 'official' || entry.originFilter === 'authorial' || entry.originFilter === 'mixed' || entry.originFilter === 'all')
       ? entry.originFilter
       : undefined;
-    const quiz: ActiveQuiz = { profileId: targetProfileId, startedAt, gradeMode, originFilter, snapshots, answers, current: 0 };
+    const exerciseFormat = entry.exerciseFormat === 'alternatives' ? 'alternatives' : 'ce';
+    const quiz: ActiveQuiz = { profileId: targetProfileId, startedAt, gradeMode: exerciseFormat === 'alternatives' ? 'normal' : gradeMode, exerciseFormat, originFilter, snapshots, answers, current: 0 };
     const calculated = calculateResult(quiz, finishedAt);
     const originalId = typeof entry.id === 'string' && entry.id.length < 120 && entry.id.trim() ? entry.id : crypto.randomUUID();
     const uniqueId = seen.has(originalId) ? crypto.randomUUID() : originalId;
