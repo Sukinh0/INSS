@@ -18,20 +18,54 @@ const db = app ? getFirestore(app) : null;
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
 
+export function formatAuthError(err: unknown): string {
+  const code = (err as { code?: string })?.code || '';
+  const msg = (err as { message?: string })?.message || '';
+  if (code === 'auth/unauthorized-domain') {
+    const domain = typeof window !== 'undefined' ? window.location.hostname : 'do site';
+    return `Domínio "${domain}" não autorizado. Vá em Firebase Console > Authentication > Configurações > Domínios autorizados e adicione "${domain}".`;
+  }
+  if (code === 'auth/popup-closed-by-user') {
+    return 'A janela de login do Google foi fechada antes de concluir.';
+  }
+  if (code === 'auth/popup-blocked') {
+    return 'O pop-up de login foi bloqueado pelo seu navegador. Permita pop-ups para este site.';
+  }
+  if (code === 'auth/operation-not-allowed') {
+    return 'Login com Google não está ativado no Firebase Console (Authentication > Método de login).';
+  }
+  if (code === 'auth/cancelled-popup-request') {
+    return 'Tentativa de login cancelada.';
+  }
+  return msg || 'Erro ao autenticar com o Google.';
+}
+
 export async function loginGoogle() {
-  if (!auth) throw new Error('Configure as variáveis do Firebase para entrar com Google.');
-  try { await signInWithPopup(auth, provider); }
-  catch (err) {
+  if (!auth) throw new Error('Configure as variáveis de ambiente do Firebase para entrar com Google.');
+  try {
+    const res = await signInWithPopup(auth, provider);
+    return res.user;
+  } catch (err) {
     const code = (err as { code?: string }).code || '';
     if (code === 'auth/popup-blocked' || code === 'auth/operation-not-supported-in-this-environment') {
       await signInWithRedirect(auth, provider);
-    } else throw err;
+      return null;
+    }
+    throw err;
   }
 }
-export function watchUser(callback: (user: User | null) => void) {
+
+export function watchUser(callback: (user: User | null) => void, onError?: (err: Error) => void) {
   if (!auth) return () => {};
-  getRedirectResult(auth).catch(console.error);
-  return onAuthStateChanged(auth, callback);
+  getRedirectResult(auth)
+    .then(res => {
+      if (res?.user) callback(res.user);
+    })
+    .catch(err => {
+      console.error('Redirect result error:', err);
+      if (onError) onError(err);
+    });
+  return onAuthStateChanged(auth, callback, onError);
 }
 export async function logoutGoogle() { if (auth) await signOut(auth); }
 export function toProfile(user: User): Profile {

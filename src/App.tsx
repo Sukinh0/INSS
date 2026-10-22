@@ -7,7 +7,7 @@ import {
   Sparkles, Target, Trash2, TrendingUp, Trophy, X, XCircle
 } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { cloudEnabled, getCloudCustom, loadCloudAttempts, loginGoogle, logoutGoogle, saveCloudAttempt, saveCloudCustom, saveLeaderboard, syncProfile, toProfile, watchLeaderboard, watchUser } from './lib/firebase';
+import { cloudEnabled, formatAuthError, getCloudCustom, loadCloudAttempts, loginGoogle, logoutGoogle, saveCloudAttempt, saveCloudCustom, saveLeaderboard, syncProfile, toProfile, watchLeaderboard, watchUser } from './lib/firebase';
 import { calculateResult, compileStats, formatAnswer, getWrongQuestionIds, pickQuestions, subjectBreakdown, summarizeMode, topicBreakdown } from './lib/engine';
 import { exampleQuestions, parseQuestions } from './lib/import';
 import { parseBackup } from './lib/backup';
@@ -75,29 +75,32 @@ export default function App() {
 
   useEffect(() => {
     if (!cloudEnabled) return;
-    return watchUser(user => {
-      if (!user) { setAuthUid(null); return; }
-      const current = toProfile(user);
-      setAuthUid(user.uid);
-      setProfiles(prev => {
-        const next = [...prev.filter(p => p.id !== user.uid), { ...prev.find(p => p.id === user.uid), ...current }];
-        storage.saveProfiles(next); return next;
-      });
-      selectUser(current.id);
-      syncProfile(current).catch(() => setAuthError('Não foi possível salvar o perfil na nuvem. Confira as regras do Firestore.'));
-      loadCloudAttempts(current.id).then(cloud => {
-        if (storage.activeId() !== current.id) return;
-        const local = storage.attempts(current.id);
-        const merged = [...new Map([...local, ...cloud].map(a => [a.id, a])).values()].sort((a,b) => b.finishedAt.localeCompare(a.finishedAt));
-        storage.saveAttempts(current.id, merged); setAttempts(merged);
-        saveLeaderboard(compileStats(current.id,current.name,merged,current.photo)).catch(() => setAuthError('Ranking não pôde ser atualizado.'));
-      }).catch(() => setAuthError('Falha ao sincronizar o histórico. Verifique as regras do Firestore.'));
-      getCloudCustom(current.id).then(items => {
-        if (storage.activeId() !== current.id) return;
-        const merged = [...new Map([...storage.custom(current.id), ...items].map(q => [q.id,q])).values()];
-        storage.saveCustom(current.id, merged); setCustom(merged);
-      }).catch(() => setAuthError('O banco personalizado não pôde ser sincronizado.'));
-    });
+    return watchUser(
+      user => {
+        if (!user) { setAuthUid(null); return; }
+        const current = toProfile(user);
+        setAuthUid(user.uid);
+        setProfiles(prev => {
+          const next = [...prev.filter(p => p.id !== user.uid), { ...prev.find(p => p.id === user.uid), ...current }];
+          storage.saveProfiles(next); return next;
+        });
+        selectUser(current.id);
+        syncProfile(current).catch(() => setAuthError('Não foi possível salvar o perfil na nuvem. Confira se o banco Firestore foi criado no Firebase Console.'));
+        loadCloudAttempts(current.id).then(cloud => {
+          if (storage.activeId() !== current.id) return;
+          const local = storage.attempts(current.id);
+          const merged = [...new Map([...local, ...cloud].map(a => [a.id, a])).values()].sort((a,b) => b.finishedAt.localeCompare(a.finishedAt));
+          storage.saveAttempts(current.id, merged); setAttempts(merged);
+          saveLeaderboard(compileStats(current.id,current.name,merged,current.photo)).catch(() => setAuthError('Ranking não pôde ser atualizado.'));
+        }).catch(() => setAuthError('Falha ao sincronizar o histórico. Verifique se o Firestore foi criado no console.'));
+        getCloudCustom(current.id).then(items => {
+          if (storage.activeId() !== current.id) return;
+          const merged = [...new Map([...storage.custom(current.id), ...items].map(q => [q.id,q])).values()];
+          storage.saveCustom(current.id, merged); setCustom(merged);
+        }).catch(() => setAuthError('O banco personalizado não pôde ser sincronizado.'));
+      },
+      err => setAuthError(formatAuthError(err))
+    );
   // Intencional: observador de autenticação criado uma única vez
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -221,7 +224,7 @@ export default function App() {
     {id:'bank',name:'Questões e provas',icon:<FileQuestion size={19}/>}
   ] as const;
 
-  if (!profile) return <div className="welcome-screen"><div className="welcome-decoration deco-one"/><div className="welcome-decoration deco-two"/><div className="welcome-card"><div className="logo-big"><GraduationCap size={27}/></div><Badge>Seu cantinho de estudos</Badge><h1>A sua aprovação começa aqui. <span>💜</span></h1><p>Estude no seu ritmo, descubra onde melhorar e comemore cada conquista. Um passo de cada vez!</p><label htmlFor="first-name">Como podemos te chamar?</label><input id="first-name" placeholder="Seu nome ou apelido" maxLength={35} value={nameInput} onChange={e => setNameInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && createProfile()}/><button className="btn btn-primary full" onClick={createProfile}>Começar meus estudos <ArrowRight size={18}/></button>{cloudEnabled && <><div className="or"><span>ou</span></div><button className="btn btn-outline full" onClick={() => loginGoogle().catch(e => setAuthError(e.message))}><Cloud size={18}/> Entrar com Google e sincronizar</button></>}{profiles.length > 0 && <><div className="or"><span>Continuar perfil salvo</span></div><div className="saved-profiles">{profiles.map(p => <button key={p.id} onClick={() => {if (p.cloud && authUid !== p.id) {setAuthError('Entre novamente com a conta Google deste perfil.');return;} selectUser(p.id);}}><Avatar name={p.name} photo={p.photo} size="small"/>{p.name}<ChevronRight size={15}/></button>)}</div></>}{authError && <p className="form-error">{authError}</p>}<p className="small-note"><ShieldCheck size={15}/> {cloudEnabled ? 'Perfil local ou conta Google sincronizada.' : 'Os dados ficam salvos neste dispositivo. Ative o Firebase para sincronizar.'}</p></div></div>;
+  if (!profile) return <div className="welcome-screen"><div className="welcome-decoration deco-one"/><div className="welcome-decoration deco-two"/><div className="welcome-card"><div className="logo-big"><GraduationCap size={27}/></div><Badge>Seu cantinho de estudos</Badge><h1>A sua aprovação começa aqui. <span>💜</span></h1><p>Estude no seu ritmo, descubra onde melhorar e comemore cada conquista. Um passo de cada vez!</p><label htmlFor="first-name">Como podemos te chamar?</label><input id="first-name" placeholder="Seu nome ou apelido" maxLength={35} value={nameInput} onChange={e => setNameInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && createProfile()}/><button className="btn btn-primary full" onClick={createProfile}>Começar meus estudos <ArrowRight size={18}/></button>{cloudEnabled && <><div className="or"><span>ou</span></div><button className="btn btn-outline full" onClick={() => loginGoogle().catch(e => setAuthError(formatAuthError(e)))}><Cloud size={18}/> Entrar com Google e sincronizar</button></>}{profiles.length > 0 && <><div className="or"><span>Continuar perfil salvo</span></div><div className="saved-profiles">{profiles.map(p => <button key={p.id} onClick={() => {if (p.cloud && authUid !== p.id) {setAuthError('Entre novamente com a conta Google deste perfil.');return;} selectUser(p.id);}}><Avatar name={p.name} photo={p.photo} size="small"/>{p.name}<ChevronRight size={15}/></button>)}</div></>}{authError && <p className="form-error">{authError}</p>}<p className="small-note"><ShieldCheck size={15}/> {cloudEnabled ? 'Perfil local ou conta Google sincronizada.' : 'Os dados ficam salvos neste dispositivo. Ative o Firebase para sincronizar.'}</p></div></div>;
 
   const localRanking = profiles.filter(p => !p.cloud).map(p => compileStats(p.id,p.name,storage.attempts(p.id),p.photo));
   const ranking = (authUid ? [...cloudRanking, ...localRanking] : profiles.map(p => compileStats(p.id,p.name, p.id === activeId ? attempts : storage.attempts(p.id),p.photo)))
@@ -238,7 +241,7 @@ export default function App() {
     </aside>
     {drawer && <button className="drawer-overlay" aria-label="Fechar menu" onClick={() => setDrawer(false)}/>}
     <div className="main-column">
-      <header className="topbar"><div className="topbar-left"><button className="icon-btn mobile-only" aria-label="Abrir menu" onClick={() => setDrawer(true)}><Menu size={22}/></button><span className="top-date"><CalendarDays size={15}/><span>{today}</span></span></div><div className="topbar-right">{cloudEnabled && !authUid && <button className="text-link cloud-entry" onClick={() => loginGoogle().catch(e => setAuthError(e.message))}>Entrar com Google</button>}<Badge tone={authUid===activeId?'mint':'neutral'}>{authUid===activeId?<><Cloud size={13}/> Google</>:<><ShieldCheck size={13}/> Local</>}</Badge><Avatar name={profile.name} photo={profile.photo} size="small"/></div></header>
+      <header className="topbar"><div className="topbar-left"><button className="icon-btn mobile-only" aria-label="Abrir menu" onClick={() => setDrawer(true)}><Menu size={22}/></button><span className="top-date"><CalendarDays size={15}/><span>{today}</span></span></div><div className="topbar-right">{cloudEnabled && !authUid && <button className="text-link cloud-entry" onClick={() => loginGoogle().catch(e => setAuthError(formatAuthError(e)))}>Entrar com Google</button>}<Badge tone={authUid===activeId?'mint':'neutral'}>{authUid===activeId?<><Cloud size={13}/> Google</>:<><ShieldCheck size={13}/> Local</>}</Badge><Avatar name={profile.name} photo={profile.photo} size="small"/></div></header>
       <main className="main-content">
         {page === 'home' && <>
           <div className="page-heading"><div><span className="eyebrow"><Sparkles size={15}/> SUA JORNADA DE ESTUDOS</span><h1>Oi, {profile.name.split(' ')[0]}! <span>👋</span></h1><p>Pronta para dar mais um passo rumo à sua aprovação?</p></div></div>
