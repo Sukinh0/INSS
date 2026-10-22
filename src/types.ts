@@ -77,6 +77,7 @@ export type ActiveQuiz = {
   profileId: string;
   startedAt: string;
   gradeMode: GradeMode;
+  exerciseFormat?: ExerciseFormat;
   originFilter?: OriginFilter;
   snapshots: Question[];
   answers: Record<string, Selection>;
