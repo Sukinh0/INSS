@@ -493,6 +493,8 @@ function ResultView({result,filter,setFilter,onReturn,onAgain,onReview}:{result:
         <span className={good?'correct-label':'incorrect-label'}>{good?<><CheckCircle2 size={15}/> Acertou</>:response?<><XCircle size={15}/> Errou</>:<><CircleHelp size={15}/> Em branco</>}</span>
       </div>
       <p>{q.statement}</p>
+      {q.adaptedFrom?.length ? <p className="muted">Exercício A–E adaptado de {q.adaptedFrom.length} afirmações Certo/Errado, não é questão original da banca.</p> : null}
+      {q.options?.length ? <ol className="bank-options">{q.options.map((option,i)=><li key={i}><b>{'ABCDE'[i]}.</b> {option}</li>)}</ol> : null}
       <div className="answer-comparison">
         <span>Sua resposta: <strong>{formatAnswer(response,q.options)}</strong></span>
         <span>Gabarito: <strong>{formatAnswer(q.correct,q.options)}</strong></span>
@@ -507,7 +509,7 @@ function ResultView({result,filter,setFilter,onReturn,onAgain,onReview}:{result:
             <Lightbulb size={13}/> Comentário de estudo — não é justificativa oficial da banca
           </div>
         )}
-        <p>{q.explanation}</p>
+        <p style={{whiteSpace:'pre-line'}}>{q.explanation}</p>
       </div>}
     </div>;
   })}</div>:<Empty title="Nenhum erro para revisar!" detail="Você acertou tudo. Escolha Todas para rever as explicações."/>}</section></>;
