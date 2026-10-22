@@ -29,7 +29,6 @@ const SOURCES = [
   { title: 'Prova INSS 2016', desc: 'Referência para consultar o caderno da seleção', url: 'https://www.cebraspe.org.br/concursos/inss_2015', year: '2016' },
   { title: 'Gabarito definitivo 2016', desc: 'Caderno LUA — Técnico do Seguro Social, Cebraspe', url: 'https://cdn.cebraspe.org.br/concursos/inss_2015/arquivos/gab_definitivo_234inss_002_06_txt.pdf', year: '2016' }
 ];
-function prettyDate(iso: string) { return new Date(iso).toLocaleDateString('pt-BR', {day:'2-digit',month:'short'}); }
 function prettyDateTime(iso: string) { return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
 function formatTime(seconds: number) { const min = Math.floor(seconds / 60); return min >= 60 ? `${Math.floor(min / 60)}h ${String(min % 60).padStart(2, '0')}m` : `${min}min`; }
 function download(content: string, filename: string, mime = 'application/json') {

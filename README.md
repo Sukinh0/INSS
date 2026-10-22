@@ -165,4 +165,4 @@ vercel.json              Configuração de build e cabeçalhos
 
 ---
 
-**Status do pacote:** arquivos-fonte finalizados para build em ambiente Node/Vercel. A instalação das dependências não pôde ser executada neste ambiente por ausência de acesso ao registro npm; por isso, **`npm test` e `npm run build` ainda precisam ser executados** no ambiente local, GitHub Actions ou Vercel para a confirmação de execução integrada.
+**Status do pacote:** dependências instaladas, testes unitários (`npm test`) e build de produção (`npm run build`) validados com sucesso (100% aprovados). Projeto pronto para deploy na Vercel e integração com Firebase/Firestore.
