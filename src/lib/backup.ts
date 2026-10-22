@@ -1,6 +1,7 @@
 import { calculateResult } from './engine';
 import { parseQuestions } from './import';
-import type { ActiveQuiz, Attempt, GradeMode, Question, Selection } from '../types';
+import { normalizeQuestion } from './origin';
+import type { ActiveQuiz, Attempt, GradeMode, OriginFilter, Question, Selection } from '../types';
 
 export type BackupContent = { attempts: Attempt[]; custom: Question[] };
 
@@ -10,7 +11,7 @@ export function parseBackup(raw: string, targetProfileId: string, targetName: st
   try { value = JSON.parse(raw); } catch { throw new Error('Backup inválido: não é um JSON válido.'); }
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Backup inválido.');
   const data = value as Record<string, unknown>;
-  if (data.app !== 'Rumo ao INSS' || data.version !== 1 || !Array.isArray(data.attempts) || !Array.isArray(data.custom)) {
+  if (data.app !== 'Rumo ao INSS' || (data.version !== 1 && data.version !== 2) || !Array.isArray(data.attempts) || !Array.isArray(data.custom)) {
     throw new Error('Arquivo não é um backup reconhecido do Rumo ao INSS.');
   }
   if (data.attempts.length > 1000 || data.custom.length > 400) throw new Error('Backup ultrapassa os limites de importação.');
@@ -20,7 +21,8 @@ export function parseBackup(raw: string, targetProfileId: string, targetName: st
     if (!item || typeof item !== 'object' || Array.isArray(item)) throw new Error(`Simulado ${index + 1}: formato inválido.`);
     const entry = item as Record<string, unknown>;
     if (!Array.isArray(entry.snapshots) || !entry.snapshots.length || entry.snapshots.length > 400) throw new Error(`Simulado ${index + 1}: questões inválidas.`);
-    const snapshots = parseQuestions(JSON.stringify(entry.snapshots),'backup.json');
+    const parsedSnapshots = parseQuestions(JSON.stringify(entry.snapshots),'backup.json');
+    const snapshots = parsedSnapshots.map(normalizeQuestion);
     if (!entry.answers || typeof entry.answers !== 'object' || Array.isArray(entry.answers)) throw new Error(`Simulado ${index + 1}: respostas inválidas.`);
     const savedAnswers = entry.answers as Record<string, unknown>;
     const answers: Record<string, Selection> = {};
@@ -34,12 +36,15 @@ export function parseBackup(raw: string, targetProfileId: string, targetName: st
     const start = Date.parse(startedAt), finish = Date.parse(finishedAt);
     if (!Number.isFinite(start) || !Number.isFinite(finish) || finish < start || finish > Date.now() + 86_400_000) throw new Error(`Simulado ${index + 1}: datas inválidas.`);
     const gradeMode: GradeMode = entry.gradeMode === 'cebraspe' ? 'cebraspe' : 'normal';
-    const quiz: ActiveQuiz = { profileId: targetProfileId, startedAt, gradeMode, snapshots, answers, current: 0 };
+    const originFilter: OriginFilter | undefined = (entry.originFilter === 'official' || entry.originFilter === 'authorial' || entry.originFilter === 'mixed' || entry.originFilter === 'all')
+      ? entry.originFilter
+      : undefined;
+    const quiz: ActiveQuiz = { profileId: targetProfileId, startedAt, gradeMode, originFilter, snapshots, answers, current: 0 };
     const calculated = calculateResult(quiz, finishedAt);
     const originalId = typeof entry.id === 'string' && entry.id.length < 120 && entry.id.trim() ? entry.id : crypto.randomUUID();
     const uniqueId = seen.has(originalId) ? crypto.randomUUID() : originalId;
     seen.add(uniqueId);
-    return { ...calculated, id: uniqueId, profileId: targetProfileId, profileName: targetName };
+    return { ...calculated, id: uniqueId, profileId: targetProfileId, profileName: targetName, originFilter };
   });
   return { attempts, custom };
 }

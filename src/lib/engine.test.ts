@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { calculateResult, compileStats, getWrongQuestionIds, pickQuestions, subjectBreakdown } from './engine';
+import { normalizeQuestion } from './origin';
 import type { ActiveQuiz, Question } from '../types';
+
 const questions: Question[] = [
-  { id: 'x', subject: 'A', topic: 'T', statement: 'a', correct: 'C', explanation: 'e', origin: 'Autoral' },
-  { id: 'y', subject: 'B', topic: 'T', statement: 'b', correct: 'E', explanation: 'e', origin: 'Autoral' },
-  { id: 'z', subject: 'A', topic: 'T', statement: 'c', correct: 'C', explanation: 'e', origin: 'Autoral' }
+  normalizeQuestion({ id: 'x', subject: 'A', topic: 'T', statement: 'a', correct: 'C', explanation: 'e', origin: 'Autoral' }),
+  normalizeQuestion({ id: 'y', subject: 'B', topic: 'T', statement: 'b', correct: 'E', explanation: 'e', origin: 'Autoral' }),
+  normalizeQuestion({ id: 'z', subject: 'A', topic: 'T', statement: 'c', correct: 'C', explanation: 'e', origin: 'Autoral' })
 ];
 const make = (mode: 'cebraspe'|'normal') : ActiveQuiz => ({ profileId: 'p', startedAt: '2026-01-01T00:00:00.000Z', gradeMode: mode, snapshots: questions, current: 0, answers: {x:'C', y:'C', z:null} });
 describe('motor de simulados', () => {

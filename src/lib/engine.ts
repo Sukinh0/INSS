@@ -1,4 +1,5 @@
-import type { ActiveQuiz, Answer, Attempt, GradeMode, ProfileStats, Question, Selection } from '../types';
+import type { ActiveQuiz, Answer, Attempt, GradeMode, OriginFilter, OriginKind, ProfileStats, Question, Selection } from '../types';
+import { getOfficialKey, isAvailableForQuiz, normalizeQuestion } from './origin';
 
 export function shuffle<T>(items: T[], random: () => number = Math.random): T[] {
   const copy = [...items];
@@ -9,10 +10,47 @@ export function shuffle<T>(items: T[], random: () => number = Math.random): T[] 
   return copy;
 }
 
-export function pickQuestions(pool: Question[], count: number, subjects: string[], random: () => number = Math.random): Question[] {
-  const filtered = pool.filter(q => !subjects.length || subjects.includes(q.subject));
-  const deduplicated = [...new Map(filtered.map(q => [q.id, q])).values()];
-  return shuffle(deduplicated, random).slice(0, Math.max(0, Math.floor(count)));
+export function pickQuestions(
+  pool: Question[],
+  count: number,
+  subjects: string[] = [],
+  randomOrOrigin?: (() => number) | OriginFilter,
+  originFilterParam?: OriginFilter
+): Question[] {
+  let random: () => number = Math.random;
+  let originFilter: OriginFilter = 'all';
+
+  if (typeof randomOrOrigin === 'function') {
+    random = randomOrOrigin;
+  }
+  if (originFilterParam) {
+    originFilter = originFilterParam;
+  } else if (typeof randomOrOrigin === 'string') {
+    originFilter = randomOrOrigin;
+  }
+
+  // Normaliza itens de entrada caso venham de fontes não normalizadas
+  const normalizedPool = pool.map(q => (q.source ? q : normalizeQuestion(q)));
+
+  // Filtra itens aptos para o simulado (ativos, pontuáveis, sem anulação e com a origem solicitada)
+  const filtered = normalizedPool.filter(q => isAvailableForQuiz(q, originFilter, subjects));
+
+  // Deduplicação: por ID e para oficiais pela tupla de prova
+  const deduplicatedMap = new Map<string, Question>();
+  for (const q of filtered) {
+    if (q.source.kind === 'official') {
+      const officialKey = getOfficialKey(q.source);
+      if (officialKey && deduplicatedMap.has(officialKey)) continue;
+      deduplicatedMap.set(officialKey || q.id, q);
+    } else {
+      if (!deduplicatedMap.has(q.id)) {
+        deduplicatedMap.set(q.id, q);
+      }
+    }
+  }
+
+  const list = [...deduplicatedMap.values()];
+  return shuffle(list, random).slice(0, Math.max(0, Math.floor(count)));
 }
 
 export function calculateResult(quiz: ActiveQuiz, now: string): Attempt {
@@ -27,7 +65,9 @@ export function calculateResult(quiz: ActiveQuiz, now: string): Attempt {
   return {
     id: crypto.randomUUID(), profileId: quiz.profileId, profileName: '',
     startedAt: quiz.startedAt, finishedAt: now, elapsedSeconds: Math.round(dateDelta),
-    gradeMode: quiz.gradeMode, questionIds: quiz.snapshots.map(q => q.id),
+    gradeMode: quiz.gradeMode,
+    originFilter: quiz.originFilter,
+    questionIds: quiz.snapshots.map(q => q.id),
     snapshots: quiz.snapshots, answers: quiz.answers,
     subjects: [...new Set(quiz.snapshots.map(q => q.subject))],
     correct, wrong, blank,
@@ -36,35 +76,82 @@ export function calculateResult(quiz: ActiveQuiz, now: string): Attempt {
   };
 }
 
-export function subjectBreakdown(attempts: Attempt[]) {
+export function subjectBreakdown(attempts: Attempt[], originFilter?: OriginKind) {
   const data = new Map<string, {subject: string, correct: number, wrong: number, blank: number, total: number, accuracy: number}>();
-  for (const attempt of attempts) for (const q of attempt.snapshots) {
-    const record = data.get(q.subject) ?? { subject: q.subject, correct: 0, wrong: 0, blank: 0, total: 0, accuracy: 0 };
-    const answer = attempt.answers[q.id];
-    record.total++;
-    if (!answer) record.blank++;
-    else if (answer === q.correct) record.correct++;
-    else record.wrong++;
-    record.accuracy = Math.round((record.correct * 100) / record.total);
-    data.set(q.subject, record);
+  for (const attempt of attempts) {
+    for (const rawQ of attempt.snapshots) {
+      const q = rawQ.source ? rawQ : normalizeQuestion(rawQ);
+      if (originFilter && q.source?.kind !== originFilter) continue;
+      const record = data.get(q.subject) ?? { subject: q.subject, correct: 0, wrong: 0, blank: 0, total: 0, accuracy: 0 };
+      const answer = attempt.answers[q.id];
+      record.total++;
+      if (!answer) record.blank++;
+      else if (answer === q.correct) record.correct++;
+      else record.wrong++;
+      record.accuracy = Math.round((record.correct * 100) / record.total);
+      data.set(q.subject, record);
+    }
   }
   return [...data.values()].sort((a, b) => a.accuracy - b.accuracy || b.total - a.total);
 }
 
-export function topicBreakdown(attempts: Attempt[]) {
+export function topicBreakdown(attempts: Attempt[], originFilter?: OriginKind) {
   const data = new Map<string, {topic: string, subject: string, correct: number, wrong: number, blank: number, total: number, accuracy: number}>();
-  for (const attempt of attempts) for (const q of attempt.snapshots) {
-    const key = `${q.subject}||${q.topic}`;
-    const record = data.get(key) ?? { topic: q.topic, subject: q.subject, correct: 0, wrong: 0, blank: 0, total: 0, accuracy: 0 };
-    const answer = attempt.answers[q.id];
-    record.total++;
-    if (!answer) record.blank++;
-    else if (answer === q.correct) record.correct++;
-    else record.wrong++;
-    record.accuracy = Math.round((record.correct * 100) / record.total);
-    data.set(key, record);
+  for (const attempt of attempts) {
+    for (const rawQ of attempt.snapshots) {
+      const q = rawQ.source ? rawQ : normalizeQuestion(rawQ);
+      if (originFilter && q.source?.kind !== originFilter) continue;
+      const key = `${q.subject}||${q.topic}`;
+      const record = data.get(key) ?? { topic: q.topic, subject: q.subject, correct: 0, wrong: 0, blank: 0, total: 0, accuracy: 0 };
+      const answer = attempt.answers[q.id];
+      record.total++;
+      if (!answer) record.blank++;
+      else if (answer === q.correct) record.correct++;
+      else record.wrong++;
+      record.accuracy = Math.round((record.correct * 100) / record.total);
+      data.set(key, record);
+    }
   }
   return [...data.values()].sort((a, b) => a.accuracy - b.accuracy || b.total - a.total);
+}
+
+export function compileOriginStats(
+  profileId: string,
+  name: string,
+  attempts: Attempt[],
+  originKind?: OriginKind,
+  photo?: string
+): ProfileStats {
+  const sorted = [...attempts].sort((a,b) => b.finishedAt.localeCompare(a.finishedAt));
+  let totalCorrect = 0;
+  let totalAnswered = 0;
+  let totalQuestions = 0;
+  let matchingAttempts = 0;
+
+  for (const a of attempts) {
+    const items = a.snapshots
+      .map(q => (q.source ? q : normalizeQuestion(q)))
+      .filter(q => !originKind || q.source?.kind === originKind);
+    if (!items.length) continue;
+    matchingAttempts++;
+    for (const q of items) {
+      totalQuestions++;
+      const ans = a.answers[q.id];
+      if (ans) {
+        totalAnswered++;
+        if (ans === q.correct) totalCorrect++;
+      }
+    }
+  }
+
+  return {
+    profileId, profileName: name, photo, totalCorrect, totalAnswered, totalQuestions,
+    attempts: matchingAttempts,
+    bestAccuracy: attempts.length ? Math.max(...attempts.map(a => a.accuracy)) : 0,
+    accuracy: totalQuestions ? Math.round(100 * totalCorrect / totalQuestions) : 0,
+    points: totalCorrect * 10,
+    lastAt: sorted[0]?.finishedAt ?? ''
+  };
 }
 
 export function compileStats(profileId: string, name: string, attempts: Attempt[], photo?: string): ProfileStats {
