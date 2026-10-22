@@ -1,0 +1,1028 @@
+[
+  {
+    "id": "base-001",
+    "subject": "Direito Previdenciário",
+    "topic": "RGPS",
+    "statement": "O Regime Geral de Previdência Social é administrado pelo INSS no que se refere ao reconhecimento e à manutenção de benefícios.",
+    "correct": "C",
+    "explanation": "O INSS executa serviços e concede benefícios do RGPS; a arrecadação das contribuições previdenciárias federais é atribuição da Receita Federal.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-002",
+    "subject": "Direito Previdenciário",
+    "topic": "RGPS",
+    "statement": "O RGPS é um regime exclusivo dos servidores titulares de cargos efetivos da União.",
+    "correct": "E",
+    "explanation": "Servidores efetivos podem integrar regimes próprios; o RGPS abrange, entre outros, trabalhadores da iniciativa privada.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-003",
+    "subject": "Direito Previdenciário",
+    "topic": "Segurados obrigatórios",
+    "statement": "O empregado com carteira assinada é segurado obrigatório do RGPS.",
+    "correct": "C",
+    "explanation": "O exercício de atividade remunerada enquadrada em lei gera filiação obrigatória.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-004",
+    "subject": "Direito Previdenciário",
+    "topic": "Segurados facultativos",
+    "statement": "A inscrição como segurado facultativo dispensa a idade mínima prevista na legislação previdenciária.",
+    "correct": "E",
+    "explanation": "A filiação facultativa exige os requisitos legais, entre eles a idade mínima aplicável.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-005",
+    "subject": "Direito Previdenciário",
+    "topic": "Segurado especial",
+    "statement": "O trabalhador rural que atua em regime de economia familiar pode se enquadrar como segurado especial.",
+    "correct": "C",
+    "explanation": "O enquadramento depende das condições legais de trabalho e da composição familiar.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-006",
+    "subject": "Direito Previdenciário",
+    "topic": "Segurados obrigatórios",
+    "statement": "Todo trabalhador autônomo é classificado como empregado doméstico para fins previdenciários.",
+    "correct": "E",
+    "explanation": "O autônomo pode ser contribuinte individual; empregado doméstico é categoria distinta.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-007",
+    "subject": "Direito Previdenciário",
+    "topic": "Dependentes",
+    "statement": "Dependentes podem ter direito à pensão por morte quando preenchidos os requisitos legais.",
+    "correct": "C",
+    "explanation": "A pensão por morte é benefício destinado a dependentes habilitados do segurado falecido.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-008",
+    "subject": "Direito Previdenciário",
+    "topic": "Aposentadoria",
+    "statement": "O recebimento de benefício assistencial de prestação continuada exige contribuição prévia ao RGPS.",
+    "correct": "E",
+    "explanation": "O BPC é assistencial e não contributivo, com requisitos próprios.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-009",
+    "subject": "Direito Previdenciário",
+    "topic": "Auxílio por incapacidade",
+    "statement": "Benefícios por incapacidade dependem de avaliação dos requisitos legais, incluindo a incapacidade para a atividade laboral quando aplicável.",
+    "correct": "C",
+    "explanation": "O benefício não é automático: é necessário demonstrar os requisitos específicos.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-010",
+    "subject": "Direito Previdenciário",
+    "topic": "Carência",
+    "statement": "Carência e tempo de contribuição são expressões equivalentes em todas as regras do RGPS.",
+    "correct": "E",
+    "explanation": "Carência corresponde a número mínimo de contribuições mensais; tempo de contribuição é instituto distinto.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-011",
+    "subject": "Direito Previdenciário",
+    "topic": "Qualidade de segurado",
+    "statement": "Em situações previstas em lei, a qualidade de segurado pode ser mantida por um período mesmo após cessarem contribuições.",
+    "correct": "C",
+    "explanation": "Trata-se do chamado período de graça.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-012",
+    "subject": "Direito Previdenciário",
+    "topic": "Financiamento",
+    "statement": "Somente as contribuições dos trabalhadores financiam a seguridade social.",
+    "correct": "E",
+    "explanation": "O financiamento é compartilhado pela sociedade e abrange outras fontes, conforme a Constituição.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-013",
+    "subject": "Direito Previdenciário",
+    "topic": "Salário de contribuição",
+    "statement": "O salário de contribuição é uma das referências utilizadas para apurar contribuições previdenciárias.",
+    "correct": "C",
+    "explanation": "Ele compõe a base contributiva segundo regras específicas.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-014",
+    "subject": "Direito Previdenciário",
+    "topic": "Benefícios",
+    "statement": "A pensão por morte é paga apenas ao próprio segurado, nunca aos seus dependentes.",
+    "correct": "E",
+    "explanation": "Por definição, a pensão por morte se destina aos dependentes elegíveis.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-015",
+    "subject": "Direito Previdenciário",
+    "topic": "Reabilitação profissional",
+    "statement": "A reabilitação profissional integra os serviços oferecidos pela Previdência Social.",
+    "correct": "C",
+    "explanation": "Visa favorecer a reinserção no trabalho nas hipóteses previstas.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-016",
+    "subject": "Direito Previdenciário",
+    "topic": "Filiação e inscrição",
+    "statement": "Inscrição e filiação previdenciária são conceitos sempre idênticos e ocorrem obrigatoriamente no mesmo ato.",
+    "correct": "E",
+    "explanation": "Filiação é o vínculo com o regime; inscrição é o cadastramento, com regras distintas.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-017",
+    "subject": "Direito Previdenciário",
+    "topic": "Empregado doméstico",
+    "statement": "O empregado doméstico presta serviços contínuos, subordinados, onerosos e pessoais no âmbito residencial, sem finalidade lucrativa para o empregador.",
+    "correct": "C",
+    "explanation": "O enquadramento decorre de características legais específicas da relação de trabalho.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-018",
+    "subject": "Direito Previdenciário",
+    "topic": "Regimes previdenciários",
+    "statement": "Um servidor público titular de cargo efetivo é obrigatoriamente segurado facultativo do RGPS, sem exceções.",
+    "correct": "E",
+    "explanation": "A vinculação previdenciária depende do cargo, regime e situação legal; facultatividade não é automática.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-019",
+    "subject": "Direito Previdenciário",
+    "topic": "Beneficiários",
+    "statement": "A legislação do RGPS distingue segurados de dependentes.",
+    "correct": "C",
+    "explanation": "Segurados se vinculam pelo exercício de atividade ou filiação facultativa; dependentes derivam proteção legal de vínculo com segurado.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-020",
+    "subject": "Direito Previdenciário",
+    "topic": "Benefícios",
+    "statement": "O benefício de aposentadoria por incapacidade permanente é concedido independentemente da existência de incapacidade.",
+    "correct": "E",
+    "explanation": "A incapacidade permanente e os demais requisitos precisam ser comprovados.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-021",
+    "subject": "Seguridade Social",
+    "topic": "Constituição",
+    "statement": "A seguridade social compreende saúde, previdência e assistência social.",
+    "correct": "C",
+    "explanation": "Essa é a definição constitucional de seguridade social.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-022",
+    "subject": "Seguridade Social",
+    "topic": "Assistência social",
+    "statement": "A assistência social é prestada somente a quem já contribuiu por 12 meses para o INSS.",
+    "correct": "E",
+    "explanation": "Assistência social independe de contribuição à seguridade.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-023",
+    "subject": "Seguridade Social",
+    "topic": "Saúde",
+    "statement": "O acesso às ações e aos serviços públicos de saúde é assegurado de forma universal.",
+    "correct": "C",
+    "explanation": "O SUS tem universalidade como diretriz e princípio.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-024",
+    "subject": "Seguridade Social",
+    "topic": "Saúde",
+    "statement": "A saúde pública brasileira integra exclusivamente a Previdência Social, fora da seguridade social.",
+    "correct": "E",
+    "explanation": "Saúde é um dos três eixos da seguridade social, ao lado da previdência e assistência.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-025",
+    "subject": "Seguridade Social",
+    "topic": "Princípios",
+    "statement": "A uniformidade e equivalência dos benefícios e serviços às populações urbanas e rurais são objetivos da seguridade social.",
+    "correct": "C",
+    "explanation": "É princípio previsto no art. 194 da Constituição Federal.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-026",
+    "subject": "Seguridade Social",
+    "topic": "Princípios",
+    "statement": "A seguridade social deve oferecer necessariamente o mesmo valor de benefício a todas as pessoas, sem considerar requisitos específicos.",
+    "correct": "E",
+    "explanation": "Uniformidade e equivalência não significam igualdade nominal absoluta de benefícios.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-027",
+    "subject": "Seguridade Social",
+    "topic": "Financiamento",
+    "statement": "A seguridade social é financiada por toda a sociedade, direta e indiretamente, nos termos constitucionais.",
+    "correct": "C",
+    "explanation": "A Constituição prevê orçamento público e contribuições sociais.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-028",
+    "subject": "Seguridade Social",
+    "topic": "BPC",
+    "statement": "O benefício de prestação continuada é uma aposentadoria contributiva do RGPS.",
+    "correct": "E",
+    "explanation": "O BPC é um benefício assistencial da LOAS, não uma aposentadoria.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-029",
+    "subject": "Seguridade Social",
+    "topic": "BPC",
+    "statement": "O BPC pode ser destinado à pessoa idosa ou à pessoa com deficiência que satisfaça os requisitos legais.",
+    "correct": "C",
+    "explanation": "Há critérios específicos de idade, deficiência e vulnerabilidade previstos em lei.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-030",
+    "subject": "Seguridade Social",
+    "topic": "BPC",
+    "statement": "O benefício de prestação continuada gera automaticamente direito ao décimo terceiro salário.",
+    "correct": "E",
+    "explanation": "O BPC não inclui décimo terceiro por ser benefício assistencial.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-031",
+    "subject": "Seguridade Social",
+    "topic": "Participação social",
+    "statement": "A gestão da seguridade social inclui participação da comunidade e de diferentes segmentos sociais.",
+    "correct": "C",
+    "explanation": "A Constituição prevê caráter democrático e descentralizado da administração.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-032",
+    "subject": "Seguridade Social",
+    "topic": "Universalidade",
+    "statement": "Universalidade da cobertura significa que a previdência contributiva paga aposentadoria a qualquer pessoa sem necessidade de requisitos.",
+    "correct": "E",
+    "explanation": "A universalidade da seguridade convive com requisitos próprios de cada política.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-033",
+    "subject": "Seguridade Social",
+    "topic": "Previdência social",
+    "statement": "A previdência social, no RGPS, possui caráter contributivo e filiação obrigatória para segurados enquadrados na lei.",
+    "correct": "C",
+    "explanation": "Essas características constam do art. 201 da Constituição.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-034",
+    "subject": "Seguridade Social",
+    "topic": "Benefícios assistenciais",
+    "statement": "Para receber BPC, basta declarar qualquer dificuldade financeira, sem análise dos requisitos legais.",
+    "correct": "E",
+    "explanation": "É necessária verificação dos critérios da LOAS e regulamentação aplicável.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-035",
+    "subject": "Língua Portuguesa",
+    "topic": "Acentuação",
+    "statement": "A palavra “saúde” recebe acento porque contém hiato com vogal tônica “u”, nas condições da regra.",
+    "correct": "C",
+    "explanation": "A separação sa-ú-de justifica a acentuação.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-036",
+    "subject": "Língua Portuguesa",
+    "topic": "Acentuação",
+    "statement": "A palavra “ideia” deve ser acentuada com agudo na grafia atual.",
+    "correct": "E",
+    "explanation": "Pela ortografia vigente, “ideia” não recebe acento.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-037",
+    "subject": "Língua Portuguesa",
+    "topic": "Concordância",
+    "statement": "Na frase “Os servidores analisaram os documentos”, o verbo concorda com o sujeito plural.",
+    "correct": "C",
+    "explanation": "O sujeito “Os servidores” está na terceira pessoa do plural.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-038",
+    "subject": "Língua Portuguesa",
+    "topic": "Concordância",
+    "statement": "Na frase “Havia muitas solicitações”, o verbo haver deveria ficar obrigatoriamente no plural.",
+    "correct": "E",
+    "explanation": "“Haver”, no sentido de existir, é impessoal e fica na terceira pessoa do singular.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-039",
+    "subject": "Língua Portuguesa",
+    "topic": "Crase",
+    "statement": "Na frase “O servidor se dirigiu à agência”, há emprego adequado do acento indicativo de crase.",
+    "correct": "C",
+    "explanation": "O verbo pede preposição “a” e “agência” admite artigo feminino “a”.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-040",
+    "subject": "Língua Portuguesa",
+    "topic": "Crase",
+    "statement": "Na expressão “entregou o documento à ela”, o acento indicativo de crase é obrigatório.",
+    "correct": "E",
+    "explanation": "Em regra, não há crase antes de pronome pessoal “ela”.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-041",
+    "subject": "Língua Portuguesa",
+    "topic": "Pontuação",
+    "statement": "Em “Maria, confira o processo”, a vírgula separa um vocativo.",
+    "correct": "C",
+    "explanation": "“Maria” é o termo usado para chamar a interlocutora.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-042",
+    "subject": "Língua Portuguesa",
+    "topic": "Pontuação",
+    "statement": "A vírgula pode separar livremente sujeito e verbo, sem produzir desvio de pontuação.",
+    "correct": "E",
+    "explanation": "Não se deve separar sujeito e predicado por vírgula sem justificativa sintática.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-043",
+    "subject": "Língua Portuguesa",
+    "topic": "Ortografia",
+    "statement": "A grafia “exceção” está de acordo com a ortografia oficial.",
+    "correct": "C",
+    "explanation": "A forma correta é “exceção”.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-044",
+    "subject": "Língua Portuguesa",
+    "topic": "Ortografia",
+    "statement": "A palavra “benefício” é escrita corretamente como “benefissio”.",
+    "correct": "E",
+    "explanation": "“Benefício” é a grafia correta, com c e acento.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-045",
+    "subject": "Língua Portuguesa",
+    "topic": "Classes de palavras",
+    "statement": "Na expressão “atendimento rápido”, “rápido” funciona como adjetivo que caracteriza o substantivo.",
+    "correct": "C",
+    "explanation": "O termo modifica “atendimento”.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-046",
+    "subject": "Língua Portuguesa",
+    "topic": "Classes de palavras",
+    "statement": "Na frase “Ela estudou ontem”, a palavra “ontem” é um adjetivo.",
+    "correct": "E",
+    "explanation": "“Ontem” é advérbio de tempo.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-047",
+    "subject": "Língua Portuguesa",
+    "topic": "Interpretação",
+    "statement": "Uma inferência textual deve ser compatível com as informações e relações apresentadas no texto.",
+    "correct": "C",
+    "explanation": "Interpretar não é atribuir ao autor uma conclusão sem base textual.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-048",
+    "subject": "Língua Portuguesa",
+    "topic": "Interpretação",
+    "statement": "Compreender um texto significa apenas localizar palavras iguais às da pergunta, dispensando contexto.",
+    "correct": "E",
+    "explanation": "A compreensão envolve contexto, relações e sentido.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-049",
+    "subject": "Língua Portuguesa",
+    "topic": "Redação oficial",
+    "statement": "A redação oficial deve buscar clareza, concisão e impessoalidade.",
+    "correct": "C",
+    "explanation": "Esses atributos favorecem comunicação institucional compreensível.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-050",
+    "subject": "Língua Portuguesa",
+    "topic": "Regência",
+    "statement": "A forma “assistir o filme” é a única admitida na norma-padrão quando “assistir” significa ver.",
+    "correct": "E",
+    "explanation": "Na regência tradicional normativa, emprega-se “assistir ao filme” no sentido de presenciar.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-051",
+    "subject": "Direito Constitucional",
+    "topic": "Princípios da administração",
+    "statement": "Legalidade, impessoalidade, moralidade, publicidade e eficiência são princípios expressos da administração pública.",
+    "correct": "C",
+    "explanation": "São os princípios do caput do art. 37 da Constituição.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-052",
+    "subject": "Direito Constitucional",
+    "topic": "Princípios da administração",
+    "statement": "A publicidade administrativa autoriza revelar livremente qualquer dado pessoal protegido por lei.",
+    "correct": "E",
+    "explanation": "A publicidade deve respeitar sigilo legal e direitos fundamentais.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-053",
+    "subject": "Direito Constitucional",
+    "topic": "Direitos fundamentais",
+    "statement": "A igualdade perante a lei está prevista na Constituição de 1988.",
+    "correct": "C",
+    "explanation": "O art. 5º estabelece que todos são iguais perante a lei nos termos constitucionais.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-054",
+    "subject": "Direito Constitucional",
+    "topic": "Direitos fundamentais",
+    "statement": "O direito à vida não é protegido pela Constituição Federal.",
+    "correct": "E",
+    "explanation": "É expressamente protegido no art. 5º.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-055",
+    "subject": "Direito Constitucional",
+    "topic": "Direitos sociais",
+    "statement": "Educação, saúde e trabalho estão entre os direitos sociais constitucionais.",
+    "correct": "C",
+    "explanation": "Integram o rol do art. 6º da Constituição.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-056",
+    "subject": "Direito Constitucional",
+    "topic": "Direitos sociais",
+    "statement": "A previdência social não é reconhecida como direito social pela Constituição.",
+    "correct": "E",
+    "explanation": "A previdência social integra os direitos sociais do art. 6º.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-057",
+    "subject": "Direito Constitucional",
+    "topic": "Administração pública",
+    "statement": "A investidura em cargo ou emprego público depende, em regra, de aprovação prévia em concurso público.",
+    "correct": "C",
+    "explanation": "A Constituição prevê exceções, como cargos em comissão declarados de livre nomeação e exoneração.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-058",
+    "subject": "Direito Constitucional",
+    "topic": "Administração pública",
+    "statement": "Todo cargo público pode ser preenchido sem concurso por escolha pessoal da autoridade.",
+    "correct": "E",
+    "explanation": "A regra geral constitucional exige concurso para investidura.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-059",
+    "subject": "Direito Constitucional",
+    "topic": "Poderes",
+    "statement": "Legislativo, Executivo e Judiciário são poderes da União, independentes e harmônicos entre si.",
+    "correct": "C",
+    "explanation": "A separação de poderes está prevista no art. 2º.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-060",
+    "subject": "Direito Constitucional",
+    "topic": "Poderes",
+    "statement": "O Poder Judiciário pode substituir a Constituição por uma lei ordinária de sua autoria.",
+    "correct": "E",
+    "explanation": "Mudanças constitucionais obedecem ao processo constitucional previsto.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-061",
+    "subject": "Direito Constitucional",
+    "topic": "Direitos e garantias",
+    "statement": "É assegurado o direito de petição aos poderes públicos em defesa de direitos ou contra ilegalidade ou abuso de poder.",
+    "correct": "C",
+    "explanation": "A garantia consta do art. 5º, XXXIV, a.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-062",
+    "subject": "Direito Constitucional",
+    "topic": "Direitos e garantias",
+    "statement": "O habeas corpus é instrumento voltado exclusivamente à proteção do direito de propriedade.",
+    "correct": "E",
+    "explanation": "Seu objeto é a liberdade de locomoção nas condições constitucionais.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-063",
+    "subject": "Direito Constitucional",
+    "topic": "Federalismo",
+    "statement": "A República Federativa do Brasil é formada pela união indissolúvel de estados, municípios e Distrito Federal.",
+    "correct": "C",
+    "explanation": "O art. 1º consagra a organização federativa.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-064",
+    "subject": "Direito Constitucional",
+    "topic": "Federalismo",
+    "statement": "Os municípios não possuem autonomia política no modelo federativo brasileiro.",
+    "correct": "E",
+    "explanation": "Municípios são entes federativos dotados de autonomia nos limites da Constituição.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-065",
+    "subject": "Direito Administrativo",
+    "topic": "Administração indireta",
+    "statement": "Autarquias integram a administração pública indireta.",
+    "correct": "C",
+    "explanation": "Autarquias são pessoas jurídicas de direito público criadas por lei específica.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-066",
+    "subject": "Direito Administrativo",
+    "topic": "Administração indireta",
+    "statement": "O INSS é uma empresa privada sem vínculo com a administração pública federal.",
+    "correct": "E",
+    "explanation": "O INSS é uma autarquia federal.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-067",
+    "subject": "Direito Administrativo",
+    "topic": "Atos administrativos",
+    "statement": "A presunção de legitimidade é um atributo geralmente associado aos atos administrativos.",
+    "correct": "C",
+    "explanation": "É presunção relativa, sujeita a controle e prova em contrário.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-068",
+    "subject": "Direito Administrativo",
+    "topic": "Atos administrativos",
+    "statement": "Todo ato administrativo ilegal se torna válido apenas porque foi praticado por servidor público.",
+    "correct": "E",
+    "explanation": "A atuação administrativa deve observar requisitos de legalidade.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-069",
+    "subject": "Direito Administrativo",
+    "topic": "Poder de polícia",
+    "statement": "O poder de polícia permite limitar ou condicionar direitos e atividades nos termos da lei em benefício do interesse público.",
+    "correct": "C",
+    "explanation": "Seu exercício é vinculado a competências e limites legais.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-070",
+    "subject": "Direito Administrativo",
+    "topic": "Poder hierárquico",
+    "statement": "O poder hierárquico autoriza um servidor a descumprir qualquer lei por ordem de superior.",
+    "correct": "E",
+    "explanation": "Ordens manifestamente ilegais não devem ser cumpridas.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-071",
+    "subject": "Direito Administrativo",
+    "topic": "Processo administrativo",
+    "statement": "A Lei nº 9.784/1999 estabelece normas básicas sobre processo administrativo no âmbito da administração pública federal.",
+    "correct": "C",
+    "explanation": "É a lei federal de processo administrativo.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-072",
+    "subject": "Direito Administrativo",
+    "topic": "Processo administrativo",
+    "statement": "A administração pode desconsiderar totalmente o direito de defesa do interessado em processos sancionadores.",
+    "correct": "E",
+    "explanation": "Contraditório e ampla defesa devem ser observados quando aplicáveis.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-073",
+    "subject": "Direito Administrativo",
+    "topic": "Serviços públicos",
+    "statement": "A prestação de serviços públicos pode ser realizada diretamente pelo Estado ou delegada, nos termos da lei.",
+    "correct": "C",
+    "explanation": "A delegação obedece ao regime jurídico pertinente.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-074",
+    "subject": "Direito Administrativo",
+    "topic": "Serviços públicos",
+    "statement": "A concessão de serviço público dispensa qualquer regra ou formalidade legal.",
+    "correct": "E",
+    "explanation": "Concessões devem seguir requisitos constitucionais e legais, inclusive licitação como regra.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-075",
+    "subject": "Direito Administrativo",
+    "topic": "Responsabilidade civil",
+    "statement": "A Constituição prevê responsabilidade civil das pessoas jurídicas de direito público por danos causados por seus agentes nessa qualidade.",
+    "correct": "C",
+    "explanation": "É prevista no art. 37, § 6º, com condições legais.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-076",
+    "subject": "Direito Administrativo",
+    "topic": "Agentes públicos",
+    "statement": "Servidor público e empregado público são expressões sempre sinônimas e submetidas necessariamente ao mesmo regime.",
+    "correct": "E",
+    "explanation": "Há regimes de vínculo jurídico distintos, incluindo estatutário e celetista.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-077",
+    "subject": "Direito Administrativo",
+    "topic": "Princípio da finalidade",
+    "statement": "A atuação administrativa deve perseguir a finalidade pública prevista em lei.",
+    "correct": "C",
+    "explanation": "Desvio de finalidade pode viciar o ato administrativo.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-078",
+    "subject": "Direito Administrativo",
+    "topic": "Controle",
+    "statement": "Atos da administração pública estão totalmente imunes ao controle judicial.",
+    "correct": "E",
+    "explanation": "É possível controle judicial de legalidade nos limites da separação dos poderes.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-079",
+    "subject": "Ética no Serviço Público",
+    "topic": "Conduta ética",
+    "statement": "A conduta ética do agente público deve observar tanto deveres legais quanto valores de honestidade e respeito ao cidadão.",
+    "correct": "C",
+    "explanation": "A ética funcional envolve padrões de comportamento na prestação de serviços públicos.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-080",
+    "subject": "Ética no Serviço Público",
+    "topic": "Conduta ética",
+    "statement": "É aceitável tratar usuários com desrespeito quando a repartição estiver com excesso de trabalho.",
+    "correct": "E",
+    "explanation": "A carga de trabalho não afasta o dever de urbanidade e respeito.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-081",
+    "subject": "Ética no Serviço Público",
+    "topic": "Interesse público",
+    "statement": "O agente deve evitar usar o cargo público para obter vantagem pessoal indevida.",
+    "correct": "C",
+    "explanation": "O cargo é exercido para atender a finalidades públicas, não interesses particulares.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-082",
+    "subject": "Ética no Serviço Público",
+    "topic": "Interesse público",
+    "statement": "O servidor pode privilegiar um familiar em atendimento público por mera preferência pessoal.",
+    "correct": "E",
+    "explanation": "Esse favorecimento contraria impessoalidade e padrões éticos.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-083",
+    "subject": "Ética no Serviço Público",
+    "topic": "Sigilo",
+    "statement": "Informações protegidas por sigilo legal devem receber tratamento adequado do servidor.",
+    "correct": "C",
+    "explanation": "Deveres de transparência coexistem com proteção de dados e hipóteses de sigilo.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-084",
+    "subject": "Ética no Serviço Público",
+    "topic": "Sigilo",
+    "statement": "A obrigação de transparência elimina toda e qualquer proteção legal de dados pessoais.",
+    "correct": "E",
+    "explanation": "Publicidade e proteção de dados devem ser conciliadas.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-085",
+    "subject": "Ética no Serviço Público",
+    "topic": "Respeito",
+    "statement": "Ouvir o usuário com atenção e prestar informações claras são atitudes compatíveis com um atendimento ético.",
+    "correct": "C",
+    "explanation": "Urbanidade e orientação adequada fortalecem o serviço público.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-086",
+    "subject": "Ética no Serviço Público",
+    "topic": "Respeito",
+    "statement": "É ético fornecer deliberadamente informação falsa ao cidadão para encerrar rapidamente um atendimento.",
+    "correct": "E",
+    "explanation": "A atitude viola honestidade, respeito e confiabilidade institucional.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-087",
+    "subject": "Ética no Serviço Público",
+    "topic": "Conflito de interesses",
+    "statement": "Situações de conflito de interesses exigem cuidado e observância das regras aplicáveis.",
+    "correct": "C",
+    "explanation": "Interesses privados não devem interferir indevidamente no desempenho da função pública.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-088",
+    "subject": "Ética no Serviço Público",
+    "topic": "Conflito de interesses",
+    "statement": "Aceitar presente em troca de favorecer um processo administrativo é conduta eticamente neutra.",
+    "correct": "E",
+    "explanation": "A vantagem indevida compromete a integridade e pode configurar ilícito.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-089",
+    "subject": "Ética no Serviço Público",
+    "topic": "Responsabilidade",
+    "statement": "O servidor deve agir com zelo no desempenho de suas atribuições.",
+    "correct": "C",
+    "explanation": "O cuidado com recursos e interesses públicos é dever funcional.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-090",
+    "subject": "Ética no Serviço Público",
+    "topic": "Responsabilidade",
+    "statement": "Diante de erro identificado em atendimento, a medida ética é ocultá-lo para preservar a imagem do setor.",
+    "correct": "E",
+    "explanation": "A conduta apropriada envolve tratar o erro com responsabilidade e observar os procedimentos de correção.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-091",
+    "subject": "Informática",
+    "topic": "Segurança digital",
+    "statement": "A autenticação em duas etapas pode reduzir o risco de acesso indevido a uma conta.",
+    "correct": "C",
+    "explanation": "Ela exige um fator adicional além da senha, quando configurada adequadamente.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-092",
+    "subject": "Informática",
+    "topic": "Segurança digital",
+    "statement": "Uma senha usada em vários serviços é tão segura quanto senhas únicas para cada serviço.",
+    "correct": "E",
+    "explanation": "Reutilizar senhas amplia o impacto do vazamento de uma delas.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-093",
+    "subject": "Informática",
+    "topic": "Navegadores",
+    "statement": "O navegador permite acessar páginas web por meio de endereços e hiperlinks.",
+    "correct": "C",
+    "explanation": "Esse é um de seus usos essenciais.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-094",
+    "subject": "Informática",
+    "topic": "Navegadores",
+    "statement": "O modo anônimo de navegação torna a pessoa invisível a todos os sites, redes e provedores.",
+    "correct": "E",
+    "explanation": "O modo privado reduz registros locais, mas não garante anonimato na rede.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-095",
+    "subject": "Informática",
+    "topic": "Correio eletrônico",
+    "statement": "Um anexo de e-mail desconhecido pode representar risco de malware.",
+    "correct": "C",
+    "explanation": "Arquivos e links suspeitos devem ser verificados antes da abertura.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-096",
+    "subject": "Informática",
+    "topic": "Correio eletrônico",
+    "statement": "Receber mensagem com logotipo de instituição é prova suficiente de que o remetente é legítimo.",
+    "correct": "E",
+    "explanation": "Golpistas podem falsificar a aparência de mensagens.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-097",
+    "subject": "Informática",
+    "topic": "Planilhas",
+    "statement": "Em uma planilha eletrônica, fórmulas geralmente começam pelo sinal de igual.",
+    "correct": "C",
+    "explanation": "Exemplo: =SOMA(A1:A3).",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-098",
+    "subject": "Informática",
+    "topic": "Planilhas",
+    "statement": "Uma fórmula como =SOMA(A1:A3) serve exclusivamente para criar um gráfico de pizza.",
+    "correct": "E",
+    "explanation": "Ela calcula a soma dos valores do intervalo indicado.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-099",
+    "subject": "Informática",
+    "topic": "Internet",
+    "statement": "HTTPS utiliza um protocolo de comunicação com proteção criptográfica na transmissão de dados.",
+    "correct": "C",
+    "explanation": "A conexão TLS/HTTPS protege o tráfego em trânsito, mas não garante que todo site seja confiável.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-100",
+    "subject": "Informática",
+    "topic": "Internet",
+    "statement": "Todo site que apresenta cadeado HTTPS está necessariamente livre de fraude.",
+    "correct": "E",
+    "explanation": "Criminosos também podem obter certificados para sites fraudulentos.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-101",
+    "subject": "Informática",
+    "topic": "Arquivos",
+    "statement": "Uma cópia de segurança ajuda a recuperar dados após perda ou dano.",
+    "correct": "C",
+    "explanation": "Backups são parte importante da estratégia de continuidade.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-102",
+    "subject": "Informática",
+    "topic": "Arquivos",
+    "statement": "Excluir arquivos da lixeira equivale sempre a apagar fisicamente todos os vestígios de qualquer armazenamento.",
+    "correct": "E",
+    "explanation": "A exclusão não garante destruição irrecuperável dos dados.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-103",
+    "subject": "Raciocínio Lógico",
+    "topic": "Porcentagem",
+    "statement": "Vinte por cento de 150 correspondem a 30.",
+    "correct": "C",
+    "explanation": "0,20 × 150 = 30.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-104",
+    "subject": "Raciocínio Lógico",
+    "topic": "Porcentagem",
+    "statement": "Se uma quantidade aumenta 10% e depois diminui 10%, ela retorna necessariamente ao valor original.",
+    "correct": "E",
+    "explanation": "100 vira 110 e depois 99, portanto não retorna a 100.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-105",
+    "subject": "Raciocínio Lógico",
+    "topic": "Lógica proposicional",
+    "statement": "A negação de “Todos os documentos foram analisados” é “Pelo menos um documento não foi analisado”.",
+    "correct": "C",
+    "explanation": "A negação do quantificador universal é existencial com predicado negado.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-106",
+    "subject": "Raciocínio Lógico",
+    "topic": "Lógica proposicional",
+    "statement": "A negação de “Algum servidor estuda” é “Algum servidor não estuda”.",
+    "correct": "E",
+    "explanation": "A negação correta é “Nenhum servidor estuda”.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-107",
+    "subject": "Raciocínio Lógico",
+    "topic": "Tabelas-verdade",
+    "statement": "Uma proposição simples possui dois valores lógicos possíveis na lógica clássica.",
+    "correct": "C",
+    "explanation": "Verdadeiro ou falso são os valores possíveis.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-108",
+    "subject": "Raciocínio Lógico",
+    "topic": "Tabelas-verdade",
+    "statement": "Uma tabela-verdade com duas proposições simples distintas tem exatamente duas linhas.",
+    "correct": "E",
+    "explanation": "Duas proposições geram 2² = 4 combinações.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-109",
+    "subject": "Raciocínio Lógico",
+    "topic": "Conectivos",
+    "statement": "Uma conjunção P e Q só é verdadeira quando P e Q são verdadeiras.",
+    "correct": "C",
+    "explanation": "Esse é o significado lógico do conectivo “e”.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-110",
+    "subject": "Raciocínio Lógico",
+    "topic": "Conectivos",
+    "statement": "Na disjunção inclusiva P ou Q, a proposição é falsa apenas quando ambas são verdadeiras.",
+    "correct": "E",
+    "explanation": "A disjunção inclusiva é falsa quando ambas são falsas.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-111",
+    "subject": "Raciocínio Lógico",
+    "topic": "Conjuntos",
+    "statement": "Se A é subconjunto de B, todo elemento de A também pertence a B.",
+    "correct": "C",
+    "explanation": "Essa é a definição de relação de inclusão.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-112",
+    "subject": "Raciocínio Lógico",
+    "topic": "Conjuntos",
+    "statement": "A interseção entre dois conjuntos reúne todos os elementos que estão em apenas um deles.",
+    "correct": "E",
+    "explanation": "A interseção contém os elementos comuns aos dois conjuntos.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-113",
+    "subject": "Raciocínio Lógico",
+    "topic": "Regra de três",
+    "statement": "Se 4 servidores processam 40 pedidos no mesmo período e ritmo, 8 servidores processariam 80 pedidos nas mesmas condições.",
+    "correct": "C",
+    "explanation": "A proporcionalidade direta se mantém sob essas hipóteses.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "base-114",
+    "subject": "Raciocínio Lógico",
+    "topic": "Porcentagem",
+    "statement": "Um desconto de 25% sobre R$ 200 resulta em um preço final de R$ 175.",
+    "correct": "E",
+    "explanation": "25% de 200 = 50; o preço final é R$ 150.",
+    "origin": "Questão autoral • estilo Cebraspe"
+  }
+]

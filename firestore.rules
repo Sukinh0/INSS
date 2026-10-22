@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+    function validRanking(uid) {
+      let r = request.resource.data;
+      return r.keys().hasAll(['profileId', 'profileName', 'photo', 'totalCorrect', 'totalAnswered', 'attempts', 'totalQuestions', 'bestAccuracy', 'accuracy', 'points', 'lastAt'])
+        && r.keys().hasOnly(['profileId', 'profileName', 'photo', 'totalCorrect', 'totalAnswered', 'attempts', 'totalQuestions', 'bestAccuracy', 'accuracy', 'points', 'lastAt'])
+        && r.profileId == uid
+        && r.profileName is string && r.profileName.size() <= 60
+        && (r.photo == null || (r.photo is string && r.photo.size() <= 1024))
+        && r.totalCorrect is int && r.totalCorrect >= 0
+        && r.totalAnswered is int && r.totalAnswered >= r.totalCorrect
+        && r.totalQuestions is int && r.totalQuestions >= r.totalAnswered
+        && r.attempts is int && r.attempts >= 0
+        && r.points is int && r.points == r.totalCorrect * 10
+        && r.bestAccuracy is number && r.bestAccuracy >= 0 && r.bestAccuracy <= 100
+        && r.accuracy is number && r.accuracy >= 0 && r.accuracy <= 100
+        && r.lastAt is string && r.lastAt.size() <= 60;
+    }
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+      match /attempts/{attemptId} { allow read, write: if isOwner(uid); }
+      match /custom/{document} { allow read, write: if isOwner(uid); }
+    }
+    match /leaderboard/{uid} {
+      allow read: if signedIn();
+      allow create, update: if isOwner(uid) && validRanking(uid);
+      allow delete: if isOwner(uid);
+    }
+  }
+}
