@@ -1,8 +1,8 @@
-# Rumo ao INSS 💜
+# Rumo ao INSS 🌻
 
 Um aplicativo simples, mobile-first, para praticar questões e acompanhar a evolução dos estudos para **Técnico do Seguro Social (INSS)**.
 
-> **Não é um produto oficial do INSS ou do Cebraspe.** As 114 questões que já acompanham o aplicativo são **autorais, de treino**, não são transcrições de provas. Legislação e editais podem mudar. Confira tudo em fontes atuais antes de estudar para um concurso futuro.
+> **Não é um produto oficial do INSS ou do Cebraspe.** As 234 questões que já acompanham o aplicativo (114 base + 120 da expansão Certo/Errado) são **autorais, de treino**, não são transcrições de provas. Legislação e editais podem mudar. Confira tudo em fontes atuais antes de estudar para um concurso futuro.
 
 ## O que já está pronto
 
@@ -143,7 +143,7 @@ Há links consultáveis na aba **Questões e provas → Provas anteriores**, inc
 ```text
 src/App.tsx              Páginas e navegação
 src/styles.css           Design responsivo
-src/data/questions.json  114 itens de treino autorais
+src/data/questions.json  234 itens de treino autorais
 src/lib/engine.ts        Sorteio, correção, ranking e análises
 src/lib/storage.ts       Persistência local
 src/lib/firebase.ts      Google Auth e Firestore opcionais

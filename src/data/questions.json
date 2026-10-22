@@ -1024,5 +1024,1085 @@
     "correct": "E",
     "explanation": "25% de 200 = 50; o preço final é R$ 150.",
     "origin": "Questão autoral • estilo Cebraspe"
+  },
+  {
+    "id": "inss-ce-2026-01-001",
+    "subject": "Direito Previdenciário",
+    "topic": "Segurados obrigatórios",
+    "statement": "Uma pessoa contratada como empregada de empresa privada, sob subordinação e mediante remuneração, enquadra-se, em regra, como segurada obrigatória do RGPS, ainda que o empregador deixe de recolher as contribuições devidas.",
+    "correct": "C",
+    "explanation": "A filiação decorre do exercício da atividade remunerada enquadrada na lei; inadimplência do empregador não desfaz a condição de segurado empregado. Base: Lei 8.213/1991, art. 11, e Decreto 3.048/1999.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-002",
+    "subject": "Direito Previdenciário",
+    "topic": "Filiação e inscrição",
+    "statement": "Para o trabalhador empregado, a filiação ao RGPS somente se concretiza depois que o INSS confirma seu cadastro no sistema previdenciário.",
+    "correct": "E",
+    "explanation": "A filiação do segurado obrigatório decorre automaticamente do exercício da atividade abrangida; inscrição e filiação não são conceitos equivalentes. Base: Lei 8.213/1991, art. 11, e Decreto 3.048/1999.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-003",
+    "subject": "Direito Previdenciário",
+    "topic": "Segurado facultativo",
+    "statement": "O trabalhador que exerce atividade remunerada abrangida obrigatoriamente pelo RGPS pode escolher recolher exclusivamente como segurado facultativo, caso considere essa categoria financeiramente mais vantajosa.",
+    "correct": "E",
+    "explanation": "O facultativo não pode substituir o enquadramento obrigatório decorrente de atividade remunerada. Base: Lei 8.213/1991, art. 13.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-004",
+    "subject": "Direito Previdenciário",
+    "topic": "Segurado especial",
+    "statement": "A exploração rural em regime de economia familiar, na forma da lei, pode caracterizar segurado especial mesmo quando a atividade é exercida com auxílio eventual de terceiros.",
+    "correct": "C",
+    "explanation": "O auxílio eventual de terceiros não descaracteriza, por si só, o regime de economia familiar; devem ser observadas as condições legais. Base: Lei 8.213/1991, art. 11, VII e § 1.º.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-005",
+    "subject": "Direito Previdenciário",
+    "topic": "Trabalhador avulso",
+    "statement": "O trabalhador avulso caracteriza-se necessariamente pela existência de contrato de emprego individual e permanente com cada empresa à qual presta serviços.",
+    "correct": "E",
+    "explanation": "A prestação de serviços avulsos ocorre sem vínculo empregatício, com intermediação legalmente prevista. Base: Lei 8.213/1991, art. 11, VI.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-006",
+    "subject": "Direito Previdenciário",
+    "topic": "Dependentes",
+    "statement": "A existência de dependente habilitado em classe preferencial exclui, para a pensão por morte do RGPS, o direito de dependentes pertencentes às classes subsequentes.",
+    "correct": "C",
+    "explanation": "A Lei 8.213/1991 estabelece classes de dependentes e preferência entre elas. Base: art. 16, § 1.º.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-007",
+    "subject": "Direito Previdenciário",
+    "topic": "Dependentes",
+    "statement": "Para fins previdenciários, a dependência econômica dos pais do segurado falecido é presumida, dispensando qualquer demonstração dessa condição.",
+    "correct": "E",
+    "explanation": "A presunção de dependência econômica alcança os dependentes da primeira classe; os pais devem comprová-la. Base: Lei 8.213/1991, art. 16, § 4.º.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-008",
+    "subject": "Direito Previdenciário",
+    "topic": "Pensão por morte",
+    "statement": "A concessão de pensão por morte no RGPS independe de carência, embora a duração de determinadas cotas dependa da verificação de requisitos legais específicos.",
+    "correct": "C",
+    "explanation": "Pensão por morte está entre as prestações independentes de carência; duração e elegibilidade têm regras próprias. Base: Lei 8.213/1991, arts. 26 e 77.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-009",
+    "subject": "Direito Previdenciário",
+    "topic": "Carência",
+    "statement": "A perda da qualidade de segurado extingue, de modo definitivo, todas as contribuições anteriores, impedindo seu eventual aproveitamento em qualquer hipótese de nova filiação.",
+    "correct": "E",
+    "explanation": "A legislação prevê condições para o aproveitamento de contribuições anteriores após nova filiação; a afirmação absoluta está errada. Base: Lei 8.213/1991, art. 27-A.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-010",
+    "subject": "Direito Previdenciário",
+    "topic": "Salário-maternidade",
+    "statement": "O salário-maternidade é benefício do RGPS reservado exclusivamente às seguradas empregadas com vínculo formal de emprego.",
+    "correct": "E",
+    "explanation": "O benefício não se restringe às empregadas; a legislação contempla outras categorias de seguradas, observados os requisitos. Base: Lei 8.213/1991, arts. 71 a 73.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-011",
+    "subject": "Direito Previdenciário",
+    "topic": "Incapacidade",
+    "statement": "O auxílio por incapacidade temporária é devido a qualquer segurado que apresente doença diagnosticada, independentemente de avaliação da incapacidade para seu trabalho ou atividade habitual.",
+    "correct": "E",
+    "explanation": "O diagnóstico de doença, isoladamente, não basta: é necessário observar os critérios de incapacidade laboral e outros requisitos legais. Base: Lei 8.213/1991, art. 59.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-012",
+    "subject": "Direito Previdenciário",
+    "topic": "Reabilitação profissional",
+    "statement": "A reabilitação profissional integra os serviços previdenciários destinados a proporcionar meios de readaptação profissional ao beneficiário incapacitado, observadas as condições previstas em lei.",
+    "correct": "C",
+    "explanation": "A Lei 8.213/1991 prevê habilitação e reabilitação profissional como serviço da previdência social. Base: arts. 89 a 93.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-013",
+    "subject": "Direito Previdenciário",
+    "topic": "Salário-família",
+    "statement": "O salário-família é pago indistintamente a todos os segurados do RGPS, sem considerar renda ou categoria de segurado.",
+    "correct": "E",
+    "explanation": "O salário-família possui requisitos e destinatários específicos, inclusive condições referentes à remuneração. Base: Lei 8.213/1991, arts. 65 a 70.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-014",
+    "subject": "Direito Previdenciário",
+    "topic": "Qualidade de segurado",
+    "statement": "A cessação de contribuições ao RGPS nem sempre provoca perda imediata da qualidade de segurado, pois a legislação prevê hipóteses de manutenção dessa qualidade por certo período.",
+    "correct": "C",
+    "explanation": "O chamado período de graça mantém a qualidade de segurado em situações e prazos previstos na legislação. Base: Lei 8.213/1991, art. 15.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-01-015",
+    "subject": "Direito Previdenciário",
+    "topic": "BPC e RGPS",
+    "statement": "O benefício assistencial de prestação continuada, previsto na LOAS, constitui aposentadoria do RGPS e pressupõe contribuições previdenciárias anteriores.",
+    "correct": "E",
+    "explanation": "O BPC é assistencial, não aposentadoria previdenciária, e independe de contribuição; depende do atendimento dos requisitos legais. Base: CF, art. 203, V, e Lei 8.742/1993, art. 20.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-001",
+    "subject": "Seguridade Social",
+    "topic": "Organização constitucional",
+    "statement": "A seguridade social compreende ações dos poderes públicos e da sociedade direcionadas à garantia de direitos relativos à saúde, à previdência social e à assistência social.",
+    "correct": "C",
+    "explanation": "Essa é a estrutura constitucional da seguridade social. Base: Constituição Federal, art. 194, caput.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-002",
+    "subject": "Seguridade Social",
+    "topic": "Universalidade",
+    "statement": "O princípio da universalidade de cobertura e atendimento significa que todas as prestações previdenciárias devem ser concedidas a qualquer pessoa, mesmo sem preenchimento de requisitos legais.",
+    "correct": "E",
+    "explanation": "A universalidade é objetivo do sistema, mas cada prestação pode exigir condições legais; a previdência tem caráter contributivo. Base: CF, arts. 194 e 201.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-003",
+    "subject": "Seguridade Social",
+    "topic": "Uniformidade e equivalência",
+    "statement": "A uniformidade e equivalência das prestações às populações urbanas e rurais determina que todos os beneficiários recebam necessariamente valores monetários idênticos.",
+    "correct": "E",
+    "explanation": "Uniformidade e equivalência não significam valor individual idêntico para todos, pois benefícios observam critérios legais. Base: CF, art. 194, parágrafo único, II.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-004",
+    "subject": "Seguridade Social",
+    "topic": "Seletividade e distributividade",
+    "statement": "A seletividade e a distributividade autorizam o legislador, respeitados os parâmetros constitucionais, a estabelecer critérios de acesso e distribuição de prestações da seguridade social.",
+    "correct": "C",
+    "explanation": "São objetivos expressos que orientam a escolha das prestações e sua distribuição social. Base: CF, art. 194, parágrafo único, III.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-005",
+    "subject": "Seguridade Social",
+    "topic": "Irredutibilidade",
+    "statement": "A irredutibilidade do valor dos benefícios figura entre os objetivos constitucionais de organização da seguridade social.",
+    "correct": "C",
+    "explanation": "Está prevista no art. 194, parágrafo único, IV, da Constituição. A forma de proteção do valor deve ser interpretada com as regras aplicáveis a cada benefício.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-006",
+    "subject": "Seguridade Social",
+    "topic": "Diversidade do financiamento",
+    "statement": "Segundo a Constituição, a seguridade social deve ser custeada exclusivamente por contribuições incidentes sobre a folha de salários das empresas.",
+    "correct": "E",
+    "explanation": "O sistema possui financiamento diversificado, inclusive recursos orçamentários e contribuições sobre outras bases. Base: CF, arts. 194 e 195.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-007",
+    "subject": "Seguridade Social",
+    "topic": "Gestão quadripartite",
+    "statement": "O caráter democrático e descentralizado da administração da seguridade social inclui a participação, nos órgãos colegiados, de trabalhadores, empregadores, aposentados e governo.",
+    "correct": "C",
+    "explanation": "A gestão quadripartite é princípio expresso. Base: CF, art. 194, parágrafo único, VII.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-008",
+    "subject": "Seguridade Social",
+    "topic": "Financiamento",
+    "statement": "O financiamento da seguridade social compete a toda a sociedade, de forma direta e indireta, nos termos constitucionais.",
+    "correct": "C",
+    "explanation": "A Constituição prevê custeio por orçamentos públicos e contribuições sociais, entre outras fontes admitidas. Base: CF, art. 195, caput.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-009",
+    "subject": "Seguridade Social",
+    "topic": "Saúde",
+    "statement": "O acesso às ações do Sistema Único de Saúde é restrito a segurados do RGPS que tenham recolhido contribuições nos doze meses anteriores ao atendimento.",
+    "correct": "E",
+    "explanation": "A saúde é direito de todos, não prestação condicionada a contribuição previdenciária. Base: CF, art. 196.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-010",
+    "subject": "Seguridade Social",
+    "topic": "Assistência social",
+    "statement": "A prestação da assistência social independe de contribuição à seguridade social, desde que atendidos os requisitos previstos para cada ação ou benefício.",
+    "correct": "C",
+    "explanation": "A ausência de caráter contributivo decorre do art. 203 da Constituição.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-011",
+    "subject": "Seguridade Social",
+    "topic": "Previdência social",
+    "statement": "No RGPS, a filiação de todas as pessoas é facultativa, porque a Constituição veda a obrigatoriedade de participação em qualquer regime previdenciário.",
+    "correct": "E",
+    "explanation": "O RGPS possui filiação obrigatória para quem realiza atividade enquadrada legalmente. Base: CF, art. 201.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-012",
+    "subject": "Seguridade Social",
+    "topic": "Fonte de custeio",
+    "statement": "A Constituição proíbe a criação, majoração ou extensão de benefício ou serviço da seguridade social sem a correspondente fonte de custeio total.",
+    "correct": "C",
+    "explanation": "É a regra de contrapartida financeira. Base: CF, art. 195, § 5.º.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-013",
+    "subject": "Seguridade Social",
+    "topic": "Orçamento da seguridade",
+    "statement": "As receitas dos estados, do Distrito Federal e dos municípios destinadas à seguridade social integram obrigatoriamente o orçamento da União.",
+    "correct": "E",
+    "explanation": "A Constituição estabelece que essas receitas constam dos respectivos orçamentos, não integrando o orçamento da União. Base: CF, art. 195, § 1.º.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-014",
+    "subject": "Seguridade Social",
+    "topic": "SUS",
+    "statement": "A execução de ações de vigilância sanitária e epidemiológica inclui-se entre as competências constitucionais do Sistema Único de Saúde.",
+    "correct": "C",
+    "explanation": "O art. 200, II, da Constituição trata expressamente dessas ações.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-02-015",
+    "subject": "Seguridade Social",
+    "topic": "Assistência e previdência",
+    "statement": "O benefício assistencial destinado ao idoso de baixa renda é financiado exclusivamente por descontos na folha de pagamento dos próprios beneficiários.",
+    "correct": "E",
+    "explanation": "A prestação é assistencial e não depende de contribuições dos beneficiários; seu financiamento integra a seguridade social. Base: CF, arts. 195 e 203.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-001",
+    "subject": "Língua Portuguesa",
+    "topic": "Emprego de haver",
+    "statement": "Na frase “Havia diversos requerimentos pendentes de análise”, a substituição de “Havia” por “Haviam” preservaria a correção gramatical.",
+    "correct": "E",
+    "explanation": "Com sentido de existir, o verbo haver é impessoal e permanece na terceira pessoa do singular.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-002",
+    "subject": "Língua Portuguesa",
+    "topic": "Emprego de fazer",
+    "statement": "Na frase “Faz três semanas que o setor recebeu o pedido”, o verbo “fazer” permanece corretamente no singular por indicar tempo decorrido.",
+    "correct": "C",
+    "explanation": "Quando expressa tempo decorrido, fazer é impessoal, de modo que não flexiona no plural.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-003",
+    "subject": "Língua Portuguesa",
+    "topic": "Crase",
+    "statement": "Na oração “A servidora encaminhou o documento à chefia”, o emprego do sinal indicativo de crase decorre da fusão da preposição exigida pelo verbo com o artigo feminino.",
+    "correct": "C",
+    "explanation": "Encaminhar algo a alguém: preposição a mais artigo a que antecede chefia, formando à.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-004",
+    "subject": "Língua Portuguesa",
+    "topic": "Crase",
+    "statement": "Em “O atendimento ocorre de segunda à sexta-feira”, a crase é obrigatória por se tratar de locução que indica dias da semana.",
+    "correct": "E",
+    "explanation": "Na correlação de ... a, sem artigo antes do primeiro termo, escreve-se de segunda a sexta-feira.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-005",
+    "subject": "Língua Portuguesa",
+    "topic": "Concordância verbal",
+    "statement": "Na frase “Existem, no arquivo, um conjunto de processos antigos”, a forma verbal “Existem” concorda regularmente com “um conjunto”, que é o núcleo do sujeito singular.",
+    "correct": "E",
+    "explanation": "O núcleo “conjunto” está no singular: a formulação segura é “Existe, no arquivo, um conjunto de processos antigos”.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-006",
+    "subject": "Língua Portuguesa",
+    "topic": "Concordância nominal",
+    "statement": "Em “Seguem anexas as declarações solicitadas”, a palavra “anexas” concorda corretamente em gênero e número com “declarações”.",
+    "correct": "C",
+    "explanation": "Como adjetivo, anexo flexiona para concordar com o substantivo a que se refere.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-007",
+    "subject": "Língua Portuguesa",
+    "topic": "Pronome relativo",
+    "statement": "Na construção “O cidadão cujo o benefício foi revisado apresentou recurso”, o artigo “o” é obrigatório após “cujo”.",
+    "correct": "E",
+    "explanation": "O pronome relativo cujo concorda com o termo posterior, mas não admite artigo imediatamente depois dele.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-008",
+    "subject": "Língua Portuguesa",
+    "topic": "Pontuação",
+    "statement": "Na frase “Os processos, que chegaram ontem, serão revisados”, a retirada das vírgulas manteria necessariamente a mesma interpretação a respeito de quais processos serão revisados.",
+    "correct": "E",
+    "explanation": "Com vírgulas, a oração adjetiva é explicativa; sem elas, tende a ser restritiva, alterando o alcance referencial.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-009",
+    "subject": "Língua Portuguesa",
+    "topic": "Valor semântico",
+    "statement": "Na frase “Embora estivesse cansada, a equipe concluiu o atendimento”, a troca de “Embora” por “Porque” preservaria a relação de concessão entre as orações.",
+    "correct": "E",
+    "explanation": "Embora indica concessão; porque introduz, em contexto usual, causa ou explicação.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-010",
+    "subject": "Língua Portuguesa",
+    "topic": "Coesão textual",
+    "statement": "Na sequência “A equipe recebeu os documentos e, em seguida, conferiu os dados”, o sujeito da segunda oração pode ser recuperado por elipse, sem prejuízo da compreensão.",
+    "correct": "C",
+    "explanation": "O sujeito não expresso de conferiu é recuperado do contexto: a equipe.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-011",
+    "subject": "Língua Portuguesa",
+    "topic": "Regência",
+    "statement": "Na frase “O técnico assistiu ao treinamento”, a preposição “a” é compatível com o emprego do verbo “assistir” no sentido de presenciar.",
+    "correct": "C",
+    "explanation": "No sentido de presenciar, o verbo assistir rege tradicionalmente a preposição a.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-012",
+    "subject": "Língua Portuguesa",
+    "topic": "Ortografia",
+    "statement": "A grafia “idéia”, com acento agudo, está de acordo com a ortografia oficial brasileira vigente.",
+    "correct": "E",
+    "explanation": "Pelo acordo ortográfico, o ditongo aberto ei de paroxítonas como ideia deixou de ser acentuado.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-013",
+    "subject": "Língua Portuguesa",
+    "topic": "Acentuação",
+    "statement": "A palavra “saída” recebe acento gráfico em razão da regra do hiato, pois a vogal “í” tônica forma sílaba própria nas condições previstas pela norma.",
+    "correct": "C",
+    "explanation": "Sa-í-da enquadra-se na regra de acentuação das vogais i e u tônicas em hiato.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-014",
+    "subject": "Língua Portuguesa",
+    "topic": "Conjunções",
+    "statement": "Em “O sistema ficou indisponível; portanto, o prazo interno foi reajustado”, a expressão “portanto” introduz conclusão em relação ao conteúdo anterior.",
+    "correct": "C",
+    "explanation": "Portanto é conectivo conclusivo, e não adversativo ou concessivo.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-03-015",
+    "subject": "Língua Portuguesa",
+    "topic": "Uso de onde",
+    "statement": "Na frase “A instrução normativa onde estão os requisitos foi atualizada”, o emprego de “onde” é o mais adequado segundo a norma culta, pois o antecedente designa documento, não lugar.",
+    "correct": "E",
+    "explanation": "Onde deve retomar ideia de lugar; nesse contexto, preferem-se “em que” ou “na qual”.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-001",
+    "subject": "Direito Constitucional",
+    "topic": "Princípios administrativos",
+    "statement": "Os princípios expressos no caput do art. 37 da Constituição alcançam a administração pública direta e indireta de qualquer dos Poderes da União, dos estados, do Distrito Federal e dos municípios.",
+    "correct": "C",
+    "explanation": "Legalidade, impessoalidade, moralidade, publicidade e eficiência aplicam-se ao conjunto da administração apontada no art. 37.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-002",
+    "subject": "Direito Constitucional",
+    "topic": "Legalidade",
+    "statement": "A exigência de legalidade impõe ao particular a mesma vinculação estrita aplicável ao agente público, permitindo-lhe agir apenas quando houver autorização legal específica.",
+    "correct": "E",
+    "explanation": "Para o particular, vale em regra o espaço de liberdade que a lei não proíbe; a administração se vincula à legalidade de modo próprio. Base: CF, arts. 5.º, II, e 37.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-003",
+    "subject": "Direito Constitucional",
+    "topic": "Direito de reunião",
+    "statement": "Uma reunião pacífica e sem armas em local aberto ao público, que não frustre outra reunião anteriormente convocada para o mesmo local, independe de autorização, sendo exigido prévio aviso à autoridade competente.",
+    "correct": "C",
+    "explanation": "A Constituição assegura essa liberdade sem necessidade de autorização, mas condiciona o exercício nos termos previstos no art. 5.º, XVI.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-004",
+    "subject": "Direito Constitucional",
+    "topic": "Certidões",
+    "statement": "A obtenção de certidões em repartições públicas, para defesa de direitos e esclarecimento de situações de interesse pessoal, integra garantia constitucional que independe do pagamento de taxas.",
+    "correct": "C",
+    "explanation": "Previsão do art. 5.º, XXXIV, b, da Constituição.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-005",
+    "subject": "Direito Constitucional",
+    "topic": "Habeas corpus",
+    "statement": "O habeas corpus é o instrumento constitucional destinado, prioritariamente, à obtenção de acesso a dados pessoais mantidos em bancos de dados públicos.",
+    "correct": "E",
+    "explanation": "Essa descrição se aproxima do habeas data; habeas corpus protege a liberdade de locomoção. Base: CF, art. 5.º, LXVIII e LXXII.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-006",
+    "subject": "Direito Constitucional",
+    "topic": "Habeas data",
+    "statement": "O habeas data pode ser utilizado, observados os requisitos aplicáveis, para assegurar conhecimento de informações relativas ao impetrante constantes de registros de entidades governamentais ou de caráter público.",
+    "correct": "C",
+    "explanation": "É hipótese expressa no art. 5.º, LXXII, a, da Constituição.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-007",
+    "subject": "Direito Constitucional",
+    "topic": "Mandado de segurança",
+    "statement": "O mandado de segurança individual é cabível mesmo quando o direito alegado for protegido especificamente por habeas corpus ou habeas data.",
+    "correct": "E",
+    "explanation": "A Constituição reserva o mandado de segurança à proteção de direito líquido e certo não amparado por habeas corpus ou habeas data. Base: CF, art. 5.º, LXIX.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-008",
+    "subject": "Direito Constitucional",
+    "topic": "Direitos sociais",
+    "statement": "A previdência social e a saúde figuram entre os direitos sociais expressamente relacionados no art. 6.º da Constituição Federal.",
+    "correct": "C",
+    "explanation": "Ambos constam do rol constitucional de direitos sociais.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-009",
+    "subject": "Direito Constitucional",
+    "topic": "Concurso público",
+    "statement": "A investidura em cargo ou emprego público depende, como regra, de prévia aprovação em concurso público, ressalvadas as nomeações para cargo em comissão declarado em lei de livre nomeação e exoneração.",
+    "correct": "C",
+    "explanation": "É a regra do art. 37, II, da Constituição.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-010",
+    "subject": "Direito Constitucional",
+    "topic": "Acumulação de cargos",
+    "statement": "A compatibilidade de horários, por si só, autoriza a acumulação remunerada irrestrita de cargos públicos, sem necessidade de observar as hipóteses constitucionais.",
+    "correct": "E",
+    "explanation": "Além de outros requisitos, a acumulação depende de enquadramento em exceções constitucionais. Base: CF, art. 37, XVI.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-011",
+    "subject": "Direito Constitucional",
+    "topic": "Estabilidade",
+    "statement": "Os servidores nomeados para cargo de provimento efetivo em virtude de concurso público tornam-se estáveis após três anos de efetivo exercício, observada a avaliação especial de desempenho exigida constitucionalmente.",
+    "correct": "C",
+    "explanation": "Regra do art. 41, caput e § 4.º, da Constituição.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-012",
+    "subject": "Direito Constitucional",
+    "topic": "Liberdade de associação",
+    "statement": "Uma associação civil regularmente constituída pode ser dissolvida compulsoriamente por simples determinação administrativa, dispensada decisão judicial.",
+    "correct": "E",
+    "explanation": "A dissolução compulsória exige decisão judicial transitada em julgado. Base: CF, art. 5.º, XIX.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-013",
+    "subject": "Direito Constitucional",
+    "topic": "Direito à informação",
+    "statement": "O direito constitucional de receber informações de órgãos públicos elimina todas as hipóteses legais de sigilo e proteção da intimidade.",
+    "correct": "E",
+    "explanation": "A Constituição admite ressalvas de sigilo imprescindível e protege intimidade, vida privada e dados conforme a ordem jurídica. Base: CF, art. 5.º, X e XXXIII.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-014",
+    "subject": "Direito Constitucional",
+    "topic": "Administração indireta",
+    "statement": "A criação de autarquia depende de lei específica, ao passo que a instituição de empresa pública depende de autorização legal, na forma constitucional.",
+    "correct": "C",
+    "explanation": "O art. 37, XIX, distingue criação da autarquia e autorização de instituição das demais entidades ali indicadas.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-04-015",
+    "subject": "Direito Constitucional",
+    "topic": "Acesso a cargos",
+    "statement": "Os cargos públicos brasileiros são acessíveis exclusivamente a brasileiros natos, sendo vedado seu provimento por naturalizados ou estrangeiros.",
+    "correct": "E",
+    "explanation": "A Constituição prevê acesso a brasileiros que preencham requisitos legais e também a estrangeiros na forma da lei. Base: CF, art. 37, I.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-001",
+    "subject": "Direito Administrativo",
+    "topic": "Órgãos públicos",
+    "statement": "A desconcentração administrativa pode distribuir competências entre órgãos integrantes de uma mesma pessoa jurídica, sem criar novas pessoas jurídicas.",
+    "correct": "C",
+    "explanation": "Na desconcentração, criam-se órgãos internos; não há descentralização para pessoa jurídica distinta.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-002",
+    "subject": "Direito Administrativo",
+    "topic": "Administração indireta",
+    "statement": "O fato de uma entidade integrar a administração pública indireta significa, necessariamente, que ela possui personalidade jurídica de direito público.",
+    "correct": "E",
+    "explanation": "Empresas públicas e sociedades de economia mista, por exemplo, têm personalidade jurídica de direito privado.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-003",
+    "subject": "Direito Administrativo",
+    "topic": "Autarquias",
+    "statement": "Autarquias são pessoas jurídicas integrantes da administração indireta e exercem atividades típicas da administração pública, nos limites de suas competências legais.",
+    "correct": "C",
+    "explanation": "São entes descentralizados, criados por lei específica, com personalidade própria.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-004",
+    "subject": "Direito Administrativo",
+    "topic": "Poder hierárquico",
+    "statement": "A distribuição e a revisão interna de tarefas entre órgãos subordinados, observados os limites legais, exemplificam manifestações do poder hierárquico.",
+    "correct": "C",
+    "explanation": "O poder hierárquico organiza, coordena e fiscaliza as atividades administrativas em relação de subordinação.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-005",
+    "subject": "Direito Administrativo",
+    "topic": "Poder disciplinar",
+    "statement": "O poder disciplinar da administração permite aplicar sanções sem instauração de procedimento e sem observância do contraditório, sempre que o superior considerar a infração evidente.",
+    "correct": "E",
+    "explanation": "A aplicação de sanções depende do devido processo e das garantias legais pertinentes.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-006",
+    "subject": "Direito Administrativo",
+    "topic": "Poder de polícia",
+    "statement": "O exercício do poder de polícia confere à administração liberdade ilimitada para restringir direitos individuais, ainda que não exista base legal para a restrição.",
+    "correct": "E",
+    "explanation": "O poder de polícia é condicionado à lei, à finalidade pública e aos limites constitucionais.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-007",
+    "subject": "Direito Administrativo",
+    "topic": "Atos administrativos",
+    "statement": "A presunção de legitimidade dos atos administrativos admite prova em contrário e não torna todo ato da administração imune ao controle.",
+    "correct": "C",
+    "explanation": "A presunção é relativa, podendo o ato ser controlado e invalidado quando ilegal.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-008",
+    "subject": "Direito Administrativo",
+    "topic": "Autoexecutoriedade",
+    "statement": "A autoexecutoriedade é atributo presente em todos os atos administrativos, autorizando sempre execução material direta sem previsão legal ou situação de urgência.",
+    "correct": "E",
+    "explanation": "Nem todo ato é autoexecutório; o atributo depende das condições admitidas pelo ordenamento.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-009",
+    "subject": "Direito Administrativo",
+    "topic": "Anulação e revogação",
+    "statement": "A anulação de um ato administrativo decorre de ilegalidade, enquanto sua revogação, em regra, é motivada por conveniência e oportunidade sobre ato válido.",
+    "correct": "C",
+    "explanation": "A distinção clássica opõe controle de legalidade e controle de mérito administrativo, respeitados os limites de revogação.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-010",
+    "subject": "Direito Administrativo",
+    "topic": "Convalidação",
+    "statement": "Qualquer vício de ato administrativo pode ser convalidado, inclusive vício de finalidade, desde que o administrador considere a convalidação economicamente vantajosa.",
+    "correct": "E",
+    "explanation": "Convalidação não alcança indistintamente todos os vícios, especialmente os insanáveis como desvio de finalidade.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-011",
+    "subject": "Direito Administrativo",
+    "topic": "Controle judicial",
+    "statement": "O Poder Judiciário pode examinar a legalidade de atos administrativos, sem que isso implique substituição indiscriminada do mérito legítimo da administração por preferências do julgador.",
+    "correct": "C",
+    "explanation": "O controle judicial recai sobre juridicidade e limites dos atos; a escolha legítima de mérito tem esfera própria.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-012",
+    "subject": "Direito Administrativo",
+    "topic": "Responsabilidade civil do Estado",
+    "statement": "Uma autarquia pode responder objetivamente por dano que seu agente, nessa qualidade, cause a terceiro, assegurado o direito de regresso contra o responsável quando houver dolo ou culpa.",
+    "correct": "C",
+    "explanation": "É a regra do art. 37, § 6.º, da Constituição.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-013",
+    "subject": "Direito Administrativo",
+    "topic": "Processo administrativo",
+    "statement": "No processo administrativo federal, decisões que neguem, limitem ou afetem direitos ou interesses devem ser motivadas, com indicação dos fatos e fundamentos jurídicos.",
+    "correct": "C",
+    "explanation": "A motivação é exigida pela Lei 9.784/1999, art. 50, I.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-014",
+    "subject": "Direito Administrativo",
+    "topic": "Impessoalidade",
+    "statement": "O princípio da impessoalidade permite ao agente atribuir a si mesmo, em publicidade institucional, o mérito pessoal de realizações administrativas custeadas pelo erário.",
+    "correct": "E",
+    "explanation": "Publicidade institucional não pode caracterizar promoção pessoal de autoridades ou servidores. Base: CF, art. 37, § 1.º.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-05-015",
+    "subject": "Direito Administrativo",
+    "topic": "Improbidade administrativa",
+    "statement": "A simples prática culposa de qualquer irregularidade administrativa basta, por si só, para configurar ato de improbidade nos termos da legislação atual.",
+    "correct": "E",
+    "explanation": "A Lei 8.429/1992, após alterações da Lei 14.230/2021, exige dolo nos tipos de improbidade, observados os demais elementos legais.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-001",
+    "subject": "Ética no Serviço Público",
+    "topic": "Conduta funcional",
+    "statement": "A atuação eticamente adequada do servidor não se esgota no cumprimento formal da lei, pois deve considerar a finalidade pública e o respeito ao cidadão.",
+    "correct": "C",
+    "explanation": "O Código de Ética do servidor federal orienta a conduta por honestidade, finalidade pública e decoro. Base: Decreto 1.171/1994.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-002",
+    "subject": "Ética no Serviço Público",
+    "topic": "Atendimento ao público",
+    "statement": "Diante de aumento no volume de atendimentos, o servidor pode dispensar a urbanidade no contato com o cidadão, desde que atinja a meta diária de produtividade.",
+    "correct": "E",
+    "explanation": "Produtividade não autoriza tratamento desrespeitoso; urbanidade e respeito continuam exigidos. Base: Decreto 1.171/1994.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-003",
+    "subject": "Ética no Serviço Público",
+    "topic": "Verdade e omissão",
+    "statement": "É admissível que o servidor omita informação verdadeira em documento administrativo para proteger a imagem da repartição, se a omissão não gerar ganho financeiro pessoal.",
+    "correct": "E",
+    "explanation": "Compromisso com a verdade e a honestidade independe de benefício financeiro próprio. Base: Decreto 1.171/1994.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-004",
+    "subject": "Ética no Serviço Público",
+    "topic": "Conflito de interesses",
+    "statement": "A identificação de interesse privado que possa comprometer a imparcialidade exige atenção e tratamento institucional, e não pode ser resolvida apenas pela vontade do agente interessado.",
+    "correct": "C",
+    "explanation": "A ética pública exige prevenção de conflito entre interesse pessoal e dever funcional. Base: Decreto 1.171/1994 e Lei 12.813/2013, quando aplicável.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-005",
+    "subject": "Ética no Serviço Público",
+    "topic": "Uso do patrimônio público",
+    "statement": "É permitido utilizar impressoras, veículos e sistemas institucionais para negócios particulares, desde que o servidor restitua o material utilizado ao fim do expediente.",
+    "correct": "E",
+    "explanation": "A utilização privada de recursos públicos fora das hipóteses autorizadas desvia sua finalidade e viola deveres funcionais.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-006",
+    "subject": "Ética no Serviço Público",
+    "topic": "Cortesia",
+    "statement": "Tratar usuários com respeito e sem discriminações indevidas é exigência compatível com a ética do serviço público, independentemente da origem social do cidadão.",
+    "correct": "C",
+    "explanation": "O dever de respeito e urbanidade orienta o atendimento igualitário no serviço público.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-007",
+    "subject": "Ética no Serviço Público",
+    "topic": "Informações protegidas",
+    "statement": "A transparência pública determina que qualquer servidor divulgue livremente dados pessoais ou informações legalmente sigilosas sempre que um cidadão os solicitar.",
+    "correct": "E",
+    "explanation": "Transparência convive com proteção de dados e hipóteses legais de sigilo; divulgação indiscriminada viola deveres de proteção.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-008",
+    "subject": "Ética no Serviço Público",
+    "topic": "Comissões de ética",
+    "statement": "As comissões de ética podem ter atribuição de orientar e aconselhar servidores sobre a ética profissional no tratamento com pessoas e patrimônio público.",
+    "correct": "C",
+    "explanation": "Essa função de orientação está prevista no Código de Ética aprovado pelo Decreto 1.171/1994.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-009",
+    "subject": "Ética no Serviço Público",
+    "topic": "Comissões de ética",
+    "statement": "A aplicação de demissão ao servidor público federal é sanção que a comissão de ética impõe diretamente, sem depender do regime disciplinar competente.",
+    "correct": "E",
+    "explanation": "Demissão é penalidade disciplinar sujeita ao regime legal e à autoridade competente; não é aplicada diretamente pela comissão de ética.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-010",
+    "subject": "Ética no Serviço Público",
+    "topic": "Pressão indevida",
+    "statement": "Um chefe pode exigir que subordinados manipulem a ordem de processos para beneficiar conhecidos, desde que assuma pessoalmente a responsabilidade por eventuais reclamações.",
+    "correct": "E",
+    "explanation": "Favorecimento e manipulação de procedimentos contrariam impessoalidade e ética, independentemente de assunção de responsabilidade.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-011",
+    "subject": "Ética no Serviço Público",
+    "topic": "Responsabilidade profissional",
+    "statement": "A identificação de erro em procedimento administrativo deve levar à adoção dos meios institucionais adequados para sua correção, e não ao ocultamento da ocorrência.",
+    "correct": "C",
+    "explanation": "O dever de honestidade e a finalidade pública exigem correção e comunicação adequada de erros.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-012",
+    "subject": "Ética no Serviço Público",
+    "topic": "Pontualidade",
+    "statement": "A ausência injustificada e reiterada ao serviço constitui questão exclusivamente privada, sem repercussão possível na avaliação da conduta profissional do servidor.",
+    "correct": "E",
+    "explanation": "Assiduidade e responsabilidade no trabalho são deveres funcionais e têm dimensão ética.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-013",
+    "subject": "Ética no Serviço Público",
+    "topic": "Respeito ao cidadão",
+    "statement": "Exigir do usuário formalidade não prevista como condição para receber orientação administrativa pode contrariar o compromisso ético com atendimento acessível e digno.",
+    "correct": "C",
+    "explanation": "Exigências arbitrárias prejudicam o atendimento e desrespeitam a finalidade do serviço público.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-014",
+    "subject": "Ética no Serviço Público",
+    "topic": "Vantagem indevida",
+    "statement": "O recebimento de vantagem pessoal para acelerar pedido de terceiro deixa de apresentar problema ético se o processo for, ao final, decidido corretamente.",
+    "correct": "E",
+    "explanation": "Vantagem indevida para favorecimento viola probidade e impessoalidade, independentemente do resultado formal do pedido.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-06-015",
+    "subject": "Ética no Serviço Público",
+    "topic": "Prestação de contas",
+    "statement": "Facilitar a fiscalização e o controle legítimo dos próprios atos integra uma conduta ética compatível com a responsabilidade de quem exerce função pública.",
+    "correct": "C",
+    "explanation": "Transparência, colaboração e prestação de contas são dimensões relevantes da ética administrativa, ressalvados dados protegidos.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-001",
+    "subject": "Informática",
+    "topic": "Internet e intranet",
+    "statement": "Uma intranet pode empregar protocolos e tecnologias também utilizados na Internet, embora o acesso aos seus recursos seja restrito à organização ou a pessoas autorizadas.",
+    "correct": "C",
+    "explanation": "Intranets utilizam tecnologias de rede da Internet em ambiente de acesso controlado.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-002",
+    "subject": "Informática",
+    "topic": "Segurança na web",
+    "statement": "A presença de HTTPS na barra do navegador é garantia suficiente de que o site visitado é legítimo e não oferece risco de fraude.",
+    "correct": "E",
+    "explanation": "HTTPS protege a comunicação com o destino do certificado; não assegura que o próprio site seja confiável.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-003",
+    "subject": "Informática",
+    "topic": "Autenticação",
+    "statement": "A autenticação em múltiplos fatores pode reduzir riscos de acesso indevido mesmo quando uma senha é exposta, embora não elimine todos os ataques.",
+    "correct": "C",
+    "explanation": "Exigir fator adicional dificulta acesso usando apenas senha comprometida.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-004",
+    "subject": "Informática",
+    "topic": "Phishing",
+    "statement": "Uma mensagem que imita comunicação institucional e solicita clique em link de confirmação pode caracterizar phishing, ainda que não possua arquivo anexado.",
+    "correct": "C",
+    "explanation": "Phishing usa engenharia social e pode empregar links, formulários, QR codes ou outros canais.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-005",
+    "subject": "Informática",
+    "topic": "Ransomware",
+    "statement": "Um ransomware é, por definição, programa que melhora a disponibilidade de arquivos ao criar cópias de segurança automáticas para o usuário.",
+    "correct": "E",
+    "explanation": "Ransomware busca extorquir vítimas, frequentemente criptografando ou bloqueando seus dados.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-006",
+    "subject": "Informática",
+    "topic": "Worms",
+    "statement": "Um worm pode se propagar entre sistemas explorando vulnerabilidades de rede, sem depender necessariamente da abertura manual de um anexo infectado.",
+    "correct": "C",
+    "explanation": "Worms têm capacidade de propagação automatizada, diferindo de mecanismos comuns de vírus.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-007",
+    "subject": "Informática",
+    "topic": "Backups",
+    "statement": "A manutenção de cópia de segurança desconectada do ambiente principal pode reduzir o risco de perda total de informações em caso de ataque que comprometa a rede.",
+    "correct": "C",
+    "explanation": "Backups isolados ajudam a recuperar dados quando os sistemas originais são comprometidos.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-008",
+    "subject": "Informática",
+    "topic": "Navegação privativa",
+    "statement": "A navegação em janela anônima impede o provedor de Internet e os sites acessados de identificar o endereço IP utilizado na conexão.",
+    "correct": "E",
+    "explanation": "Modo privado reduz alguns registros locais; não oculta necessariamente o endereço IP de sites e provedores.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-009",
+    "subject": "Informática",
+    "topic": "Correio eletrônico",
+    "statement": "Colocar destinatários no campo CCO torna seus endereços visíveis a todos os destinatários listados nos campos Para e CC.",
+    "correct": "E",
+    "explanation": "CCO oculta os endereços nele incluídos dos demais destinatários da mensagem.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-010",
+    "subject": "Informática",
+    "topic": "LibreOffice Writer",
+    "statement": "O formato ODT é associado a documentos de texto no padrão OpenDocument e pode ser utilizado no LibreOffice Writer.",
+    "correct": "C",
+    "explanation": "ODT é extensão do formato de documento de texto OpenDocument, suportado pelo Writer.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-011",
+    "subject": "Informática",
+    "topic": "LibreOffice Calc",
+    "statement": "Em uma planilha eletrônica, uma fórmula inserida em célula do LibreOffice Calc costuma iniciar com o sinal de igualdade.",
+    "correct": "C",
+    "explanation": "O Calc reconhece fórmulas pelo sinal =, como em =A1+B1.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-012",
+    "subject": "Informática",
+    "topic": "Referências em planilhas",
+    "statement": "Ao copiar uma fórmula contendo a referência relativa A1 para outra célula, a referência original permanece obrigatoriamente fixa, independentemente da posição de destino.",
+    "correct": "E",
+    "explanation": "Referências relativas se ajustam à nova posição; referências absolutas, como $A$1, são usadas para fixá-las.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-013",
+    "subject": "Informática",
+    "topic": "Sistema operacional",
+    "statement": "Em ambientes Windows, o atalho Ctrl+C normalmente copia o conteúdo selecionado, enquanto Ctrl+V normalmente cola o conteúdo da área de transferência.",
+    "correct": "C",
+    "explanation": "São atalhos comuns de copiar e colar em aplicativos compatíveis.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-014",
+    "subject": "Informática",
+    "topic": "Firewall",
+    "statement": "A instalação de um firewall torna dispensáveis atualizações de segurança e cópias de segurança, pois bloqueia toda forma de malware.",
+    "correct": "E",
+    "explanation": "Firewall é apenas uma camada de proteção; não substitui correções, antivírus, backups e outras medidas.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-07-015",
+    "subject": "Informática",
+    "topic": "Anexos e macros",
+    "statement": "Arquivos recebidos por e-mail, inclusive documentos de escritório com macros, podem representar risco à segurança e devem ser tratados com cautela quando sua procedência não for confiável.",
+    "correct": "C",
+    "explanation": "Macros e arquivos maliciosos podem executar ações indesejadas; verificar a procedência reduz exposição a ataques.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-001",
+    "subject": "Raciocínio Lógico",
+    "topic": "Implicação lógica",
+    "statement": "Uma proposição da forma “se P, então Q” é falsa apenas quando P é verdadeira e Q é falsa.",
+    "correct": "C",
+    "explanation": "Na tabela-verdade da implicação material, somente V → F resulta em F.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-002",
+    "subject": "Raciocínio Lógico",
+    "topic": "Contraposição",
+    "statement": "A afirmação “Se o documento foi validado, então o cadastro foi atualizado” é logicamente equivalente a “Se o cadastro não foi atualizado, então o documento não foi validado”.",
+    "correct": "C",
+    "explanation": "A contrapositiva ¬Q → ¬P equivale a P → Q.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-003",
+    "subject": "Raciocínio Lógico",
+    "topic": "Negação de conjunção",
+    "statement": "A negação de “O pedido está completo e o prazo foi observado” pode ser expressa por “O pedido não está completo ou o prazo não foi observado”.",
+    "correct": "C",
+    "explanation": "Pela lei de De Morgan, ¬(P ∧ Q) ≡ ¬P ∨ ¬Q.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-004",
+    "subject": "Raciocínio Lógico",
+    "topic": "Negação de quantificadores",
+    "statement": "A negação lógica de “Todos os requerimentos foram conferidos” é “Nenhum requerimento foi conferido”.",
+    "correct": "E",
+    "explanation": "Negar todos exige ao menos um contraexemplo: “Pelo menos um requerimento não foi conferido”.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-005",
+    "subject": "Raciocínio Lógico",
+    "topic": "Bicondicional",
+    "statement": "Uma bicondicional “P se, e somente se, Q” é verdadeira quando P e Q têm o mesmo valor lógico.",
+    "correct": "C",
+    "explanation": "P ↔ Q é verdadeira em V,V e F,F.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-006",
+    "subject": "Raciocínio Lógico",
+    "topic": "Tautologia",
+    "statement": "A proposição composta “P ou não P” é uma tautologia, independentemente do valor lógico de P.",
+    "correct": "C",
+    "explanation": "O princípio do terceiro excluído: P ∨ ¬P é sempre verdadeiro.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-007",
+    "subject": "Raciocínio Lógico",
+    "topic": "Contradição",
+    "statement": "A proposição “P e não P” é verdadeira em pelo menos uma linha de sua tabela-verdade.",
+    "correct": "E",
+    "explanation": "P ∧ ¬P é contradição, falsa em todas as valorações.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-008",
+    "subject": "Raciocínio Lógico",
+    "topic": "Tabela-verdade",
+    "statement": "Uma proposição composta formada por três proposições simples independentes possui exatamente seis linhas em sua tabela-verdade completa.",
+    "correct": "E",
+    "explanation": "Com n proposições simples independentes, há 2^n linhas: para n=3, são 8.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-009",
+    "subject": "Raciocínio Lógico",
+    "topic": "Porcentagem",
+    "statement": "Se 240 solicitações foram registradas e 25% delas estavam incompletas, então 180 solicitações estavam completas.",
+    "correct": "C",
+    "explanation": "25% de 240 = 60 incompletas; 240 - 60 = 180 completas.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-010",
+    "subject": "Raciocínio Lógico",
+    "topic": "Porcentagem composta",
+    "statement": "Um valor que sofre aumento de 20% e depois desconto de 20% sobre o valor já aumentado retorna exatamente ao valor inicial.",
+    "correct": "E",
+    "explanation": "Os fatores são 1,20 e 0,80; o produto é 0,96, portanto o valor final é 96% do inicial.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-011",
+    "subject": "Raciocínio Lógico",
+    "topic": "Interseção e união",
+    "statement": "Em um grupo de 50 candidatos, 30 estudam Português, 25 estudam Informática e 10 estudam ambas. Nessas condições, 45 estudam pelo menos uma das duas matérias.",
+    "correct": "C",
+    "explanation": "Pelo princípio da inclusão-exclusão, |P ∪ I| = 30 + 25 - 10 = 45.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-012",
+    "subject": "Raciocínio Lógico",
+    "topic": "Operações com conjuntos",
+    "statement": "Se todo elemento do conjunto A pertence ao conjunto B, então a interseção entre A e B é igual a A.",
+    "correct": "C",
+    "explanation": "Se A está contido em B, todos os seus elementos pertencem aos dois conjuntos; portanto, a interseção A ∩ B é o próprio A.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-013",
+    "subject": "Raciocínio Lógico",
+    "topic": "Conectivo “ou”",
+    "statement": "Na lógica proposicional clássica, “P ou Q” é falsa sempre que apenas uma das proposições P ou Q for verdadeira.",
+    "correct": "E",
+    "explanation": "O ou inclusivo é verdadeiro quando pelo menos uma proposição é verdadeira; é falso apenas se ambas forem falsas.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-014",
+    "subject": "Raciocínio Lógico",
+    "topic": "Equivalências",
+    "statement": "A negação de “Se o prazo terminou, então o pedido foi arquivado” equivale a “O prazo terminou e o pedido não foi arquivado”.",
+    "correct": "C",
+    "explanation": "A negação de uma implicação é verdadeira apenas quando a condição inicial ocorre e a consequência falha: ¬(P → Q) ≡ P ∧ ¬Q.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
+  },
+  {
+    "id": "inss-ce-2026-08-015",
+    "subject": "Raciocínio Lógico",
+    "topic": "Razão e percentual",
+    "statement": "Se um simulado tem 80 itens e uma candidata acerta 52, então seu percentual bruto de acertos é igual a 70%.",
+    "correct": "E",
+    "explanation": "A taxa é 52/80 = 0,65 = 65%, e não 70%.",
+    "origin": "Questão autoral • treino Cebraspe • expansão outubro/2026"
   }
 ]
