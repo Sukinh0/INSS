@@ -14,11 +14,15 @@ import { parseBackup } from './lib/backup';
 import { formatOriginBadge, isAvailableForQuiz, normalizeQuestion } from './lib/origin';
 import { storage } from './lib/storage';
 import originalQuestions from './data/questions.json';
+import officialQuestions from './data/questions_official.json';
 import type { ActiveQuiz, Attempt, GradeMode, OriginFilter, OriginKind, Profile, ProfileStats, Question, Selection } from './types';
 import './styles.css';
 
 type Page = 'home' | 'setup' | 'quiz' | 'result' | 'progress' | 'ranking' | 'bank';
-const BASE = (originalQuestions as unknown[]).map(normalizeQuestion);
+const BASE = [
+  ...(originalQuestions as unknown[]).map(normalizeQuestion),
+  ...(officialQuestions as unknown[]).map(normalizeQuestion)
+];
 const subjectIcons = ['📘','⚖️','✍️','🏛️','📋','🤝','💻','🧠'];
 const knownSubjects = [...new Set(BASE.map(q => q.subject))];
 const SOURCES = [
@@ -187,9 +191,14 @@ export default function App() {
     try {
       const items = parseQuestions(await file.text(),file.name);
       const report = analyzeImport(items);
+      const newItems = items.filter(item => !BASE.some(q => q.id === item.id));
+      if (!newItems.length) {
+        setToast('Todas as questões do arquivo já estão ativas no acervo base!');
+        setBankTab('questions');
+        return;
+      }
       const currentMap = new Map(custom.map(q => [q.id,q]));
-      for (const item of items) {
-        if (BASE.some(q => q.id === item.id)) throw new Error(`ID ${item.id} pertence à base original. Use outro ID.`);
+      for (const item of newItems) {
         const existing = currentMap.get(item.id);
         if (existing && (existing.correct !== item.correct || existing.statement !== item.statement)) {
           throw new Error(`Conflito no item ${item.id}: texto ou gabarito divergem do registro existente.`);
@@ -200,38 +209,15 @@ export default function App() {
       if (next.length > 400) throw new Error('Limite de 400 questões personalizadas por perfil.');
       if (!storage.saveCustom(activeId,next)) throw new Error('Espaço local insuficiente. Exporte antes seus dados.');
       setCustom(next);
-      setToast(`${items.length} questões importadas (${report.authorial} autorais, ${report.official} oficiais, ${report.unverified} em revisão)!`);
+      setToast(`${newItems.length} questões importadas (${report.authorial} autorais, ${report.official} oficiais, ${report.unverified} em revisão)!`);
       setBankTab('questions');
       if (authUid === activeId && profile.cloud) saveCloudCustom(activeId,next).catch(() => setToast('Importadas localmente, mas a sincronização falhou.'));
     } catch(e) {setToast((e as Error).message);} finally { if (fileInput.current) fileInput.current.value = ''; }
   }
   async function loadOfficialBatch() {
-    if (!profile) return;
-    try {
-      const res = await fetch('/inss_2022_60_para_importar.json');
-      if (!res.ok) throw new Error('Arquivo de lote oficial não encontrado. Use o botão "Selecionar arquivo" para importar o JSON gerado pelo extrator.');
-      const text = await res.text();
-      const items = parseQuestions(text, 'inss_2022_60_para_importar.json');
-      const report = analyzeImport(items);
-      const currentMap = new Map(custom.map(q => [q.id,q]));
-      for (const item of items) {
-        if (BASE.some(q => q.id === item.id)) throw new Error(`ID ${item.id} pertence à base original. Use outro ID.`);
-        const existing = currentMap.get(item.id);
-        if (existing && (existing.correct !== item.correct || existing.statement !== item.statement)) {
-          throw new Error(`Conflito no item ${item.id}: texto ou gabarito divergem do registro existente.`);
-        }
-        currentMap.set(item.id,item);
-      }
-      const next = [...currentMap.values()];
-      if (next.length > 400) throw new Error('Limite de 400 questões personalizadas por perfil.');
-      if (!storage.saveCustom(activeId,next)) throw new Error('Espaço local insuficiente. Exporte antes seus dados.');
-      setCustom(next);
-      setToast(`${items.length} questões oficiais carregadas (${report.official} oficiais verificadas, 0 anuladas)!`);
-      setBankTab('questions');
-      if (authUid === activeId && profile.cloud) saveCloudCustom(activeId,next).catch(() => setToast('Importadas localmente, mas a sincronização falhou.'));
-    } catch(e) {
-      setToast((e as Error).message);
-    }
+    setToast('As 60 questões oficiais do INSS 2022 já estão disponíveis e ativas no acervo padrão!');
+    setBankTab('questions');
+    setBankOrigin('official');
   }
   function clearCustom() {
     if (!custom.length || !confirm(`Apagar as ${custom.length} questões personalizadas? O histórico dos simulados será preservado.`)) return;

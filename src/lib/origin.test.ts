@@ -279,4 +279,19 @@ describe('Segurança de Origem e Separação de Bancos (Rumo ao INSS)', () => {
     expect(ofcStats.totalQuestions).toBe(1);
     expect(ofcStats.accuracy).toBe(0);
   });
+
+  it('integra 60 itens oficiais verificados de questions_official.json no acervo base', async () => {
+    const officialData = (await import('../data/questions_official.json')).default;
+    expect(officialData).toHaveLength(60);
+    const normalized = officialData.map(normalizeQuestion);
+    expect(normalized.filter(q => q.source.kind === 'official')).toHaveLength(60);
+    expect(normalized.filter(q => q.source.verification === 'verified')).toHaveLength(60);
+    expect(normalized.filter(q => q.status === 'active')).toHaveLength(60);
+    for (const q of normalized) {
+      expect(isAvailableForQuiz(q, 'official')).toBe(true);
+      expect(q.source.organizer).toBe('Cebraspe');
+      expect(q.source.examYear).toBe(2022);
+    }
+  });
 });
+
