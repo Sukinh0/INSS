@@ -10,7 +10,7 @@ export default function StreakGarden({streak,onStudy,compact=false}: Props) {
   return <section className={`streak-garden ${compact?'streak-garden-compact':''}`} aria-label="Sequência de dias de estudo">
     <div className="streak-garden-intro">
       <div className="streak-garden-main">
-        <span className="streak-bloom" aria-hidden="true">{streak.current>=7?'🌻':streak.current>=3?'🌼':'🌱'}</span>
+        <span className="streak-bloom" aria-hidden="true">{streak.latestFlower?.emoji ?? '🌱'}</span>
         <div>
           <div className="streak-eyebrow"><Sun size={15}/> SEQUÊNCIA GIRASSOL</div>
           <h2><strong>{streak.current}</strong> {streak.current===1?'dia de estudo':'dias de estudo'}</h2>
@@ -22,11 +22,12 @@ export default function StreakGarden({streak,onStudy,compact=false}: Props) {
     <div className="streak-week" aria-label="Atividade nos últimos sete dias">
       {streak.days.map(item=><div key={item.date} className={`streak-week-day ${item.studied?'streak-week-done':''} ${item.today?'streak-week-today':''}`}>
         <small>{item.label}</small>
-        <span title={`${item.date}: ${item.studied?'estudou':'sem registro'}`} aria-label={`${item.label}, ${item.date}: ${item.studied?'estudou':'sem estudo registrado'}`}>
-          {item.studied?'🌻':item.today?'🌱':'·'}
+        <span title={`${item.date}: ${item.flower?`estudou — ${item.flower.name} ${item.flower.emoji}`:'sem registro de estudo'}`} aria-label={`${item.label}, ${item.date}: ${item.flower?`estudou e ganhou ${item.flower.name}`:'sem estudo registrado'}`}>
+          {item.flower?.emoji ?? (item.today?'🌱':'·')}
         </span>
       </div>)}
     </div>
+    <p className="streak-flower-cycle">🌷 Cada dia de estudo traz uma flor diferente. Após 11 flores, o jardim recomeça a coleção!</p>
     <div className="streak-milestone">
       <div className="streak-milestone-caption"><span><CalendarDays size={15}/> Próxima florada</span><strong>{streak.nextMilestone} dias</strong></div>
       <div className="streak-milestone-track" role="progressbar" aria-label="Caminho até a próxima florada" aria-valuemin={0} aria-valuemax={streak.nextMilestone} aria-valuenow={streak.current}><span style={{width:`${progress}%`}}/></div>

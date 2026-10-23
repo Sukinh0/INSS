@@ -32,6 +32,17 @@ Conferir: simulado Certo/Errado e A–E; guardar uma questão **antes** de confe
 
 ## Sequência Girassol — hábito gentil de estudo
 
+### Jardim de flores variadas
+
+A cada **dia distinto em que houve estudo**, o calendário mostra uma nova flor da coleção de 11 emojis:
+**🌻 Girassol → 🌷 Tulipa → 🌹 Rosa → 🌺 Hibisco → 🌸 Flor de cerejeira → 🌼 Margarida → 🪷 Lótus → 🪻 Jacinto → 🏵️ Roseta → 💮 Flor branca → 💐 Buquê de flores**.
+
+Após ganhar a 11ª, a próxima flor volta a ser 🌻 e o ciclo se repete indefinidamente. O rodízio usa a ordem cronológica dos **dias efetivamente estudados**, não a posição da semana nem a quantidade de atividades no mesmo dia. Se houver uma pausa, as flores conquistadas permanecem e a coleção continua de onde parou, mesmo que a *sequência diária* comece novamente.
+
+Emojis podem variar ligeiramente entre Android, iOS e navegadores. Não usamos 🥀 (flor murcha) para evitar sugerir punição pela pausa. O painel mostra o nome da flor em atributos acessíveis para leitores de tela.
+
+
+
 A **Sequência Girassol 🌻** aparece no início e no Meu Cantinho. Ela soma **dias com atividade real**, sem qualquer exigência de acerto:
 
 - Simulado finalizado (inclusive com nota zero ou negativa).
