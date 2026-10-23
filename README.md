@@ -9,6 +9,27 @@
 - A conferência é salva junto ao simulado no dispositivo, de modo que voltar à questão ou recarregar mantém o feedback aberto. Simulados iniciados em versões anteriores continuam compatíveis: respostas existentes também permanecem bloqueadas, mas podem ser conferidas.
 - O histórico, nota e ranking usam os mesmos gabaritos e regras de pontuação de antes; visualizar a correção não altera acertos.
 
+## Meu Caderninho 📒 — notas e questões salvas de qualquer tela
+
+A estudante encontra um botão flutuante 📒 na parte inferior da interface. No desktop ele abre um painel lateral; no celular, uma folha deslizante. O conteúdo é **particular a cada perfil**.
+
+- **Anotações livres:** título, texto simples, matéria, assunto e marcador opcional **Estudar depois**. É possível buscar, filtrar, editar e excluir.
+- **Questões guardadas:** botão `Guardar questão` durante o simulado, na revisão e no banco de questões. Também é possível salvar a questão em andamento dentro do painel. A questão inclui seu enunciado, opções e origem, mas **NÃO armazena gabarito, resposta escolhida ou comentário de correção**: guardar uma questão não revela nada antes da hora.
+- **Durante o simulado:** abrir/fechar o caderno não muda `quiz.current`, `quiz.answers`, tempo nem `checkedAnswers`. Resposta travada continua travada. O caderno nunca conta como um dia de streak nem pontua para ranking.
+- **Offline:** notas são guardadas no `localStorage` por perfil (limite inicial: 100 itens ativos; texto de até 1.500 caracteres), e permanecem disponíveis ao desconectar.
+- **Nuvem:** perfis Google usam o campo `notebook` de `users/{uid}` no Firestore, com transação de merge por ID/versão. Exclusões geram marcadores de exclusão (tombstones) para não reaparecerem após sincronização. O app tenta reenviar ao recuperar conexão ou foco.
+- **Backup:** exportação `v4` inclui `notebook` e é compatível com restauração de v1, v2 e v3. Importação combina os registros existentes, sem apagar anotações anteriores.
+
+**Privacidade:** o Firebase exige autenticação e permite acesso somente ao próprio UID pelas Rules existentes. No modo local, dados permanecem no navegador **sem criptografia adicional**; não use notas para senhas ou segredos em dispositivos compartilhados. PDFs/arquivos/fotos, formatação rica e resumos gerados por IA não fazem parte desta primeira versão.
+
+### Checklist de QA
+
+`npm ci && npm test && npm run build`
+
+Conferir: simulado Certo/Errado e A–E; guardar uma questão **antes** de conferir a resposta; fechar/reabrir sem interromper o simulado; edição/exclusão; filtros e pesquisa; dois perfis diferentes; backup antigo e v4; Firebase login/desconexão/retomada; painel móvel e teclado (Tab/Esc).
+
+---
+
 ## Sequência Girassol — hábito gentil de estudo
 
 A **Sequência Girassol 🌻** aparece no início e no Meu Cantinho. Ela soma **dias com atividade real**, sem qualquer exigência de acerto:
