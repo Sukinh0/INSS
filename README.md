@@ -1,5 +1,14 @@
 # Rumo ao INSS 🌻
 
+## Conferir minha resposta durante o simulado
+
+- **Ao selecionar uma resposta, ela fica travada imediatamente.** Não é possível selecionar outra opção, desfazer a escolha ou alterá-la ao voltar à questão.
+- O botão **Conferir minha resposta** só é habilitado após uma escolha. Mostra se houve acerto/erro, destaca a resposta correta, informa o gabarito e apresenta a mesma explicação da correção final ("Entender a resposta").
+- Questões oficiais indicam que o comentário de estudo **não é justificativa oficial da banca**. Exercícios de alternativas adaptadas mantêm a indicação de autoria.
+- O botão não obriga a conferir: a estudante pode navegar ou finalizar com questões em branco (importante no modo Cebraspe).
+- A conferência é salva junto ao simulado no dispositivo, de modo que voltar à questão ou recarregar mantém o feedback aberto. Simulados iniciados em versões anteriores continuam compatíveis: respostas existentes também permanecem bloqueadas, mas podem ser conferidas.
+- O histórico, nota e ranking usam os mesmos gabaritos e regras de pontuação de antes; visualizar a correção não altera acertos.
+
 ## Novidade — modo Alternativas A–E (treino adaptado)
 
 Em **Simulados → Formato**, a estudante pode escolher:
