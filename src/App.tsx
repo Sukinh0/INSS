@@ -7,7 +7,7 @@ import {
   Sparkles, Sun, Target, Trash2, TrendingUp, Trophy, X, XCircle
 } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { cloudEnabled, formatAuthError, getCloudCustom, loadCloudAttempts, loginGoogle, logoutGoogle, saveCloudAttempt, saveCloudCustom, saveLeaderboard, syncProfile, toProfile, watchLeaderboard, watchUser } from './lib/firebase';
+import { cloudEnabled, formatAuthError, getCloudCustom, loadCloudAttempts, loginGoogle, logoutGoogle, saveCloudAttempt, saveCloudCustom, saveCloudCozy, saveLeaderboard, syncProfile, toProfile, watchLeaderboard, watchUser } from './lib/firebase';
 import { calculateResult, compileOriginStats, compileStats, formatAnswer, getWrongQuestionIds, pickQuestions, subjectBreakdown, summarizeMode, topicBreakdown } from './lib/engine';
 import { generateAlternativeQuestions } from './lib/alternatives';
 import { chooseQuizAnswer, isQuizAnswerRevealed, revealQuizAnswer } from './lib/quiz-feedback';
@@ -15,6 +15,7 @@ import { analyzeImport, exampleQuestions, parseQuestions } from './lib/import';
 import { parseBackup } from './lib/backup';
 import { formatOriginBadge, isAvailableForQuiz, normalizeQuestion } from './lib/origin';
 import { storage } from './lib/storage';
+import { mergeCozy } from './lib/cozy';
 import CozyStudy from './components/CozyStudy';
 import originalQuestions from './data/questions.json';
 import officialQuestions from './data/questions_official.json';
@@ -243,7 +244,7 @@ export default function App() {
     setToast('Questões personalizadas removidas.');
   }
   function exportData() {
-    download(JSON.stringify({app:'Rumo ao INSS', version:2, exportedAt: new Date().toISOString(), profile,attempts,custom},null,2),`rumo-inss-backup-v2-${new Date().toISOString().slice(0,10)}.json`);
+    download(JSON.stringify({app:'Rumo ao INSS', version:3, exportedAt: new Date().toISOString(), profile,attempts,custom,cozy:storage.cozy(activeId)},null,2),`rumo-inss-backup-v3-${new Date().toISOString().slice(0,10)}.json`);
   }
   async function importBackup(file: File | undefined) {
     if (!file || !profile) return;
@@ -263,13 +264,16 @@ export default function App() {
         throw new Error('Armazenamento local cheio: exporte o histórico e libere espaço.');
       }
       setAttempts(merged); setCustom([...bank.values()]);
-      setToast(`Backup restaurado: ${newItems.length} simulado(s) novo(s).`);
+      const cozyMerged=mergeCozy(storage.cozy(activeId),incoming.cozy);
+      if (!storage.saveCozy(activeId,cozyMerged)) throw new Error('Sem espaço para guardar o progresso do Meu Cantinho.');
+      setToast(`Backup restaurado: ${newItems.length} simulado(s) novo(s) e atividades leves preservadas.`);
       if (authUid === activeId && profile.cloud) {
         try {
           for (let index = 0; index < newItems.length; index += 10) {
             await Promise.all(newItems.slice(index,index+10).map(saveCloudAttempt));
           }
           await saveCloudCustom(activeId,[...bank.values()]);
+          await saveCloudCozy(activeId,cozyMerged);
           await saveLeaderboard(compileStats(activeId,profile.name,merged,profile.photo));
         } catch {setAuthError('Backup restaurado neste dispositivo, mas a sincronização de alguns dados falhou.');}
       }
