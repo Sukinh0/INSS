@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, ArrowRight, BookHeart, Check, ChevronRight, Heart, Lightbulb, RotateCcw, Sparkles, Sun, BookOpen, Flower2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookHeart, Check, ChevronRight, Heart, RotateCcw, Sparkles, Sun, Flower2 } from 'lucide-react';
 import type { Question } from '../types';
 import { getCloudCozy, saveCloudCozy } from '../lib/firebase';
 import { storage } from '../lib/storage';
 import {
-  MINI_LESSONS, chooseLessons, cozySubjects, emptyCozy, flashcardBank, mergeCozy,
+  MINI_LESSONS, chooseLessons, cozySubjects, flashcardBank, mergeCozy,
   pickFlashcards, recordCozy, sanitizeCozy, sunflowerStage,
   type CozyKind, type CozyProgress, type CozySession
 } from '../lib/cozy';
