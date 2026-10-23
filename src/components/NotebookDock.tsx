@@ -32,6 +32,8 @@ export default function NotebookDock({data,open,currentQuestion,subjects,onOpen,
   const [error,setError]=useState('');
   const panel=useRef<HTMLDivElement>(null);
   const fab=useRef<HTMLButtonElement>(null);
+  const closeRef=useRef(onClose);
+  closeRef.current=onClose;
   const all=useMemo(()=>activeNotebook(data),[data]);
   const saved=currentQuestion?hasNotebookQuestion(data,currentQuestion.id):false;
   const notes=all.filter(e=>e.kind==='note').length;
@@ -52,7 +54,7 @@ export default function NotebookDock({data,open,currentQuestion,subjects,onOpen,
     const previousFocus=document.activeElement as HTMLElement|null;
     panel.current?.focus();
     const key=(event:KeyboardEvent)=>{
-      if(event.key==='Escape'){event.preventDefault();onClose();}
+      if(event.key==='Escape'){event.preventDefault();closeRef.current();}
       if(event.key!=='Tab' || !panel.current)return;
       const items=Array.from(panel.current.querySelectorAll<HTMLElement>('button:not(:disabled),input:not(:disabled),textarea:not(:disabled),select:not(:disabled),a[href]'))
         .filter(el=>el.getClientRects().length>0);
@@ -63,7 +65,7 @@ export default function NotebookDock({data,open,currentQuestion,subjects,onOpen,
     };
     document.addEventListener('keydown',key);
     return ()=>{document.body.style.overflow=prev;document.removeEventListener('keydown',key);(previousFocus?.isConnected?previousFocus:fab.current)?.focus();};
-  },[open,onClose]);
+  },[open]);
 
   function newDraft(){
     setEditingId(null);setCreating(true);
