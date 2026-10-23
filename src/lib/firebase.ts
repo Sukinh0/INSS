@@ -1,6 +1,7 @@
 import { initializeApp, getApps, type FirebaseApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, type User } from 'firebase/auth';
-import { collection, doc, getDoc, getDocs, getFirestore, onSnapshot, setDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, getFirestore, onSnapshot, runTransaction, setDoc } from 'firebase/firestore';
+import { emptyCozy, mergeCozy, sanitizeCozy, type CozyProgress } from './cozy';
 import type { Attempt, Profile, ProfileStats, Question } from '../types';
 
 const env = import.meta.env;
@@ -100,4 +101,23 @@ export async function getCloudCustom(userId: string): Promise<Question[]> {
 export async function saveCloudCustom(userId: string, questions: Question[]) {
   if (!db) return;
   await setDoc(doc(db, 'users', userId, 'custom', 'bank'), { questions });
+}
+
+/** Usa o documento users/{uid} já autorizado nas Firestore Rules atuais. */
+export async function getCloudCozy(userId: string): Promise<CozyProgress> {
+  if (!db) return emptyCozy();
+  const snap = await getDoc(doc(db, 'users', userId));
+  return sanitizeCozy(snap.data()?.cozy);
+}
+
+/** Mescla eventos em transação para não perder progresso sincronizado em outro dispositivo. */
+export async function saveCloudCozy(userId: string, local: CozyProgress): Promise<CozyProgress> {
+  if (!db) return sanitizeCozy(local);
+  return runTransaction(db, async transaction => {
+    const ref = doc(db!, 'users', userId);
+    const snap = await transaction.get(ref);
+    const merged = mergeCozy(sanitizeCozy(snap.data()?.cozy), local);
+    transaction.set(ref, { cozy: merged }, { merge: true });
+    return merged;
+  });
 }
