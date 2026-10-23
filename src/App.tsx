@@ -10,6 +10,7 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YA
 import { cloudEnabled, formatAuthError, getCloudCustom, loadCloudAttempts, loginGoogle, logoutGoogle, saveCloudAttempt, saveCloudCustom, saveLeaderboard, syncProfile, toProfile, watchLeaderboard, watchUser } from './lib/firebase';
 import { calculateResult, compileOriginStats, compileStats, formatAnswer, getWrongQuestionIds, pickQuestions, subjectBreakdown, summarizeMode, topicBreakdown } from './lib/engine';
 import { generateAlternativeQuestions } from './lib/alternatives';
+import { chooseQuizAnswer, isQuizAnswerRevealed, revealQuizAnswer } from './lib/quiz-feedback';
 import { analyzeImport, exampleQuestions, parseQuestions } from './lib/import';
 import { parseBackup } from './lib/backup';
 import { formatOriginBadge, isAvailableForQuiz, normalizeQuestion } from './lib/origin';
@@ -155,7 +156,14 @@ export default function App() {
   function navigate(to: Page) { setDrawer(false); setPage(to); if (to !== 'result') setResult(null); }
   function setAnswer(value: Selection) {
     if (!quiz) return;
-    const updated = {...quiz, answers: {...quiz.answers, [quiz.snapshots[quiz.current].id]: value}};
+    const updated = chooseQuizAnswer(quiz, value);
+    if (updated === quiz) return;
+    setQuiz(updated); storage.saveQuiz(activeId, updated);
+  }
+  function checkAnswer() {
+    if (!quiz) return;
+    const updated = revealQuizAnswer(quiz);
+    if (updated === quiz) return;
     setQuiz(updated); storage.saveQuiz(activeId, updated);
   }
   function setCurrent(index: number) {
@@ -178,7 +186,7 @@ export default function App() {
     }
     const effectiveGrade = setupFormat === 'alternatives' ? 'normal' : setupGrade;
     if (effectiveGrade !== setupGrade) setToast('No treino A–E, cada exercício vale +1 acerto e erro não desconta pontos.');
-    const next: ActiveQuiz = { profileId: activeId, startedAt: new Date().toISOString(), gradeMode: effectiveGrade, exerciseFormat: setupFormat, originFilter: setupOrigin, snapshots: chosen, answers: {}, current: 0 };
+    const next: ActiveQuiz = { profileId: activeId, startedAt: new Date().toISOString(), gradeMode: effectiveGrade, exerciseFormat: setupFormat, originFilter: setupOrigin, snapshots: chosen, answers: {}, checkedAnswers: {}, current: 0 };
     setQuiz(next); storage.saveQuiz(activeId,next); setPage('quiz');
   }
   function finishQuiz() {
@@ -364,7 +372,7 @@ export default function App() {
             <div className="form-section"><div className="form-section-head"><span className="step-number">2</span><div><h3>Qual formato de exercício?</h3><p>Dois jeitos de praticar com o mesmo banco de conhecimento.</p></div></div><div className="grade-choices"><button className={setupFormat==='ce'?'selected':''} onClick={()=>{setSetupFormat('ce');setSetupGrade('cebraspe');}}><span className="grade-icon"><Target size={19}/></span><strong>Original • Certo ou Errado</strong><small>Uma afirmação por questão, com gabarito da banca nos itens oficiais.</small></button><button className={setupFormat==='alternatives'?'selected':''} onClick={()=>{setSetupFormat('alternatives');setSetupGrade('normal');}}><span className="grade-icon"><FileQuestion size={19}/></span><strong>Alternativas A–E</strong><small>Cinco afirmações originais combinadas em um exercício adaptado, com uma única resposta.</small></button></div>{setupFormat==='alternatives' && <div className="origin-notice"><CircleHelp size={15}/><span>Treino adaptado, não é uma questão A–E oficial da banca. Cada exercício utiliza 5 itens C/E da mesma matéria; acertos valem +1, erros valem 0.</span></div>}</div>
             <div className="form-section"><div className="form-section-head"><span className="step-number">3</span><div><h3>Quantas questões?</h3><p>Comece com poucas ou desafie seus conhecimentos.</p></div></div><div className="choice-row">{[5,10,20,30,50].map(count => <button key={count} className={`choice-chip ${setupCount===count?'selected':''}`} onClick={() => setSetupCount(count)}>{count}</button>)}<label className="custom-count-label">Outra <input aria-label="Número de questões" type="number" min={1} max={400} value={setupCount} onChange={e => setSetupCount(Math.max(1,Math.min(400,Number(e.target.value)||1)))}/></label></div></div><div className="form-section"><div className="form-section-head"><span className="step-number">4</span><div><h3>Quais matérias?</h3><p>Deixe todas misturadas ou selecione suas favoritas.</p></div></div><button className={`all-subjects ${!setupSubjects.length?'on':''}`} onClick={() => setSetupSubjects([])}><span><Sparkles size={18}/> Todas misturadas</span>{!setupSubjects.length && <Check size={18}/>}</button><div className="subjects-grid">{subjects.map((s,i) => <button key={s} className={`subject-choice ${setupSubjects.includes(s)?'selected':''}`} onClick={() => {setSetupSubjects(prev => prev.includes(s)?prev.filter(x => x!==s):[...prev,s]);}}><span className="subject-emoji">{subjectIcons[knownSubjects.indexOf(s)] || subjectIcons[i%subjectIcons.length]}</span><span>{s}<small>{setupFormat==='alternatives' ? `${generateAlternativeQuestions(availableQuestions.filter(q=>q.subject===s),Number.MAX_SAFE_INTEGER,setupOrigin,[s],()=>0.43).length} exercícios A–E` : `${allQuestions.filter(q => q.subject===s && (!reviewMode || wrongIds.has(q.id)) && !q.options?.length && isAvailableForQuiz(q, setupOrigin)).length} questões`}</small></span><span className="subject-check">{setupSubjects.includes(s)&&<Check size={13}/>}</span></button>)}</div></div><div className="form-section last"><div className="form-section-head"><span className="step-number">5</span><div><h3>Como quer ser avaliada?</h3><p>Você pode treinar sem pressão ou simular a banca.</p></div></div>{setupFormat==='alternatives' ? <div className="origin-notice"><CheckCircle2 size={15}/><span>Treino A–E: +1 acerto, 0 por erro ou em branco. Não utiliza penalidade Cebraspe.</span></div> : <div className="grade-choices"><button className={setupGrade==='normal'?'selected':''} onClick={() => setSetupGrade('normal')}><span className="grade-icon"><Heart size={19}/></span><strong>Treino leve</strong><small>Acertou? +1 ponto. Errou? Sem desconto.</small></button><button className={setupGrade==='cebraspe'?'selected':''} onClick={() => setSetupGrade('cebraspe')}><span className="grade-icon"><Target size={19}/></span><strong>Modo Cebraspe</strong><small>Acerto +1, erro −1, branco 0.</small></button></div>}</div></section><aside className="panel summary-panel"><span className="panel-kicker">TUDO PRONTO?</span><h3>Seu simulado</h3><div className="summary-illustration">📚<span>✦</span></div><div className="summary-line"><span>{setupFormat==='alternatives'?'Base utilizada':'Origem'}</span><strong>{setupOrigin==='authorial'?'✍️ Autorais':setupOrigin==='official'?'🏛️ Oficiais':'🎲 Misturadas'}</strong></div><div className="summary-line"><span>Questões</span><strong>{Math.min(setupCount,availableCount)} de {availableCount} disponíveis</strong></div><div className="summary-line"><span>Matérias</span><strong>{setupSubjects.length?`${setupSubjects.length} selecionadas`:'Todas misturadas'}</strong></div><div className="summary-line"><span>Formato</span><strong>{setupFormat==='alternatives'?'A–E adaptado':'Certo ou Errado'}</strong></div><div className="summary-line"><span>Correção</span><strong>{setupFormat==='alternatives'?'Sem desconto':setupGrade==='normal'?'Treino leve':'Cebraspe'}</strong></div><div className="summary-line"><span>Tipo</span><strong>{reviewMode?'Revisão de erros':'Questões variadas'}</strong></div>{reviewMode && <div className="inline-info"><RotateCcw size={15}/> Somente questões que você errou e ainda não acertou depois.</div>}<button className="btn btn-primary full large" onClick={startQuiz} disabled={!availableCount || !!quiz}>Iniciar simulado <ArrowRight size={18}/></button>{quiz && <p className="helper-center">Termine ou descarte o atual para começar outro.</p>}{setupCount>availableCount && <p className="helper-center">Serão usadas todas as questões disponíveis, sem repetição.</p>}</aside></div>
         </>}
-        {page === 'quiz' && quiz && <QuizView quiz={quiz} onAnswer={setAnswer} onCurrent={setCurrent} onFinish={finishQuiz} onExit={() => setPage('home')}/>}
+        {page === 'quiz' && quiz && <QuizView quiz={quiz} onAnswer={setAnswer} onCheck={checkAnswer} onCurrent={setCurrent} onFinish={finishQuiz} onExit={() => setPage('home')}/>}
         {page === 'result' && result && <ResultView result={result} filter={resultFilter} setFilter={setResultFilter} onReturn={() => navigate('home')} onAgain={() => {setReviewMode(false);setPage('setup');}} onReview={startReview}/>}
         {page === 'progress' && <><div className="page-heading"><div><span className="eyebrow"><TrendingUp size={15}/> EVOLUÇÃO CONSTANTE</span><h1>Minha evolução <span>🌱</span></h1><p>Uma visão do quanto você já avançou. Compare-se apenas com quem você era ontem.</p></div><div className="page-actions"><button className="btn btn-outline" onClick={exportData}><Download size={17}/> Exportar backup</button><input ref={backupInput} type="file" accept=".json,application/json" hidden onChange={e=>importBackup(e.target.files?.[0])}/><button className="btn btn-outline" onClick={()=>backupInput.current?.click()}><FileUp size={17}/> Restaurar backup</button></div></div>
           <div className="progress-origin-row"><span>Formato do simulado:</span><div className="choice-row">
@@ -454,16 +462,141 @@ export default function App() {
   </div>;
 }
 
-function QuizView({quiz,onAnswer,onCurrent,onFinish,onExit}:{quiz:ActiveQuiz,onAnswer:(a:Selection)=>void,onCurrent:(n:number)=>void,onFinish:()=>void,onExit:()=>void}) {
-  const [elapsed,setElapsed] = useState(() => Math.round((Date.now()-Date.parse(quiz.startedAt))/1000));
-  useEffect(() => {const timer = setInterval(() => setElapsed(Math.round((Date.now()-Date.parse(quiz.startedAt))/1000)),1000);return () => clearInterval(timer);},[quiz.startedAt]);
+function QuizView({
+  quiz, onAnswer, onCheck, onCurrent, onFinish, onExit
+}: {
+  quiz: ActiveQuiz;
+  onAnswer: (a: Selection) => void;
+  onCheck: () => void;
+  onCurrent: (n: number) => void;
+  onFinish: () => void;
+  onExit: () => void;
+}) {
+  const [elapsed, setElapsed] = useState(() => Math.round((Date.now() - Date.parse(quiz.startedAt)) / 1000));
+  useEffect(() => {
+    const timer = setInterval(() => setElapsed(Math.round((Date.now() - Date.parse(quiz.startedAt)) / 1000)), 1000);
+    return () => clearInterval(timer);
+  }, [quiz.startedAt]);
+
   const q = quiz.snapshots[quiz.current];
   const answered = quiz.snapshots.filter(item => quiz.answers[item.id] != null).length;
   const selection = quiz.answers[q.id] ?? null;
+  const locked = selection !== null;
+  const checked = isQuizAnswerRevealed(quiz, q.id);
+  const right = checked && selection === q.correct;
   const last = quiz.current === quiz.snapshots.length - 1;
   const originBadge = formatOriginBadge(q.source, q.status);
-  function finish() {if (answered < quiz.snapshots.length && !confirm(`Você deixou ${quiz.snapshots.length-answered} questão(ões) em branco. Deseja finalizar assim mesmo?`)) return;onFinish();}
-  return <><div className="quiz-top"><div><button className="text-link" onClick={onExit}><ArrowLeft size={17}/> Salvar e sair</button><h1>Hora de praticar! <span>🧠</span></h1><p>Leia com calma. Você consegue!</p></div><div className="quiz-timer"><Clock3 size={18}/>{formatTime(elapsed)}</div></div><div className="quiz-layout"><section className="panel quiz-card"><div className="quiz-progress-head"><span>QUESTÃO {quiz.current+1} DE {quiz.snapshots.length}</span><span>{Math.round(answered/quiz.snapshots.length*100)}% respondidas</span></div><div className="progress-track"><div style={{width:`${answered/quiz.snapshots.length*100}%`}}/></div><div className="question-meta"><Badge tone={originBadge.tone}>{originBadge.icon} {originBadge.short}</Badge>{q.adaptedFrom?.length ? <span className="official-item-tag">✍️ Treino adaptado • 5 afirmações do banco</span> : null}{q.source.kind === 'official' && <span className="official-item-tag">🏛️ Cebraspe · INSS {q.source.examYear || 2022} · item {q.source.itemNumber || q.id}</span>}<Badge>{q.subject}</Badge><Badge tone="neutral">{q.topic}</Badge>{q.source.questionPaperUrl && <a href={q.source.questionPaperUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Caderno <ExternalLink size={12}/></a>}{q.source.definitiveKeyUrl && <a href={q.source.definitiveKeyUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Gabarito oficial <ExternalLink size={12}/></a>}</div><h2>{q.statement}</h2><p className="question-prompt">{quiz.exerciseFormat==='alternatives' ? 'Treino adaptado de cinco afirmações C/E. Escolha uma única alternativa.' : q.options?.length ? 'Assinale a alternativa correta.' : 'Julgue a afirmação acima como certa ou errada.'}</p><div className="answer-list">{q.options?.length ? q.options.map((option,i) => {const letter = String.fromCharCode(65+i) as Selection;return <button key={letter} className={`answer-option ${selection===letter?'chosen':''}`} onClick={() => onAnswer(selection===letter?null:letter)}><span className="answer-letter">{letter}</span><div><strong>{option}</strong></div><span className="answer-radio">{selection===letter&&<Check size={17}/>}</span></button>;}) : <><button className={`answer-option ${selection==='C'?'chosen':''}`} onClick={() => onAnswer(selection==='C'?null:'C')}><span className="answer-letter">C</span><div><strong>Certo</strong><small>A afirmação está correta</small></div><span className="answer-radio">{selection==='C'&&<Check size={17}/>}</span></button><button className={`answer-option ${selection==='E'?'chosen':''}`} onClick={() => onAnswer(selection==='E'?null:'E')}><span className="answer-letter">E</span><div><strong>Errado</strong><small>A afirmação está incorreta</small></div><span className="answer-radio">{selection==='E'&&<Check size={17}/>}</span></button></>}</div><div className="quiz-controls"><button className="btn btn-outline" disabled={quiz.current===0} onClick={()=>onCurrent(quiz.current-1)}><ArrowLeft size={17}/> Anterior</button><div className="question-counter">{quiz.current+1} / {quiz.snapshots.length}</div>{last?<button className="btn btn-primary" onClick={finish}>Finalizar <Check size={17}/></button>:<button className="btn btn-primary" onClick={()=>onCurrent(quiz.current+1)}>Próxima <ArrowRight size={17}/></button>}</div></section><aside className="panel quiz-aside"><div className="panel-header"><h3>Seu simulado</h3><Badge tone="neutral">{quiz.exerciseFormat==='alternatives'?'A–E • treino':summarizeMode(quiz.gradeMode)}</Badge></div><div className="quiz-progress-label"><span>Respondidas</span><strong>{answered}/{quiz.snapshots.length}</strong></div><div className="question-navigator">{quiz.snapshots.map((item,i)=><button key={item.id} aria-label={`Ir para questão ${i+1}`} className={`${i===quiz.current?'current':''} ${quiz.answers[item.id]!=null?'answered':''}`} onClick={()=>onCurrent(i)}>{i+1}</button>)}</div><div className="navigator-legend"><span><i className="legend-done"/> Respondida</span><span><i className="legend-current"/> Atual</span><span><i className="legend-blank"/> Em branco</span></div><button className="btn btn-outline full" onClick={finish}>Finalizar simulado <Check size={17}/></button><p className="helper-center">Suas respostas são salvas automaticamente.</p></aside></div></>;
+  const choices: { letter: Exclude<Selection, null>; title: string; detail?: string }[] =
+    q.options?.length
+      ? q.options.map((option, i) => ({ letter: 'ABCDE'[i] as Exclude<Selection, null>, title: option }))
+      : [
+          { letter: 'C', title: 'Certo', detail: 'A afirmação está correta' },
+          { letter: 'E', title: 'Errado', detail: 'A afirmação está incorreta' }
+        ];
+
+  function finish() {
+    if (answered < quiz.snapshots.length && !confirm(`Você deixou ${quiz.snapshots.length - answered} questão(ões) em branco. Deseja finalizar assim mesmo?`)) return;
+    onFinish();
+  }
+
+  return <>
+    <div className="quiz-top">
+      <div><button className="text-link" onClick={onExit}><ArrowLeft size={17}/> Salvar e sair</button><h1>Hora de praticar! <span>🧠</span></h1><p>Leia com calma. Você consegue!</p></div>
+      <div className="quiz-timer"><Clock3 size={18}/>{formatTime(elapsed)}</div>
+    </div>
+    <div className="quiz-layout">
+      <section className="panel quiz-card">
+        <div className="quiz-progress-head"><span>QUESTÃO {quiz.current + 1} DE {quiz.snapshots.length}</span><span>{Math.round(answered / quiz.snapshots.length * 100)}% respondidas</span></div>
+        <div className="progress-track"><div style={{ width: `${answered / quiz.snapshots.length * 100}%` }}/></div>
+        <div className="question-meta">
+          <Badge tone={originBadge.tone}>{originBadge.icon} {originBadge.short}</Badge>
+          {q.adaptedFrom?.length ? <span className="official-item-tag">✍️ Treino adaptado • 5 afirmações do banco</span> : null}
+          {q.source.kind === 'official' && <span className="official-item-tag">🏛️ Cebraspe · INSS {q.source.examYear || 2022} · item {q.source.itemNumber || q.id}</span>}
+          <Badge>{q.subject}</Badge><Badge tone="neutral">{q.topic}</Badge>
+          {q.source.questionPaperUrl && <a href={q.source.questionPaperUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Caderno <ExternalLink size={12}/></a>}
+          {q.source.definitiveKeyUrl && <a href={q.source.definitiveKeyUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Gabarito oficial <ExternalLink size={12}/></a>}
+        </div>
+        <h2>{q.statement}</h2>
+        <p className="question-prompt">
+          {quiz.exerciseFormat === 'alternatives' ? 'Treino adaptado de cinco afirmações C/E. Escolha uma única alternativa.' : q.options?.length ? 'Assinale a alternativa correta.' : 'Julgue a afirmação acima como certa ou errada.'}
+        </p>
+        <div className="answer-list">
+          {choices.map(({letter, title, detail}) => {
+            const selected = selection === letter;
+            const correctAnswer = checked && q.correct === letter;
+            const wrongAnswer = checked && selected && q.correct !== letter;
+            return <button
+              type="button"
+              key={letter}
+              className={`answer-option ${selected ? 'chosen' : ''} ${correctAnswer ? 'answer-is-correct' : ''} ${wrongAnswer ? 'answer-is-wrong' : ''}`}
+              onClick={() => onAnswer(letter)}
+              disabled={locked}
+              aria-pressed={selected}
+              title={locked ? 'Resposta registrada e bloqueada' : undefined}
+            >
+              <span className="answer-letter">{letter}</span>
+              <div><strong>{title}</strong>{detail && <small>{detail}</small>}</div>
+              <span className="answer-radio">{selected && <Check size={17}/>}</span>
+            </button>;
+          })}
+        </div>
+        <p className="answer-lock-note" role="status">
+          {locked ? <><ShieldCheck size={15}/> Resposta registrada e bloqueada. Não é possível alterá-la.</> : <><CircleHelp size={15}/> A escolha fica definitiva ao selecionar uma resposta. Você também pode deixar em branco.</>}
+        </p>
+        <div className="quiz-check-area">
+          <button type="button" className="btn btn-primary full" disabled={!locked || checked} onClick={onCheck}>
+            <CheckCircle2 size={18}/>{checked ? 'Resposta conferida' : 'Conferir minha resposta'}
+          </button>
+          {!locked && <span className="helper-center">Selecione Certo/Errado ou uma alternativa de A a E para conferir.</span>}
+        </div>
+        {checked && (
+          <div className={`quiz-feedback ${right ? 'quiz-feedback-correct' : 'quiz-feedback-wrong'}`} role="status" aria-live="polite">
+            <div className="quiz-feedback-heading">
+              {right ? <><CheckCircle2 size={20}/> Você acertou! 🌻</> : <><XCircle size={20}/> Essa não era a resposta correta. Vamos entender?</>}
+            </div>
+            <div className="answer-comparison">
+              <span>Sua resposta: <strong>{formatAnswer(selection, q.options)}</strong></span>
+              <span>Gabarito: <strong>{formatAnswer(q.correct, q.options)}</strong></span>
+              {q.source.kind === 'official' && <span className="official-key-pill">🏛️ Gabarito oficial Cebraspe: {q.officialAnswer || q.correct}</span>}
+            </div>
+            <div className="answer-explanation">
+              <Lightbulb size={18}/>
+              <div>
+                {q.source.kind === 'official' && <div className="official-disclaimer-pill">Comentário de estudo — não é justificativa oficial da banca</div>}
+                {q.adaptedFrom?.length ? <p className="quiz-feedback-caption">Exercício A–E adaptado, não é uma questão oficial de alternativas.</p> : null}
+                <p style={{whiteSpace: 'pre-line'}}>{q.explanation}</p>
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="quiz-controls">
+          <button className="btn btn-outline" disabled={quiz.current === 0} onClick={() => onCurrent(quiz.current - 1)}><ArrowLeft size={17}/> Anterior</button>
+          <div className="question-counter">{quiz.current + 1} / {quiz.snapshots.length}</div>
+          {last ? <button className="btn btn-primary" onClick={finish}>Finalizar <Check size={17}/></button>
+            : <button className="btn btn-primary" onClick={() => onCurrent(quiz.current + 1)}>Próxima <ArrowRight size={17}/></button>}
+        </div>
+      </section>
+      <aside className="panel quiz-aside">
+        <div className="panel-header"><h3>Seu simulado</h3><Badge tone="neutral">{quiz.exerciseFormat === 'alternatives' ? 'A–E • treino' : summarizeMode(quiz.gradeMode)}</Badge></div>
+        <div className="quiz-progress-label"><span>Respondidas</span><strong>{answered}/{quiz.snapshots.length}</strong></div>
+        <div className="question-navigator">
+          {quiz.snapshots.map((item, i) => {
+            const alreadyAnswered = quiz.answers[item.id] != null;
+            const alreadyChecked = isQuizAnswerRevealed(quiz, item.id);
+            return <button
+              key={item.id}
+              aria-label={`Ir para questão ${i + 1}, ${alreadyChecked ? 'conferida' : alreadyAnswered ? 'respondida' : 'em branco'}`}
+              className={`${i === quiz.current ? 'current' : ''} ${alreadyAnswered ? 'answered' : ''} ${alreadyChecked ? 'checked' : ''}`}
+              onClick={() => onCurrent(i)}
+            >{i + 1}</button>;
+          })}
+        </div>
+        <div className="navigator-legend"><span><i className="legend-done"/> Respondida</span><span><i className="legend-current"/> Atual</span><span><i className="legend-blank"/> Em branco</span></div>
+        <button className="btn btn-outline full" onClick={finish}>Finalizar simulado <Check size={17}/></button>
+        <p className="helper-center">Respostas e conferências são salvas automaticamente.</p>
+      </aside>
+    </div>
+  </>;
 }
 
 function ResultView({result,filter,setFilter,onReturn,onAgain,onReview}:{result:Attempt,filter:'wrong'|'all',setFilter:(v:'wrong'|'all')=>void,onReturn:()=>void,onAgain:()=>void,onReview:()=>void}) {
