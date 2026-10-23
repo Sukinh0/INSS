@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { computeStudyStreak, dayKey, shiftDay, streakMessage } from './streak';
+import { computeStudyStreak, dayKey, shiftDay, streakMessage, STUDY_FLOWERS, flowerForStudyDay } from './streak';
 import type { Attempt } from '../types';
 import { emptyCozy, type CozyProgress } from './cozy';
 
@@ -73,4 +73,56 @@ describe('sequência Girassol',()=>{
     expect(info.nextMilestone).toBe(7);
     expect(info.days).toHaveLength(7);
   });
+  it('possui 11 flores visivelmente distintas sem repetição na primeira volta',()=>{
+    expect(STUDY_FLOWERS).toHaveLength(11);
+    expect(new Set(STUDY_FLOWERS.map(f=>f.emoji)).size).toBe(11);
+    expect(new Set(STUDY_FLOWERS.map(f=>f.name)).size).toBe(11);
+    expect(flowerForStudyDay(1)).toEqual({emoji:'🌻',name:'Girassol'});
+    expect(flowerForStudyDay(11)).toEqual({emoji:'💐',name:'Buquê de flores'});
+  });
+  it('repete o ciclo após todas as flores, sem apagar o histórico',()=>{
+    expect(flowerForStudyDay(12)).toEqual(flowerForStudyDay(1));
+    expect(flowerForStudyDay(22)).toEqual(flowerForStudyDay(11));
+    expect(flowerForStudyDay(23)).toEqual(flowerForStudyDay(1));
+    const attempts=Array.from({length:12},(_,i)=>
+      attempt(`${shiftDay('2026-10-22',i-11)}T15:00:00-03:00`)
+    );
+    const info=computeStudyStreak(attempts,emptyCozy(),now);
+    expect(info.totalDays).toBe(12);
+    expect(info.current).toBe(12);
+    expect(info.latestFlower).toEqual(STUDY_FLOWERS[0]);
+    expect(info.days.at(-1)?.flower).toEqual(STUDY_FLOWERS[0]);
+    expect(info.days.at(-2)?.flower).toEqual(STUDY_FLOWERS[10]);
+  });
+  it('entrega uma única flor por data, mesmo havendo vários estudos no mesmo dia',()=>{
+    const info=computeStudyStreak([
+      attempt('2026-10-21T11:00:00-03:00'),
+      attempt('2026-10-21T18:00:00-03:00'),
+      attempt('2026-10-22T11:00:00-03:00')
+    ],emptyCozy(),now);
+    expect(info.totalDays).toBe(2);
+    expect(info.days.at(-2)?.flower).toEqual(STUDY_FLOWERS[0]);
+    expect(info.days.at(-1)?.flower).toEqual(STUDY_FLOWERS[1]);
+  });
+  it('não concede flor em dia sem estudo, mas continua a coleção após uma pausa',()=>{
+    const info=computeStudyStreak([
+      attempt('2026-10-16T11:00:00-03:00'),
+      attempt('2026-10-18T11:00:00-03:00'),
+      attempt('2026-10-22T11:00:00-03:00')
+    ],emptyCozy(),now);
+    expect(info.current).toBe(1);
+    expect(info.best).toBe(1);
+    expect(info.days[0].flower).toEqual(STUDY_FLOWERS[0]);
+    expect(info.days[1].flower).toBeUndefined();
+    expect(info.days[2].flower).toEqual(STUDY_FLOWERS[1]);
+    expect(info.days[6].flower).toEqual(STUDY_FLOWERS[2]);
+    expect(info.latestFlower).toEqual(STUDY_FLOWERS[2]);
+  });
+  it('não concede flor se não houve aprendizado registrado',()=>{
+    const info=computeStudyStreak([],emptyCozy(),now);
+    expect(info.totalDays).toBe(0);
+    expect(info.latestFlower).toBeUndefined();
+    expect(info.days.every(d=>d.flower===undefined)).toBe(true);
+  });
+
 });
