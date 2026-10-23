@@ -1,9 +1,10 @@
 import { calculateResult } from './engine';
 import { parseQuestions } from './import';
 import { normalizeQuestion } from './origin';
+import { sanitizeCozy, type CozyProgress } from './cozy';
 import type { ActiveQuiz, Attempt, GradeMode, OriginFilter, Question, Selection } from '../types';
 
-export type BackupContent = { attempts: Attempt[]; custom: Question[] };
+export type BackupContent = { attempts: Attempt[]; custom: Question[]; cozy: CozyProgress };
 
 /** Backup importado nunca altera a conta ativa nem confia em notas declaradas pelo arquivo. */
 export function parseBackup(raw: string, targetProfileId: string, targetName: string): BackupContent {
@@ -11,7 +12,7 @@ export function parseBackup(raw: string, targetProfileId: string, targetName: st
   try { value = JSON.parse(raw); } catch { throw new Error('Backup inválido: não é um JSON válido.'); }
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Backup inválido.');
   const data = value as Record<string, unknown>;
-  if (data.app !== 'Rumo ao INSS' || (data.version !== 1 && data.version !== 2) || !Array.isArray(data.attempts) || !Array.isArray(data.custom)) {
+  if (data.app !== 'Rumo ao INSS' || (data.version !== 1 && data.version !== 2 && data.version !== 3) || !Array.isArray(data.attempts) || !Array.isArray(data.custom)) {
     throw new Error('Arquivo não é um backup reconhecido do Rumo ao INSS.');
   }
   if (data.attempts.length > 1000 || data.custom.length > 400) throw new Error('Backup ultrapassa os limites de importação.');
@@ -47,5 +48,5 @@ export function parseBackup(raw: string, targetProfileId: string, targetName: st
     seen.add(uniqueId);
     return { ...calculated, id: uniqueId, profileId: targetProfileId, profileName: targetName, originFilter };
   });
-  return { attempts, custom };
+  return { attempts, custom, cozy: sanitizeCozy(data.cozy) };
 }
