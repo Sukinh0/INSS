@@ -33,13 +33,20 @@ export default function CozyStudy({ profileId, profileName, questions, cloudSync
     if (!cloudSync) return;
     let alive = true;
     setIsSyncing(true);
-    getCloudCozy(profileId).then(remote => {
+    getCloudCozy(profileId).then(async remote => {
       if (!alive || storage.activeId() !== profileId) return;
-      setProgress(prev => {
-        const merged = mergeCozy(prev, remote);
-        storage.saveCozy(profileId, merged);
-        return merged;
-      });
+      // Ao reconectar, envie também eventos que só estavam neste dispositivo.
+      const merged = mergeCozy(storage.cozy(profileId), remote);
+      storage.saveCozy(profileId, merged);
+      setProgress(prev => mergeCozy(prev, merged));
+      const saved = await saveCloudCozy(profileId, merged);
+      if (alive && storage.activeId() === profileId) {
+        setProgress(prev => {
+          const resolved=mergeCozy(prev,saved);
+          storage.saveCozy(profileId,resolved);
+          return resolved;
+        });
+      }
     }).catch(() => {
       if (alive) setFeedback('O cantinho continua funcionando aqui. Não foi possível carregar o progresso da nuvem.');
     }).finally(() => {if (alive) setIsSyncing(false);});
