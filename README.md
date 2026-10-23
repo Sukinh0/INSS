@@ -9,6 +9,25 @@
 - A conferência é salva junto ao simulado no dispositivo, de modo que voltar à questão ou recarregar mantém o feedback aberto. Simulados iniciados em versões anteriores continuam compatíveis: respostas existentes também permanecem bloqueadas, mas podem ser conferidas.
 - O histórico, nota e ranking usam os mesmos gabaritos e regras de pontuação de antes; visualizar a correção não altera acertos.
 
+## Sequência Girassol — hábito gentil de estudo
+
+A **Sequência Girassol 🌻** aparece no início e no Meu Cantinho. Ela soma **dias com atividade real**, sem qualquer exigência de acerto:
+
+- Simulado finalizado (inclusive com nota zero ou negativa).
+- Pelo menos uma microaula concluída no Girassol (responder ou escolher só ler).
+- Pelo menos uma Cartinha estudada e marcada como **Já sabia** ou **Quero revisar**.
+- Várias atividades no mesmo dia valem **apenas um dia** para a sequência.
+
+**Regra de calendário:** todos os registros são convertidos para **America/Sao_Paulo**, inclusive quando a estudante usa aparelhos em outros fusos. Se hoje ainda não houve estudo, a sequência de ontem permanece ativa durante o dia. Uma pausa maior reinicia o contador atual, mas **nunca apaga o recorde**, nem o jardim, nem o histórico.
+
+A interface mostra calendário dos últimos sete dias, sequência atual, recorde e próxima florada (3, 7, 14, 30, 60, 100 dias...). Mensagens são positivas, sem pressão, perda de pontos, alarmes ou notificações coercitivas.
+
+**Persistência:** não há contador editável nem uma nova coleção Firestore. A sequência é **calculada**, evitando duplicidades, a partir de `attempts` já salvos (inclusive sincronizados pela conta Google) e `cozy.events` já sincronizados pelo Cantinho. Não altera notes, estatísticas de questões nem ranking.
+
+**Verificação:** `npm test` cobre dias repetidos, meia-noite em São Paulo, notas negativas, pausa, recorde, datas inválidas, eventos vindos do Google e próximo marco. `npm run build` checa a interface. Testar também troca de perfil, backup e uso em celular.
+
+---
+
 ## Meu Cantinho 🌻 — Girassol e Cartinhas do Saber
 
 O menu **Meu Cantinho** é um espaço de estudo acolhedor, **independente dos simulados e do ranking**. Não há cronômetro, nota, obrigação diária ou penalidade.

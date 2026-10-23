@@ -1,0 +1,50 @@
+/* Sequência Girassol — recompensar presença, não exigir desempenho */
+.streak-garden {
+  width:100%;
+  border:1px solid #ECD394;
+  border-radius:18px;
+  background:linear-gradient(125deg,#FFF3CE 0%,#FFFDF7 90%);
+  padding:22px 24px;
+  box-shadow:0 7px 22px rgba(117,79,12,.055);
+  color:#503913;
+  margin:20px 0 24px;
+}
+.streak-garden-intro {display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.streak-garden-main {display:flex;align-items:center;gap:17px;min-width:0;}
+.streak-bloom {display:flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:19px;background:#FFE3A4;font-size:41px;flex-shrink:0;}
+.streak-eyebrow {display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.065em;color:#866014;font-weight:900;}
+.streak-garden h2 {font-size:20px;letter-spacing:-.03em;margin:5px 0;color:#53390E;}
+.streak-garden h2 strong {font-size:30px;}
+.streak-garden-main p {font-size:12px;line-height:1.65;color:#785C26;margin:4px 0 0;max-width:460px;}
+.streak-best {display:flex;align-items:center;gap:9px;padding:10px 13px;border:1px solid #EAD09B;border-radius:11px;background:#FFFAEB;color:#825B12;}
+.streak-best span {display:flex;flex-direction:column;gap:2px;font-size:11px;}
+.streak-best strong {color:#503913;font-size:13px;}
+.streak-week {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin:19px 0;}
+.streak-week-day {display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0;}
+.streak-week-day small {font-size:11px;font-weight:800;color:#735D36;text-transform:capitalize;}
+.streak-week-day>span {display:flex;align-items:center;justify-content:center;width:100%;min-height:44px;border-radius:12px;font-size:26px;background:rgba(255,255,255,.65);border:1px solid #EDE0BD;color:#BCAC84;}
+.streak-week-day.streak-week-done>span {background:#FFECB7;border-color:#E9C878;}
+.streak-week-day.streak-week-today>span {box-shadow:inset 0 0 0 1px #BB8620;}
+.streak-milestone {margin:8px 0 0;}
+.streak-milestone-caption {display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:11px;font-weight:800;color:#74571B;margin-bottom:8px;}
+.streak-milestone-caption span {display:flex;align-items:center;gap:6px;}
+.streak-milestone-caption strong {color:#53390E;}
+.streak-milestone-track {height:9px;border-radius:99px;background:#F5E5BD;overflow:hidden;}
+.streak-milestone-track>span {height:100%;display:block;background:linear-gradient(90deg,#D79D23,#F4C94F);border-radius:99px;transition:width .25s;}
+.streak-study-link {display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;min-height:42px;font-size:12px;font-weight:850;color:#654308;border:1px solid #D6A934;border-radius:11px;background:#FFE099;margin:16px 0 0;width:100%;}
+.streak-study-link:hover {background:#FBD17B;}
+.streak-today-ok {font-size:12px;color:#27613D;font-weight:750;margin:13px 0 0;line-height:1.6;}
+.streak-disclaimer {font-size:11px;color:#806944;line-height:1.55;margin:13px 0 0;}
+.streak-garden-compact {margin:15px 0 22px;padding:18px;}
+@media(max-width:700px) {
+  .streak-garden {padding:16px;}
+  .streak-garden-main {gap:11px;}
+  .streak-bloom {height:58px;width:58px;font-size:33px;border-radius:14px;}
+  .streak-garden h2 {font-size:17px;}
+  .streak-garden h2 strong {font-size:24px;}
+  .streak-best {width:100%;justify-content:center;}
+  .streak-week {gap:5px;}
+  .streak-week-day>span {min-height:38px;font-size:21px;border-radius:9px;}
+  .streak-week-day small {font-size:10px;}
+}
+@media(prefers-reduced-motion:reduce) {.streak-milestone-track>span {transition:none;}}

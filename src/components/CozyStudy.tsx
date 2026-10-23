@@ -9,11 +9,13 @@ import {
   type CozyKind, type CozyProgress, type CozySession
 } from '../lib/cozy';
 import '../cozy.css';
+import StreakGarden from './StreakGarden';
+import type { StudyStreak } from '../lib/streak';
 
-type Props = { profileId: string; profileName: string; questions: Question[]; cloudSync: boolean };
+type Props = { profileId: string; profileName: string; questions: Question[]; cloudSync: boolean; streak: StudyStreak; onProgressChange: (value: CozyProgress) => void };
 type Finished = { mode: CozyKind; count: number } | null;
 
-export default function CozyStudy({ profileId, profileName, questions, cloudSync }: Props) {
+export default function CozyStudy({ profileId, profileName, questions, cloudSync, streak, onProgressChange }: Props) {
   const [progress, setProgress] = useState<CozyProgress>(() => sanitizeCozy(storage.cozy(profileId)));
   const [session, setSession] = useState<CozySession | null>(() => storage.cozySession(profileId));
   const [finished, setFinished] = useState<Finished>(null);
@@ -38,14 +40,14 @@ export default function CozyStudy({ profileId, profileName, questions, cloudSync
       // Ao reconectar, envie também eventos que só estavam neste dispositivo.
       const merged = mergeCozy(storage.cozy(profileId), remote);
       storage.saveCozy(profileId, merged);
-      setProgress(prev => mergeCozy(prev, merged));
+      setProgress(merged);
+      onProgressChange(merged);
       const saved = await saveCloudCozy(profileId, merged);
       if (alive && storage.activeId() === profileId) {
-        setProgress(prev => {
-          const resolved=mergeCozy(prev,saved);
-          storage.saveCozy(profileId,resolved);
-          return resolved;
-        });
+        const resolved=mergeCozy(storage.cozy(profileId),saved);
+        storage.saveCozy(profileId,resolved);
+        setProgress(resolved);
+        onProgressChange(resolved);
       }
     }).catch(() => {
       if (alive) setFeedback('O cantinho continua funcionando aqui. Não foi possível carregar o progresso da nuvem.');
@@ -54,17 +56,17 @@ export default function CozyStudy({ profileId, profileName, questions, cloudSync
   }, [profileId,cloudSync]);
 
   function saveProgress(next: CozyProgress) {
-    const normalized = sanitizeCozy(next);
-    setProgress(prev => mergeCozy(prev,normalized));
+    const normalized = mergeCozy(storage.cozy(profileId),sanitizeCozy(next));
+    setProgress(normalized);
     if (!storage.saveCozy(profileId,normalized)) setFeedback('Seu dispositivo está sem espaço para salvar o progresso do cantinho.');
+    onProgressChange(normalized);
     if (cloudSync) {
       saveCloudCozy(profileId,normalized).then(remote => {
         if (storage.activeId() !== profileId) return;
-        setProgress(prev => {
-          const merged=mergeCozy(prev,remote);
-          storage.saveCozy(profileId,merged);
-          return merged;
-        });
+        const merged=mergeCozy(storage.cozy(profileId),remote);
+        storage.saveCozy(profileId,merged);
+        setProgress(merged);
+        onProgressChange(merged);
       }).catch(() => setFeedback('Salvo neste dispositivo. A sincronização com Google não funcionou agora.'));
     }
   }
@@ -200,6 +202,7 @@ export default function CozyStudy({ profileId, profileName, questions, cloudSync
   </div>;
 
   return <div className="cozy-page">{heading}
+    <StreakGarden streak={streak} compact/>
     <section className="cozy-welcome">
       <div><span className="cozy-pill"><Sparkles size={15}/> Dia leve, aprendizado real</span>
         <h2>Vamos aprender no seu tempo?</h2>
