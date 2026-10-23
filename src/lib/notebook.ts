@@ -110,7 +110,7 @@ export function saveNotebookQuestion(data:NotebookData,q:Question,now=new Date()
   const question:NotebookQuestionRef={
     id:q.id.slice(0,160),statement:q.statement.slice(0,900),
     ...(q.options?.length?{options:q.options.slice(0,5).map(s=>s.slice(0,400))}:{}),
-    origin:q.source?.kind==='official'?'Oficial verificada':q.adaptedFrom?.length?'Treino A–E adaptado':'Autoral',
+    origin:q.source?.kind==='official' && q.source.verification==='verified'?'Oficial verificada':q.adaptedFrom?.length?'Treino A–E adaptado':q.source?.kind==='official'?'Origem em revisão':'Autoral',
     ...(url(q.source?.questionPaperUrl)?{sourceUrl:url(q.source.questionPaperUrl)}:{})
   };
   const item:NotebookEntry={
