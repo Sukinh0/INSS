@@ -81,6 +81,8 @@ export type ActiveQuiz = {
   originFilter?: OriginFilter;
   snapshots: Question[];
   answers: Record<string, Selection>;
+  /** IDs das questões cuja correção já foi aberta. Ausente em simulados antigos. */
+  checkedAnswers?: Record<string, boolean>;
   current: number;
 };
 
