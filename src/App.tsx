@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   ArrowLeft, ArrowRight, Award, BookOpen, Brain, Building2, CalendarDays, ChartNoAxesCombined,
   Check, CheckCircle2, ChevronDown, ChevronRight, CircleHelp, Clock3, Cloud,
-  Download, ExternalLink, FileQuestion, FileUp, GraduationCap, Heart, Home,
+  Download, ExternalLink, FileQuestion, FileUp, GraduationCap, Heart, Home, BookMarked,
   Lightbulb, LogOut, Medal, Menu, Plus, RotateCcw, Search, Settings2, ShieldCheck,
   Sparkles, Sun, Target, Trash2, TrendingUp, Trophy, X, XCircle
 } from 'lucide-react';
