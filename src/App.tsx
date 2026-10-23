@@ -7,7 +7,7 @@ import {
   Sparkles, Sun, Target, Trash2, TrendingUp, Trophy, X, XCircle
 } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { cloudEnabled, formatAuthError, getCloudCustom, loadCloudAttempts, loginGoogle, logoutGoogle, saveCloudAttempt, saveCloudCustom, saveCloudCozy, saveLeaderboard, syncProfile, toProfile, watchLeaderboard, watchUser } from './lib/firebase';
+import { cloudEnabled, formatAuthError, getCloudCustom, getCloudCozy, loadCloudAttempts, loginGoogle, logoutGoogle, saveCloudAttempt, saveCloudCustom, saveCloudCozy, saveLeaderboard, syncProfile, toProfile, watchLeaderboard, watchUser } from './lib/firebase';
 import { calculateResult, compileOriginStats, compileStats, formatAnswer, getWrongQuestionIds, pickQuestions, subjectBreakdown, summarizeMode, topicBreakdown } from './lib/engine';
 import { generateAlternativeQuestions } from './lib/alternatives';
 import { chooseQuizAnswer, isQuizAnswerRevealed, revealQuizAnswer } from './lib/quiz-feedback';
@@ -17,6 +17,8 @@ import { formatOriginBadge, isAvailableForQuiz, normalizeQuestion } from './lib/
 import { storage } from './lib/storage';
 import { mergeCozy } from './lib/cozy';
 import CozyStudy from './components/CozyStudy';
+import StreakGarden from './components/StreakGarden';
+import { computeStudyStreak } from './lib/streak';
 import originalQuestions from './data/questions.json';
 import officialQuestions from './data/questions_official.json';
 import type { ActiveQuiz, Attempt, ExerciseFormat, GradeMode, OriginFilter, OriginKind, Profile, ProfileStats, Question, Selection } from './types';
@@ -59,6 +61,8 @@ export default function App() {
   const [attempts, setAttempts] = useState<Attempt[]>(() => storage.attempts(storage.activeId()));
   const [custom, setCustom] = useState<Question[]>(() => storage.custom(storage.activeId()).map(normalizeQuestion));
   const [quiz, setQuiz] = useState<ActiveQuiz | null>(() => storage.quiz(storage.activeId()));
+  const [cozyProgress, setCozyProgress] = useState(() => storage.cozy(storage.activeId()));
+  const [streakNow, setStreakNow] = useState(() => new Date());
   const [result, setResult] = useState<Attempt | null>(null);
   const [page, setPage] = useState<Page>('home');
   const [nameInput, setNameInput] = useState('');
@@ -95,6 +99,7 @@ export default function App() {
 
   const subjects = useMemo(() => [...new Set(allQuestions.map(q => q.subject))], [allQuestions]);
   const stats = useMemo(() => compileStats(activeId, profile?.name || 'Estudante', attempts, profile?.photo), [activeId, attempts, profile?.name, profile?.photo]);
+  const streak = useMemo(() => computeStudyStreak(attempts, cozyProgress, streakNow), [attempts, cozyProgress, streakNow]);
   const breakdown = useMemo(() => subjectBreakdown(attempts), [attempts]);
   const wrongIds = useMemo(() => {
     const bankIds = new Set(allQuestions.map(q => q.id));
@@ -122,6 +127,18 @@ export default function App() {
           storage.saveAttempts(current.id, merged); setAttempts(merged);
           saveLeaderboard(compileStats(current.id,current.name,merged,current.photo)).catch(() => setAuthError('Ranking não pôde ser atualizado.'));
         }).catch(() => setAuthError('Falha ao sincronizar o histórico. Verifique se o Firestore foi criado no console.'));
+        getCloudCozy(current.id).then(async cloud => {
+          if (storage.activeId() !== current.id) return;
+          const merged=mergeCozy(storage.cozy(current.id),cloud);
+          storage.saveCozy(current.id,merged);
+          setCozyProgress(merged);
+          const saved=await saveCloudCozy(current.id,merged);
+          if (storage.activeId() === current.id) {
+            const latest=mergeCozy(storage.cozy(current.id),saved);
+            storage.saveCozy(current.id,latest);
+            setCozyProgress(latest);
+          }
+        }).catch(() => { /* Progresso leve local disponível, mesmo sem conexão. */ });
         getCloudCustom(current.id).then(items => {
           if (storage.activeId() !== current.id) return;
           const merged = [...new Map([...storage.custom(current.id), ...items].map(q => [q.id,q])).values()];
@@ -138,6 +155,10 @@ export default function App() {
     return watchLeaderboard(setCloudRanking, () => setAuthError('Ranking na nuvem indisponível. Confira as regras do Firestore.'));
   }, [authUid]);
   useEffect(() => {
+    const clock=setInterval(() => setStreakNow(new Date()), 60_000);
+    return () => clearInterval(clock);
+  }, []);
+  useEffect(() => {
     if (!toast) return;
     const timer = setTimeout(() => setToast(''), 3500); return () => clearTimeout(timer);
   }, [toast]);
@@ -145,6 +166,7 @@ export default function App() {
   function selectUser(id: string) {
     storage.saveActiveId(id); setActiveId(id);
     setAttempts(storage.attempts(id)); setCustom(storage.custom(id)); setQuiz(storage.quiz(id));
+    setCozyProgress(storage.cozy(id)); setStreakNow(new Date());
     setResult(null); setPage('home'); setDrawer(false);
   }
   function createProfile() {
@@ -266,6 +288,7 @@ export default function App() {
       setAttempts(merged); setCustom([...bank.values()]);
       const cozyMerged=mergeCozy(storage.cozy(activeId),incoming.cozy);
       if (!storage.saveCozy(activeId,cozyMerged)) throw new Error('Sem espaço para guardar o progresso do Meu Cantinho.');
+      setCozyProgress(cozyMerged);
       setToast(`Backup restaurado: ${newItems.length} simulado(s) novo(s) e atividades leves preservadas.`);
       if (authUid === activeId && profile.cloud) {
         try {
@@ -325,13 +348,14 @@ export default function App() {
         {page === 'home' && <>
           <div className="page-heading"><div><span className="eyebrow"><Sparkles size={15}/> SUA JORNADA DE ESTUDOS</span><h1>Oi, {profile.name.split(' ')[0]}! <span>👋</span></h1><p>Pronta para dar mais um passo rumo à sua aprovação?</p></div></div>
           <section className="hero-card"><div className="hero-content"><div className="hero-kicker"><span className="pulse-dot"/> O SEU FUTURO ESTÁ SENDO CONSTRUÍDO</div><h2>Um pouquinho todos os dias faz uma <em>grande diferença.</em></h2><p>Não precisa acertar tudo hoje. O importante é continuar evoluindo. 🌻</p><button className="btn btn-white" onClick={() => {if (quiz){setPage('quiz');return;}setReviewMode(false);setPage('setup');}}>{quiz?'Continuar simulado':'Começar um simulado'} <ArrowRight size={18}/></button></div><div className="hero-art" aria-hidden="true"><div className="orbit orbit-1"/><div className="orbit orbit-2"/><div className="art-star star-a">✦</div><div className="art-star star-b">✧</div><div className="book-art"><div className="book-page page-left"/><div className="book-page page-right"/><div className="book-center"/></div><span className="art-sparkle">✴</span></div></section>
+          <StreakGarden streak={streak} onStudy={() => navigate('cozy')}/>
           <div className="section-title-row"><h2>Seu progresso até aqui</h2><span className="muted">Cada conquista conta! 🌷</span></div>
           <div className="stats-grid"><div className="stat-card"><StatIcon tone="purple"><BookOpen size={22}/></StatIcon><div className="stat-number">{stats.attempts}</div><div className="stat-label">Simulados feitos</div><div className="stat-foot">Continue praticando</div></div><div className="stat-card"><StatIcon tone="green"><CheckCircle2 size={22}/></StatIcon><div className="stat-number">{stats.totalCorrect}</div><div className="stat-label">Questões certas</div><div className="stat-foot">Muito bem!</div></div><div className="stat-card"><StatIcon tone="orange"><Target size={22}/></StatIcon><div className="stat-number">{stats.accuracy}%</div><div className="stat-label">Taxa de acertos</div><div className="stat-foot">{stats.attempts?'Rumo aos 100%':'Seu ponto de partida'}</div></div><div className="stat-card"><StatIcon tone="blue"><Award size={22}/></StatIcon><div className="stat-number">{stats.points}</div><div className="stat-label">Pontos conquistados</div><div className="stat-foot">10 por acerto</div></div></div>
           <div className="dashboard-bottom"><div className="panel"><div className="panel-header"><div><span className="panel-kicker">PRÓXIMO PASSO</span><h3>O que vamos estudar?</h3></div><Brain size={21} className="muted"/></div><div className="quick-actions"><button onClick={() => {setReviewMode(false);setSetupSubjects([]);setSetupCount(10);setPage('setup');}}><span className="quick-ico purple"><FileQuestion size={22}/></span><span><strong>Simulado surpresa</strong><small>Questões de várias matérias</small></span><ChevronRight size={17}/></button><button onClick={() => {setReviewMode(false);setSetupSubjects([]);setPage('setup');}}><span className="quick-ico mint"><BookOpen size={22}/></span><span><strong>Escolher matérias</strong><small>Foque no que precisa melhorar</small></span><ChevronRight size={17}/></button><button onClick={() => navigate('cozy')}><span className="quick-ico peach"><Sun size={22}/></span><span><strong>Meu Cantinho 🌻</strong><small>Estudar sem pressão com Girassol e Cartinhas</small></span><ChevronRight size={17}/></button><button onClick={startReview} disabled={!wrongIds.size}><span className="quick-ico peach"><RotateCcw size={22}/></span><span><strong>Revisar meus erros</strong><small>{wrongIds.size ? `${wrongIds.size} questões esperando revisão` : 'Aparecerá após seus primeiros erros'}</small></span><ChevronRight size={17}/></button></div></div>
           <div className="panel recommendation-panel"><div className="panel-header"><div><span className="panel-kicker">FOCO INTELIGENTE</span><h3>Seu plano de melhoria</h3></div><Lightbulb size={21} className="muted"/></div>{breakdown.length ? <><p className="panel-intro">Com base nos simulados que você fez, vale dar mais atenção a:</p><div className="focus-list">{breakdown.slice(0,3).map((s,i) => <div key={s.subject} className="focus-item"><span className="focus-num">0{i+1}</span><span><strong>{s.subject}</strong><small>{s.correct} de {s.total} acertos • {s.accuracy}%</small></span><div className="mini-progress"><span style={{width:`${s.accuracy}%`}}/></div></div>)}</div><button className="text-link" onClick={() => navigate('progress')}>Ver análise completa <ArrowRight size={16}/></button></> : <div className="empty-compact"><span>🌱</span><strong>Tudo começa com o primeiro passo</strong><p>Faça um simulado para descobrir seus pontos fortes e onde vale revisar.</p></div>}</div></div>
           {attempts.length > 0 && <section className="panel recent-panel"><div className="panel-header"><h3>Últimos simulados</h3><button className="text-link" onClick={() => navigate('progress')}>Ver todos <ArrowRight size={15}/></button></div><div className="history-list">{attempts.slice(0,3).map(a => <button key={a.id} onClick={() => openAttempt(a)}><span className="history-icon"><CheckCircle2 size={19}/></span><span className="history-name">Simulado • {a.snapshots.length} questões<small>{prettyDateTime(a.finishedAt)} · {a.exerciseFormat==='alternatives'?'A–E adaptado':summarizeMode(a.gradeMode)}</small></span><strong>{a.accuracy}%</strong><ChevronRight size={17}/></button>)}</div></section>}
         </>}
-        {page === 'cozy' && <CozyStudy key={activeId} profileId={activeId} profileName={profile.name} questions={allQuestions} cloudSync={authUid===activeId && !!profile.cloud}/>}
+        {page === 'cozy' && <CozyStudy key={activeId} profileId={activeId} profileName={profile.name} questions={allQuestions} cloudSync={authUid===activeId && !!profile.cloud} streak={streak} onProgressChange={setCozyProgress}/>}
         {page === 'setup' && <><div className="page-heading"><div><span className="eyebrow"><Settings2 size={15}/> PERSONALIZE SEU ESTUDO</span><h1>Preparar simulado <span>✏️</span></h1><p>Escolha como quer praticar hoje. Você está no controle!</p></div></div>{quiz && <div className="resume-banner"><div><strong>Você tem um simulado em andamento.</strong><span>Retome de onde parou quando quiser.</span></div><button className="btn btn-primary" onClick={() => setPage('quiz')}>Continuar <ArrowRight size={17}/></button><button className="icon-btn" aria-label="Descartar simulado" title="Descartar simulado" onClick={() => {if (confirm('Descartar o simulado em andamento? Suas respostas atuais serão perdidas.')) {setQuiz(null);storage.saveQuiz(activeId,null);}}}><Trash2 size={17}/></button></div>}
           <div className="setup-layout"><section className="panel setup-main">
             <div className="form-section">
