@@ -2,12 +2,12 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   ArrowLeft, ArrowRight, Award, BookOpen, Brain, Building2, CalendarDays, ChartNoAxesCombined,
   Check, CheckCircle2, ChevronDown, ChevronRight, CircleHelp, Clock3, Cloud,
-  Download, ExternalLink, FileQuestion, FileUp, GraduationCap, Heart, Home,
+  Download, ExternalLink, FileQuestion, FileUp, GraduationCap, Heart, Home, BookMarked,
   Lightbulb, LogOut, Medal, Menu, Plus, RotateCcw, Search, Settings2, ShieldCheck,
   Sparkles, Sun, Target, Trash2, TrendingUp, Trophy, X, XCircle
 } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { cloudEnabled, formatAuthError, getCloudCustom, getCloudCozy, loadCloudAttempts, loginGoogle, logoutGoogle, saveCloudAttempt, saveCloudCustom, saveCloudCozy, saveLeaderboard, syncProfile, toProfile, watchLeaderboard, watchUser } from './lib/firebase';
+import { cloudEnabled, formatAuthError, getCloudCustom, getCloudCozy, getCloudNotebook, loadCloudAttempts, loginGoogle, logoutGoogle, saveCloudAttempt, saveCloudCustom, saveCloudCozy, saveCloudNotebook, saveLeaderboard, syncProfile, toProfile, watchLeaderboard, watchUser } from './lib/firebase';
 import { calculateResult, compileOriginStats, compileStats, formatAnswer, getWrongQuestionIds, pickQuestions, subjectBreakdown, summarizeMode, topicBreakdown } from './lib/engine';
 import { generateAlternativeQuestions } from './lib/alternatives';
 import { chooseQuizAnswer, isQuizAnswerRevealed, revealQuizAnswer } from './lib/quiz-feedback';
@@ -18,6 +18,8 @@ import { storage } from './lib/storage';
 import { mergeCozy } from './lib/cozy';
 import CozyStudy from './components/CozyStudy';
 import StreakGarden from './components/StreakGarden';
+import NotebookDock from './components/NotebookDock';
+import { activeNotebook, hasNotebookQuestion, mergeNotebook, normalizeNotebook, saveNotebookQuestion, type NotebookData } from './lib/notebook';
 import { computeStudyStreak } from './lib/streak';
 import originalQuestions from './data/questions.json';
 import officialQuestions from './data/questions_official.json';
@@ -62,6 +64,8 @@ export default function App() {
   const [custom, setCustom] = useState<Question[]>(() => storage.custom(storage.activeId()).map(normalizeQuestion));
   const [quiz, setQuiz] = useState<ActiveQuiz | null>(() => storage.quiz(storage.activeId()));
   const [cozyProgress, setCozyProgress] = useState(() => storage.cozy(storage.activeId()));
+  const [notebook, setNotebook] = useState<NotebookData>(() => storage.notebook(storage.activeId()));
+  const [notebookOpen, setNotebookOpen] = useState(false);
   const [streakNow, setStreakNow] = useState(() => new Date());
   const [result, setResult] = useState<Attempt | null>(null);
   const [page, setPage] = useState<Page>('home');
@@ -101,6 +105,7 @@ export default function App() {
   const stats = useMemo(() => compileStats(activeId, profile?.name || 'Estudante', attempts, profile?.photo), [activeId, attempts, profile?.name, profile?.photo]);
   const streak = useMemo(() => computeStudyStreak(attempts, cozyProgress, streakNow), [attempts, cozyProgress, streakNow]);
   const breakdown = useMemo(() => subjectBreakdown(attempts), [attempts]);
+  const savedQuestionIds = useMemo(() => new Set(activeNotebook(notebook).filter(e=>e.kind==='question').map(e=>e.question?.id).filter((id): id is string => !!id)), [notebook]);
   const wrongIds = useMemo(() => {
     const bankIds = new Set(allQuestions.map(q => q.id));
     return new Set([...getWrongQuestionIds(attempts)].filter(id => bankIds.has(id)));
@@ -139,6 +144,17 @@ export default function App() {
             setCozyProgress(latest);
           }
         }).catch(() => { /* Progresso leve local disponível, mesmo sem conexão. */ });
+        getCloudNotebook(current.id).then(async remote => {
+          if (storage.activeId() !== current.id) return;
+          const merged=mergeNotebook(storage.notebook(current.id),remote);
+          storage.saveNotebook(current.id,merged);
+          setNotebook(merged);
+          const saved=await saveCloudNotebook(current.id,merged);
+          if (storage.activeId() !== current.id) return;
+          const latest=mergeNotebook(storage.notebook(current.id),saved);
+          storage.saveNotebook(current.id,latest);
+          setNotebook(latest);
+        }).catch(() => { /* O caderno local permanece disponível sem rede. */ });
         getCloudCustom(current.id).then(items => {
           if (storage.activeId() !== current.id) return;
           const merged = [...new Map([...storage.custom(current.id), ...items].map(q => [q.id,q])).values()];
@@ -163,10 +179,46 @@ export default function App() {
     const timer = setTimeout(() => setToast(''), 3500); return () => clearTimeout(timer);
   }, [toast]);
 
+  useEffect(() => {
+    if (authUid !== activeId || !profile?.cloud) return;
+    const sync=()=>{
+      if(!navigator.onLine || storage.activeId()!==activeId)return;
+      saveCloudNotebook(activeId,storage.notebook(activeId)).then(remote=>{
+        if(storage.activeId()!==activeId)return;
+        const merged=mergeNotebook(storage.notebook(activeId),remote);
+        storage.saveNotebook(activeId,merged);
+        setNotebook(merged);
+      }).catch(()=>{ /* Reenvia ao entrar novamente no app ou ao recuperar a conexão. */ });
+    };
+    window.addEventListener('online',sync);
+    window.addEventListener('focus',sync);
+    return ()=>{window.removeEventListener('online',sync);window.removeEventListener('focus',sync);};
+  },[authUid,activeId,profile?.cloud]);
+
+  function updateNotebook(next:NotebookData) {
+    const merged=mergeNotebook(storage.notebook(activeId),normalizeNotebook(next));
+    if(!storage.saveNotebook(activeId,merged))throw Error('Não foi possível salvar. Confira o espaço disponível no dispositivo.');
+    setNotebook(merged);
+    if(authUid===activeId&&profile?.cloud) {
+      saveCloudNotebook(activeId,merged).then(remote=>{
+        if(storage.activeId()!==activeId)return;
+        const latest=mergeNotebook(storage.notebook(activeId),remote);
+        storage.saveNotebook(activeId,latest);setNotebook(latest);
+      }).catch(()=>setToast('Caderninho salvo no dispositivo. A sincronização acontecerá quando houver conexão.'));
+    }
+  }
+  function bookmarkQuestion(q:Question) {
+    try {
+      if(!hasNotebookQuestion(storage.notebook(activeId),q.id)) updateNotebook(saveNotebookQuestion(storage.notebook(activeId),q));
+      setNotebookOpen(true);
+      setToast('Questão guardada no Meu Caderninho 📒');
+    } catch(e) {setToast((e as Error).message);}
+  }
+
   function selectUser(id: string) {
     storage.saveActiveId(id); setActiveId(id);
     setAttempts(storage.attempts(id)); setCustom(storage.custom(id)); setQuiz(storage.quiz(id));
-    setCozyProgress(storage.cozy(id)); setStreakNow(new Date());
+    setCozyProgress(storage.cozy(id)); setNotebook(storage.notebook(id)); setNotebookOpen(false); setStreakNow(new Date());
     setResult(null); setPage('home'); setDrawer(false);
   }
   function createProfile() {
@@ -266,7 +318,7 @@ export default function App() {
     setToast('Questões personalizadas removidas.');
   }
   function exportData() {
-    download(JSON.stringify({app:'Rumo ao INSS', version:3, exportedAt: new Date().toISOString(), profile,attempts,custom,cozy:storage.cozy(activeId)},null,2),`rumo-inss-backup-v3-${new Date().toISOString().slice(0,10)}.json`);
+    download(JSON.stringify({app:'Rumo ao INSS', version:4, exportedAt: new Date().toISOString(), profile,attempts,custom,cozy:storage.cozy(activeId),notebook:storage.notebook(activeId)},null,2),`rumo-inss-backup-v4-${new Date().toISOString().slice(0,10)}.json`);
   }
   async function importBackup(file: File | undefined) {
     if (!file || !profile) return;
@@ -289,6 +341,9 @@ export default function App() {
       const cozyMerged=mergeCozy(storage.cozy(activeId),incoming.cozy);
       if (!storage.saveCozy(activeId,cozyMerged)) throw new Error('Sem espaço para guardar o progresso do Meu Cantinho.');
       setCozyProgress(cozyMerged);
+      const noteMerged=mergeNotebook(storage.notebook(activeId),incoming.notebook);
+      if(!storage.saveNotebook(activeId,noteMerged))throw Error('Espaço insuficiente para restaurar as anotações.');
+      setNotebook(noteMerged);
       setToast(`Backup restaurado: ${newItems.length} simulado(s) novo(s) e atividades leves preservadas.`);
       if (authUid === activeId && profile.cloud) {
         try {
@@ -297,6 +352,7 @@ export default function App() {
           }
           await saveCloudCustom(activeId,[...bank.values()]);
           await saveCloudCozy(activeId,cozyMerged);
+          await saveCloudNotebook(activeId,noteMerged);
           await saveLeaderboard(compileStats(activeId,profile.name,merged,profile.photo));
         } catch {setAuthError('Backup restaurado neste dispositivo, mas a sincronização de alguns dados falhou.');}
       }
@@ -403,8 +459,8 @@ export default function App() {
             <div className="form-section"><div className="form-section-head"><span className="step-number">2</span><div><h3>Qual formato de exercício?</h3><p>Dois jeitos de praticar com o mesmo banco de conhecimento.</p></div></div><div className="grade-choices"><button className={setupFormat==='ce'?'selected':''} onClick={()=>{setSetupFormat('ce');setSetupGrade('cebraspe');}}><span className="grade-icon"><Target size={19}/></span><strong>Original • Certo ou Errado</strong><small>Uma afirmação por questão, com gabarito da banca nos itens oficiais.</small></button><button className={setupFormat==='alternatives'?'selected':''} onClick={()=>{setSetupFormat('alternatives');setSetupGrade('normal');}}><span className="grade-icon"><FileQuestion size={19}/></span><strong>Alternativas A–E</strong><small>Cinco afirmações originais combinadas em um exercício adaptado, com uma única resposta.</small></button></div>{setupFormat==='alternatives' && <div className="origin-notice"><CircleHelp size={15}/><span>Treino adaptado, não é uma questão A–E oficial da banca. Cada exercício utiliza 5 itens C/E da mesma matéria; acertos valem +1, erros valem 0.</span></div>}</div>
             <div className="form-section"><div className="form-section-head"><span className="step-number">3</span><div><h3>Quantas questões?</h3><p>Comece com poucas ou desafie seus conhecimentos.</p></div></div><div className="choice-row">{[5,10,20,30,50].map(count => <button key={count} className={`choice-chip ${setupCount===count?'selected':''}`} onClick={() => setSetupCount(count)}>{count}</button>)}<label className="custom-count-label">Outra <input aria-label="Número de questões" type="number" min={1} max={400} value={setupCount} onChange={e => setSetupCount(Math.max(1,Math.min(400,Number(e.target.value)||1)))}/></label></div></div><div className="form-section"><div className="form-section-head"><span className="step-number">4</span><div><h3>Quais matérias?</h3><p>Deixe todas misturadas ou selecione suas favoritas.</p></div></div><button className={`all-subjects ${!setupSubjects.length?'on':''}`} onClick={() => setSetupSubjects([])}><span><Sparkles size={18}/> Todas misturadas</span>{!setupSubjects.length && <Check size={18}/>}</button><div className="subjects-grid">{subjects.map((s,i) => <button key={s} className={`subject-choice ${setupSubjects.includes(s)?'selected':''}`} onClick={() => {setSetupSubjects(prev => prev.includes(s)?prev.filter(x => x!==s):[...prev,s]);}}><span className="subject-emoji">{subjectIcons[knownSubjects.indexOf(s)] || subjectIcons[i%subjectIcons.length]}</span><span>{s}<small>{setupFormat==='alternatives' ? `${generateAlternativeQuestions(availableQuestions.filter(q=>q.subject===s),Number.MAX_SAFE_INTEGER,setupOrigin,[s],()=>0.43).length} exercícios A–E` : `${allQuestions.filter(q => q.subject===s && (!reviewMode || wrongIds.has(q.id)) && !q.options?.length && isAvailableForQuiz(q, setupOrigin)).length} questões`}</small></span><span className="subject-check">{setupSubjects.includes(s)&&<Check size={13}/>}</span></button>)}</div></div><div className="form-section last"><div className="form-section-head"><span className="step-number">5</span><div><h3>Como quer ser avaliada?</h3><p>Você pode treinar sem pressão ou simular a banca.</p></div></div>{setupFormat==='alternatives' ? <div className="origin-notice"><CheckCircle2 size={15}/><span>Treino A–E: +1 acerto, 0 por erro ou em branco. Não utiliza penalidade Cebraspe.</span></div> : <div className="grade-choices"><button className={setupGrade==='normal'?'selected':''} onClick={() => setSetupGrade('normal')}><span className="grade-icon"><Heart size={19}/></span><strong>Treino leve</strong><small>Acertou? +1 ponto. Errou? Sem desconto.</small></button><button className={setupGrade==='cebraspe'?'selected':''} onClick={() => setSetupGrade('cebraspe')}><span className="grade-icon"><Target size={19}/></span><strong>Modo Cebraspe</strong><small>Acerto +1, erro −1, branco 0.</small></button></div>}</div></section><aside className="panel summary-panel"><span className="panel-kicker">TUDO PRONTO?</span><h3>Seu simulado</h3><div className="summary-illustration">📚<span>✦</span></div><div className="summary-line"><span>{setupFormat==='alternatives'?'Base utilizada':'Origem'}</span><strong>{setupOrigin==='authorial'?'✍️ Autorais':setupOrigin==='official'?'🏛️ Oficiais':'🎲 Misturadas'}</strong></div><div className="summary-line"><span>Questões</span><strong>{Math.min(setupCount,availableCount)} de {availableCount} disponíveis</strong></div><div className="summary-line"><span>Matérias</span><strong>{setupSubjects.length?`${setupSubjects.length} selecionadas`:'Todas misturadas'}</strong></div><div className="summary-line"><span>Formato</span><strong>{setupFormat==='alternatives'?'A–E adaptado':'Certo ou Errado'}</strong></div><div className="summary-line"><span>Correção</span><strong>{setupFormat==='alternatives'?'Sem desconto':setupGrade==='normal'?'Treino leve':'Cebraspe'}</strong></div><div className="summary-line"><span>Tipo</span><strong>{reviewMode?'Revisão de erros':'Questões variadas'}</strong></div>{reviewMode && <div className="inline-info"><RotateCcw size={15}/> Somente questões que você errou e ainda não acertou depois.</div>}<button className="btn btn-primary full large" onClick={startQuiz} disabled={!availableCount || !!quiz}>Iniciar simulado <ArrowRight size={18}/></button>{quiz && <p className="helper-center">Termine ou descarte o atual para começar outro.</p>}{setupCount>availableCount && <p className="helper-center">Serão usadas todas as questões disponíveis, sem repetição.</p>}</aside></div>
         </>}
-        {page === 'quiz' && quiz && <QuizView quiz={quiz} onAnswer={setAnswer} onCheck={checkAnswer} onCurrent={setCurrent} onFinish={finishQuiz} onExit={() => setPage('home')}/>}
-        {page === 'result' && result && <ResultView result={result} filter={resultFilter} setFilter={setResultFilter} onReturn={() => navigate('home')} onAgain={() => {setReviewMode(false);setPage('setup');}} onReview={startReview}/>}
+        {page === 'quiz' && quiz && <QuizView quiz={quiz} onAnswer={setAnswer} onCheck={checkAnswer} onCurrent={setCurrent} onFinish={finishQuiz} onExit={() => setPage('home')} onBookmark={bookmarkQuestion} bookmarked={savedQuestionIds}/>}
+        {page === 'result' && result && <ResultView result={result} filter={resultFilter} setFilter={setResultFilter} onReturn={() => navigate('home')} onAgain={() => {setReviewMode(false);setPage('setup');}} onReview={startReview} onBookmark={bookmarkQuestion} bookmarked={savedQuestionIds}/>}
         {page === 'progress' && <><div className="page-heading"><div><span className="eyebrow"><TrendingUp size={15}/> EVOLUÇÃO CONSTANTE</span><h1>Minha evolução <span>🌱</span></h1><p>Uma visão do quanto você já avançou. Compare-se apenas com quem você era ontem.</p></div><div className="page-actions"><button className="btn btn-outline" onClick={exportData}><Download size={17}/> Exportar backup</button><input ref={backupInput} type="file" accept=".json,application/json" hidden onChange={e=>importBackup(e.target.files?.[0])}/><button className="btn btn-outline" onClick={()=>backupInput.current?.click()}><FileUp size={17}/> Restaurar backup</button></div></div>
           <div className="progress-origin-row"><span>Formato do simulado:</span><div className="choice-row">
             <button className={`choice-chip ${progressFormat==='ce'?'selected':''}`} onClick={()=>setProgressFormat('ce')}>Certo/Errado</button>
@@ -476,6 +532,7 @@ export default function App() {
                   {q.options?.length && <ol className="bank-options">{q.options.map((option,i)=><li key={i}><b>{String.fromCharCode(65+i)}.</b> {option}</li>)}</ol>}
                   <div className="bank-question-footer">
                     <span>{q.subject} · {q.topic}</span>
+                    <button className="notebook-save-inline" type="button" onClick={()=>bookmarkQuestion(q)}><BookMarked size={15}/>{savedQuestionIds.has(q.id)?'No caderninho':'Guardar no caderninho'}</button>
                     <details><summary>Ver gabarito</summary><p><b>{formatAnswer(q.correct,q.options)}.</b> {q.explanation}</p></details>
                   </div>
                 </div>;
@@ -487,6 +544,15 @@ export default function App() {
         </>}
       </main>
     </div>
+    <NotebookDock
+      data={notebook}
+      open={notebookOpen}
+      onOpen={() => setNotebookOpen(true)}
+      onClose={() => setNotebookOpen(false)}
+      onChange={updateNotebook}
+      currentQuestion={page==='quiz' ? quiz?.snapshots[quiz.current] : undefined}
+      subjects={subjects}
+    />
     <nav className="mobile-bottom-nav" aria-label="Acesso rápido">{nav.slice(0,5).map(n=><button key={n.id} className={page===n.id?'active':''} onClick={() => navigate(n.id)}>{n.icon}<span>{n.name==='Minha evolução'?'Evolução':n.name}</span></button>)}</nav>
     {toast && <div className="toast" role="status"><Sparkles size={17}/>{toast}<button aria-label="Fechar aviso" onClick={() => setToast('')}><X size={15}/></button></div>}
     {authError && profile && <div className="sync-error" role="alert"><Cloud size={17}/>{authError}<button aria-label="Fechar aviso" onClick={() => setAuthError('')}><X size={15}/></button></div>}
@@ -494,7 +560,7 @@ export default function App() {
 }
 
 function QuizView({
-  quiz, onAnswer, onCheck, onCurrent, onFinish, onExit
+  quiz, onAnswer, onCheck, onCurrent, onFinish, onExit, onBookmark, bookmarked
 }: {
   quiz: ActiveQuiz;
   onAnswer: (a: Selection) => void;
@@ -502,6 +568,8 @@ function QuizView({
   onCurrent: (n: number) => void;
   onFinish: () => void;
   onExit: () => void;
+  onBookmark: (q:Question)=>void;
+  bookmarked: Set<string>;
 }) {
   const [elapsed, setElapsed] = useState(() => Math.round((Date.now() - Date.parse(quiz.startedAt)) / 1000));
   useEffect(() => {
@@ -544,6 +612,7 @@ function QuizView({
           {q.adaptedFrom?.length ? <span className="official-item-tag">✍️ Treino adaptado • 5 afirmações do banco</span> : null}
           {q.source.kind === 'official' && <span className="official-item-tag">🏛️ Cebraspe · INSS {q.source.examYear || 2022} · item {q.source.itemNumber || q.id}</span>}
           <Badge>{q.subject}</Badge><Badge tone="neutral">{q.topic}</Badge>
+          <button type="button" className="notebook-save-inline" onClick={()=>onBookmark(q)}><BookMarked size={15}/>{bookmarked.has(q.id)?'No caderninho':'Guardar questão'}</button>
           {q.source.questionPaperUrl && <a href={q.source.questionPaperUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Caderno <ExternalLink size={12}/></a>}
           {q.source.definitiveKeyUrl && <a href={q.source.definitiveKeyUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Gabarito oficial <ExternalLink size={12}/></a>}
         </div>
@@ -630,7 +699,7 @@ function QuizView({
   </>;
 }
 
-function ResultView({result,filter,setFilter,onReturn,onAgain,onReview}:{result:Attempt,filter:'wrong'|'all',setFilter:(v:'wrong'|'all')=>void,onReturn:()=>void,onAgain:()=>void,onReview:()=>void}) {
+function ResultView({result,filter,setFilter,onReturn,onAgain,onReview,onBookmark,bookmarked}:{result:Attempt,filter:'wrong'|'all',setFilter:(v:'wrong'|'all')=>void,onReturn:()=>void,onAgain:()=>void,onReview:()=>void,onBookmark:(q:Question)=>void,bookmarked:Set<string>}) {
   const [expanded,setExpanded] = useState<string[]>([]);
   const subjects = subjectBreakdown([result]);
   const selected = result.snapshots.filter(q => filter === 'all' || result.answers[q.id] !== q.correct);
@@ -647,7 +716,7 @@ function ResultView({result,filter,setFilter,onReturn,onAgain,onReview}:{result:
             🏛️ Cebraspe · INSS {q.source.examYear || 2022} · item {q.source.itemNumber || q.id}
           </span>
         )}
-        <Badge tone="neutral">{q.subject}</Badge>
+        <Badge tone="neutral">{q.subject}</Badge><button className="notebook-save-inline" type="button" onClick={()=>onBookmark(q)}><BookMarked size={15}/>{bookmarked.has(q.id)?'No caderninho':'Guardar questão'}</button>
         {q.source.kind === 'official' && q.source.questionPaperUrl && (
           <a href={q.source.questionPaperUrl} target="_blank" rel="noopener noreferrer" className="source-meta-link">Caderno <ExternalLink size={12}/></a>
         )}

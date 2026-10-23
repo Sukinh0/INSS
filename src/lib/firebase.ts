@@ -2,6 +2,7 @@ import { initializeApp, getApps, type FirebaseApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, type User } from 'firebase/auth';
 import { collection, doc, getDoc, getDocs, getFirestore, onSnapshot, runTransaction, setDoc } from 'firebase/firestore';
 import { emptyCozy, mergeCozy, sanitizeCozy, type CozyProgress } from './cozy';
+import { emptyNotebook, mergeNotebook, normalizeNotebook, type NotebookData } from './notebook';
 import type { Attempt, Profile, ProfileStats, Question } from '../types';
 
 const env = import.meta.env;
@@ -118,6 +119,24 @@ export async function saveCloudCozy(userId: string, local: CozyProgress): Promis
     const snap = await transaction.get(ref);
     const merged = mergeCozy(sanitizeCozy(snap.data()?.cozy), local);
     transaction.set(ref, { cozy: merged }, { merge: true });
+    return merged;
+  });
+}
+
+/** Caderninho armazenado dentro de users/{uid}, protegido pelas Rules atuais. */
+export async function getCloudNotebook(userId: string):Promise<NotebookData> {
+  if(!db) return emptyNotebook();
+  const snap=await getDoc(doc(db,'users',userId));
+  return normalizeNotebook(snap.data()?.notebook);
+}
+/** Mescla inclusões/edições/exclusões com tombstones para evitar ressuscitar notas apagadas. */
+export async function saveCloudNotebook(userId:string,local:NotebookData):Promise<NotebookData> {
+  if(!db) return normalizeNotebook(local);
+  return runTransaction(db,async tx=>{
+    const ref=doc(db!,'users',userId);
+    const snap=await tx.get(ref);
+    const merged=mergeNotebook(normalizeNotebook(snap.data()?.notebook),local);
+    tx.set(ref,{notebook:merged},{merge:true});
     return merged;
   });
 }
