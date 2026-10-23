@@ -4,10 +4,10 @@ import {
   Check, CheckCircle2, ChevronDown, ChevronRight, CircleHelp, Clock3, Cloud,
   Download, ExternalLink, FileQuestion, FileUp, GraduationCap, Heart, Home,
   Lightbulb, LogOut, Medal, Menu, Plus, RotateCcw, Search, Settings2, ShieldCheck,
-  Sparkles, Target, Trash2, TrendingUp, Trophy, X, XCircle
+  Sparkles, Sun, Target, Trash2, TrendingUp, Trophy, X, XCircle
 } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { cloudEnabled, formatAuthError, getCloudCustom, loadCloudAttempts, loginGoogle, logoutGoogle, saveCloudAttempt, saveCloudCustom, saveLeaderboard, syncProfile, toProfile, watchLeaderboard, watchUser } from './lib/firebase';
+import { cloudEnabled, formatAuthError, getCloudCustom, loadCloudAttempts, loginGoogle, logoutGoogle, saveCloudAttempt, saveCloudCustom, saveCloudCozy, saveLeaderboard, syncProfile, toProfile, watchLeaderboard, watchUser } from './lib/firebase';
 import { calculateResult, compileOriginStats, compileStats, formatAnswer, getWrongQuestionIds, pickQuestions, subjectBreakdown, summarizeMode, topicBreakdown } from './lib/engine';
 import { generateAlternativeQuestions } from './lib/alternatives';
 import { chooseQuizAnswer, isQuizAnswerRevealed, revealQuizAnswer } from './lib/quiz-feedback';
@@ -15,12 +15,14 @@ import { analyzeImport, exampleQuestions, parseQuestions } from './lib/import';
 import { parseBackup } from './lib/backup';
 import { formatOriginBadge, isAvailableForQuiz, normalizeQuestion } from './lib/origin';
 import { storage } from './lib/storage';
+import { mergeCozy } from './lib/cozy';
+import CozyStudy from './components/CozyStudy';
 import originalQuestions from './data/questions.json';
 import officialQuestions from './data/questions_official.json';
 import type { ActiveQuiz, Attempt, ExerciseFormat, GradeMode, OriginFilter, OriginKind, Profile, ProfileStats, Question, Selection } from './types';
 import './styles.css';
 
-type Page = 'home' | 'setup' | 'quiz' | 'result' | 'progress' | 'ranking' | 'bank';
+type Page = 'home' | 'cozy' | 'setup' | 'quiz' | 'result' | 'progress' | 'ranking' | 'bank';
 const BASE = [
   ...(originalQuestions as unknown[]).map(normalizeQuestion),
   ...(officialQuestions as unknown[]).map(normalizeQuestion)
@@ -242,7 +244,7 @@ export default function App() {
     setToast('Questões personalizadas removidas.');
   }
   function exportData() {
-    download(JSON.stringify({app:'Rumo ao INSS', version:2, exportedAt: new Date().toISOString(), profile,attempts,custom},null,2),`rumo-inss-backup-v2-${new Date().toISOString().slice(0,10)}.json`);
+    download(JSON.stringify({app:'Rumo ao INSS', version:3, exportedAt: new Date().toISOString(), profile,attempts,custom,cozy:storage.cozy(activeId)},null,2),`rumo-inss-backup-v3-${new Date().toISOString().slice(0,10)}.json`);
   }
   async function importBackup(file: File | undefined) {
     if (!file || !profile) return;
@@ -262,13 +264,16 @@ export default function App() {
         throw new Error('Armazenamento local cheio: exporte o histórico e libere espaço.');
       }
       setAttempts(merged); setCustom([...bank.values()]);
-      setToast(`Backup restaurado: ${newItems.length} simulado(s) novo(s).`);
+      const cozyMerged=mergeCozy(storage.cozy(activeId),incoming.cozy);
+      if (!storage.saveCozy(activeId,cozyMerged)) throw new Error('Sem espaço para guardar o progresso do Meu Cantinho.');
+      setToast(`Backup restaurado: ${newItems.length} simulado(s) novo(s) e atividades leves preservadas.`);
       if (authUid === activeId && profile.cloud) {
         try {
           for (let index = 0; index < newItems.length; index += 10) {
             await Promise.all(newItems.slice(index,index+10).map(saveCloudAttempt));
           }
           await saveCloudCustom(activeId,[...bank.values()]);
+          await saveCloudCozy(activeId,cozyMerged);
           await saveLeaderboard(compileStats(activeId,profile.name,merged,profile.photo));
         } catch {setAuthError('Backup restaurado neste dispositivo, mas a sincronização de alguns dados falhou.');}
       }
@@ -278,6 +283,7 @@ export default function App() {
 
   const nav = [
     {id:'home',name:'Início',icon:<Home size={19}/>},
+    {id:'cozy',name:'Meu Cantinho',icon:<Sun size={19}/>},
     {id:'setup',name:'Simulados',icon:<BookOpen size={19}/>},
     {id:'progress',name:'Minha evolução',icon:<ChartNoAxesCombined size={19}/>},
     {id:'ranking',name:'Ranking',icon:<Trophy size={19}/>},
@@ -321,10 +327,11 @@ export default function App() {
           <section className="hero-card"><div className="hero-content"><div className="hero-kicker"><span className="pulse-dot"/> O SEU FUTURO ESTÁ SENDO CONSTRUÍDO</div><h2>Um pouquinho todos os dias faz uma <em>grande diferença.</em></h2><p>Não precisa acertar tudo hoje. O importante é continuar evoluindo. 🌻</p><button className="btn btn-white" onClick={() => {if (quiz){setPage('quiz');return;}setReviewMode(false);setPage('setup');}}>{quiz?'Continuar simulado':'Começar um simulado'} <ArrowRight size={18}/></button></div><div className="hero-art" aria-hidden="true"><div className="orbit orbit-1"/><div className="orbit orbit-2"/><div className="art-star star-a">✦</div><div className="art-star star-b">✧</div><div className="book-art"><div className="book-page page-left"/><div className="book-page page-right"/><div className="book-center"/></div><span className="art-sparkle">✴</span></div></section>
           <div className="section-title-row"><h2>Seu progresso até aqui</h2><span className="muted">Cada conquista conta! 🌷</span></div>
           <div className="stats-grid"><div className="stat-card"><StatIcon tone="purple"><BookOpen size={22}/></StatIcon><div className="stat-number">{stats.attempts}</div><div className="stat-label">Simulados feitos</div><div className="stat-foot">Continue praticando</div></div><div className="stat-card"><StatIcon tone="green"><CheckCircle2 size={22}/></StatIcon><div className="stat-number">{stats.totalCorrect}</div><div className="stat-label">Questões certas</div><div className="stat-foot">Muito bem!</div></div><div className="stat-card"><StatIcon tone="orange"><Target size={22}/></StatIcon><div className="stat-number">{stats.accuracy}%</div><div className="stat-label">Taxa de acertos</div><div className="stat-foot">{stats.attempts?'Rumo aos 100%':'Seu ponto de partida'}</div></div><div className="stat-card"><StatIcon tone="blue"><Award size={22}/></StatIcon><div className="stat-number">{stats.points}</div><div className="stat-label">Pontos conquistados</div><div className="stat-foot">10 por acerto</div></div></div>
-          <div className="dashboard-bottom"><div className="panel"><div className="panel-header"><div><span className="panel-kicker">PRÓXIMO PASSO</span><h3>O que vamos estudar?</h3></div><Brain size={21} className="muted"/></div><div className="quick-actions"><button onClick={() => {setReviewMode(false);setSetupSubjects([]);setSetupCount(10);setPage('setup');}}><span className="quick-ico purple"><FileQuestion size={22}/></span><span><strong>Simulado surpresa</strong><small>Questões de várias matérias</small></span><ChevronRight size={17}/></button><button onClick={() => {setReviewMode(false);setSetupSubjects([]);setPage('setup');}}><span className="quick-ico mint"><BookOpen size={22}/></span><span><strong>Escolher matérias</strong><small>Foque no que precisa melhorar</small></span><ChevronRight size={17}/></button><button onClick={startReview} disabled={!wrongIds.size}><span className="quick-ico peach"><RotateCcw size={22}/></span><span><strong>Revisar meus erros</strong><small>{wrongIds.size ? `${wrongIds.size} questões esperando revisão` : 'Aparecerá após seus primeiros erros'}</small></span><ChevronRight size={17}/></button></div></div>
+          <div className="dashboard-bottom"><div className="panel"><div className="panel-header"><div><span className="panel-kicker">PRÓXIMO PASSO</span><h3>O que vamos estudar?</h3></div><Brain size={21} className="muted"/></div><div className="quick-actions"><button onClick={() => {setReviewMode(false);setSetupSubjects([]);setSetupCount(10);setPage('setup');}}><span className="quick-ico purple"><FileQuestion size={22}/></span><span><strong>Simulado surpresa</strong><small>Questões de várias matérias</small></span><ChevronRight size={17}/></button><button onClick={() => {setReviewMode(false);setSetupSubjects([]);setPage('setup');}}><span className="quick-ico mint"><BookOpen size={22}/></span><span><strong>Escolher matérias</strong><small>Foque no que precisa melhorar</small></span><ChevronRight size={17}/></button><button onClick={() => navigate('cozy')}><span className="quick-ico peach"><Sun size={22}/></span><span><strong>Meu Cantinho 🌻</strong><small>Estudar sem pressão com Girassol e Cartinhas</small></span><ChevronRight size={17}/></button><button onClick={startReview} disabled={!wrongIds.size}><span className="quick-ico peach"><RotateCcw size={22}/></span><span><strong>Revisar meus erros</strong><small>{wrongIds.size ? `${wrongIds.size} questões esperando revisão` : 'Aparecerá após seus primeiros erros'}</small></span><ChevronRight size={17}/></button></div></div>
           <div className="panel recommendation-panel"><div className="panel-header"><div><span className="panel-kicker">FOCO INTELIGENTE</span><h3>Seu plano de melhoria</h3></div><Lightbulb size={21} className="muted"/></div>{breakdown.length ? <><p className="panel-intro">Com base nos simulados que você fez, vale dar mais atenção a:</p><div className="focus-list">{breakdown.slice(0,3).map((s,i) => <div key={s.subject} className="focus-item"><span className="focus-num">0{i+1}</span><span><strong>{s.subject}</strong><small>{s.correct} de {s.total} acertos • {s.accuracy}%</small></span><div className="mini-progress"><span style={{width:`${s.accuracy}%`}}/></div></div>)}</div><button className="text-link" onClick={() => navigate('progress')}>Ver análise completa <ArrowRight size={16}/></button></> : <div className="empty-compact"><span>🌱</span><strong>Tudo começa com o primeiro passo</strong><p>Faça um simulado para descobrir seus pontos fortes e onde vale revisar.</p></div>}</div></div>
           {attempts.length > 0 && <section className="panel recent-panel"><div className="panel-header"><h3>Últimos simulados</h3><button className="text-link" onClick={() => navigate('progress')}>Ver todos <ArrowRight size={15}/></button></div><div className="history-list">{attempts.slice(0,3).map(a => <button key={a.id} onClick={() => openAttempt(a)}><span className="history-icon"><CheckCircle2 size={19}/></span><span className="history-name">Simulado • {a.snapshots.length} questões<small>{prettyDateTime(a.finishedAt)} · {a.exerciseFormat==='alternatives'?'A–E adaptado':summarizeMode(a.gradeMode)}</small></span><strong>{a.accuracy}%</strong><ChevronRight size={17}/></button>)}</div></section>}
         </>}
+        {page === 'cozy' && <CozyStudy key={activeId} profileId={activeId} profileName={profile.name} questions={allQuestions} cloudSync={authUid===activeId && !!profile.cloud}/>}
         {page === 'setup' && <><div className="page-heading"><div><span className="eyebrow"><Settings2 size={15}/> PERSONALIZE SEU ESTUDO</span><h1>Preparar simulado <span>✏️</span></h1><p>Escolha como quer praticar hoje. Você está no controle!</p></div></div>{quiz && <div className="resume-banner"><div><strong>Você tem um simulado em andamento.</strong><span>Retome de onde parou quando quiser.</span></div><button className="btn btn-primary" onClick={() => setPage('quiz')}>Continuar <ArrowRight size={17}/></button><button className="icon-btn" aria-label="Descartar simulado" title="Descartar simulado" onClick={() => {if (confirm('Descartar o simulado em andamento? Suas respostas atuais serão perdidas.')) {setQuiz(null);storage.saveQuiz(activeId,null);}}}><Trash2 size={17}/></button></div>}
           <div className="setup-layout"><section className="panel setup-main">
             <div className="form-section">
@@ -456,7 +463,7 @@ export default function App() {
         </>}
       </main>
     </div>
-    <nav className="mobile-bottom-nav" aria-label="Acesso rápido">{nav.slice(0,4).map(n=><button key={n.id} className={page===n.id?'active':''} onClick={() => navigate(n.id)}>{n.icon}<span>{n.name==='Minha evolução'?'Evolução':n.name}</span></button>)}</nav>
+    <nav className="mobile-bottom-nav" aria-label="Acesso rápido">{nav.slice(0,5).map(n=><button key={n.id} className={page===n.id?'active':''} onClick={() => navigate(n.id)}>{n.icon}<span>{n.name==='Minha evolução'?'Evolução':n.name}</span></button>)}</nav>
     {toast && <div className="toast" role="status"><Sparkles size={17}/>{toast}<button aria-label="Fechar aviso" onClick={() => setToast('')}><X size={15}/></button></div>}
     {authError && profile && <div className="sync-error" role="alert"><Cloud size={17}/>{authError}<button aria-label="Fechar aviso" onClick={() => setAuthError('')}><X size={15}/></button></div>}
   </div>;

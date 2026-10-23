@@ -1471,7 +1471,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
   .panel { padding: 18px; border-radius: 15px; }
   .mobile-bottom-nav {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     position: fixed;
     z-index: 24;
     bottom: 0;
