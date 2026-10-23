@@ -9,6 +9,24 @@
 - A conferência é salva junto ao simulado no dispositivo, de modo que voltar à questão ou recarregar mantém o feedback aberto. Simulados iniciados em versões anteriores continuam compatíveis: respostas existentes também permanecem bloqueadas, mas podem ser conferidas.
 - O histórico, nota e ranking usam os mesmos gabaritos e regras de pontuação de antes; visualizar a correção não altera acertos.
 
+## Meu Cantinho 🌻 — Girassol e Cartinhas do Saber
+
+O menu **Meu Cantinho** é um espaço de estudo acolhedor, **independente dos simulados e do ranking**. Não há cronômetro, nota, obrigação diária ou penalidade.
+
+- **Modo Girassol:** 24 microaulas autorais distribuídas pelas oito matérias. Escolha 1, 3 ou 5 pequenos passos e, opcionalmente, uma matéria. Cada passo tem leitura breve, questão de Certo/Errado e explicação imediata. A estudante pode optar por apenas ler. O jardim cresce pelos passos concluídos, **nunca pelos acertos**.
+- **Cartinhas do Saber:** escolha 5 ou 10 cartões, com assunto específico ou misturado. A frente traz uma afirmação do **banco autoral** e o verso mostra o gabarito e a explicação. Após virar, marque **Já sabia** ou **Quero revisar**. Os cartões indicados para revisão têm prioridade nas próximas sessões.
+- **Retomar:** uma sessão iniciada fica guardada por perfil neste dispositivo. Voltar ao menu e acessar a aba novamente permite continuar de onde parou.
+- **Progresso independente:** eventos de estudo são persistidos separadamente do histórico de provas, da nota Cebraspe, da evolução dos simulados e do leaderboard.
+- **Sincronização:** usando Google/Firebase, os eventos são mesclados no documento `users/{uid}`, campo `cozy`, que já é autorizado pelas Rules atuais. Se a rede falhar, o estudo permanece salvo localmente. A posição da sessão em andamento é **local**, não sincronizada entre aparelhos.
+- **Backup:** exportação `v3` inclui as atividades leves; restauração aceita v1, v2 e v3, sem duplicar eventos.
+- **Transparência:** tanto as microaulas quanto as cartinhas são **treinos adaptados/autorais**. Nunca são apresentados como transcrições oficiais de provas. O conteúdo requer revisão pedagógica e atualização quando houver mudanças legislativas.
+
+### Validação do Cantinho
+
+Antes do deploy, execute `npm ci && npm test && npm run build` e verifique os fluxos em desktop e mobile: iniciar, responder, ler sem responder, concluir, virar cartões, marcar para revisão, fechar a aba, retomar, reiniciar, usar dois perfis, exportar/importar backup e sincronizar com a conta Google. Esta funcionalidade não precisa de alterações de Firestore Rules.
+
+---
+
 ## Novidade — modo Alternativas A–E (treino adaptado)
 
 Em **Simulados → Formato**, a estudante pode escolher:
