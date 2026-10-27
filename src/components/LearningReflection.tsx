@@ -22,7 +22,7 @@ export default function LearningReflection({attempt,saved,onSave,onOpenNotebook}
     return draft?.attemptId===attempt.id?draft.answers:['','',''];
   });
   const [step,setStep]=useState(()=>draft?.attemptId===attempt.id?draft.step:0);
-  const [screen,setScreen]=useState<'invite'|'writing'|'saved'>(saved?'saved':'invite');
+  const [screen,setScreen]=useState<'invite'|'writing'|'saved'|'dismissed'>(saved?'saved':'invite');
   const [message,setMessage]=useState('');
 
   useEffect(()=>{
@@ -64,11 +64,16 @@ export default function LearningReflection({attempt,saved,onSave,onOpenNotebook}
         <span className="reflection-focus"><Lightbulb size={15}/> Vamos falar sobre {guide.focusTopic}.</span>
         <div className="reflection-invite-actions">
           <button type="button" className="btn btn-primary" onClick={start}>{hasDraft?'Continuar minha reflexão':'Quero registrar meu aprendizado'} <ArrowRight size={17}/></button>
-          <span className="reflection-skip-text">Opcional: você pode deixar para depois.</span>
+          <button type="button" className="reflection-decline" onClick={()=>setScreen('dismissed')}>Agora não</button>
         </div>
       </div>
     </div>}
 
+    {screen==='dismissed'&&<div className="reflection-dismissed">
+      <span aria-hidden="true">🌱</span>
+      <p>Tudo bem não escrever hoje. Seu resultado está salvo, e você pode voltar aqui quando quiser.</p>
+      <button type="button" onClick={()=>setScreen('invite')}>Quero refletir depois <ArrowRight size={15}/></button>
+    </div>}
     {screen==='writing'&&<div className="reflection-writing">
       <div className="reflection-writing-head">
         <span className="reflection-eyebrow"><BookHeart size={16}/> MEU APRENDIZADO DE HOJE</span>
@@ -108,7 +113,7 @@ export default function LearningReflection({attempt,saved,onSave,onOpenNotebook}
           {step===2?'Guardar aprendizado':'Continuar'} {step===2?<NotebookPen size={17}/>:<ArrowRight size={17}/>}
         </button>
       </div>
-      <button type="button" className="reflection-skip" onClick={()=>{setScreen('invite');setMessage('');}}>Deixar para depois</button>
+      <button type="button" className="reflection-skip" onClick={()=>{setScreen('dismissed');setMessage('');}}>Deixar para depois</button>
     </div>}
 
     {screen==='saved'&&<div className="reflection-saved">
