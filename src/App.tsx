@@ -580,8 +580,8 @@ function QuizView({
   const q = quiz.snapshots[quiz.current];
   const answered = quiz.snapshots.filter(item => quiz.answers[item.id] != null).length;
   const selection = quiz.answers[q.id] ?? null;
-  const locked = selection !== null;
   const checked = isQuizAnswerRevealed(quiz, q.id);
+  const locked = checked;
   const right = checked && selection === q.correct;
   const last = quiz.current === quiz.snapshots.length - 1;
   const originBadge = formatOriginBadge(q.source, q.status);
@@ -629,10 +629,10 @@ function QuizView({
               type="button"
               key={letter}
               className={`answer-option ${selected ? 'chosen' : ''} ${correctAnswer ? 'answer-is-correct' : ''} ${wrongAnswer ? 'answer-is-wrong' : ''}`}
-              onClick={() => onAnswer(letter)}
+              onClick={() => onAnswer(selected ? null : letter)}
               disabled={locked}
               aria-pressed={selected}
-              title={locked ? 'Resposta registrada e bloqueada' : undefined}
+              title={locked ? 'Resposta conferida: não é possível alterar' : selected ? 'Toque novamente para deixar em branco' : 'Selecionar resposta'}
             >
               <span className="answer-letter">{letter}</span>
               <div><strong>{title}</strong>{detail && <small>{detail}</small>}</div>
@@ -641,13 +641,13 @@ function QuizView({
           })}
         </div>
         <p className="answer-lock-note" role="status">
-          {locked ? <><ShieldCheck size={15}/> Resposta registrada e bloqueada. Não é possível alterá-la.</> : <><CircleHelp size={15}/> A escolha fica definitiva ao selecionar uma resposta. Você também pode deixar em branco.</>}
+          {checked ? <><ShieldCheck size={15}/> Resposta conferida e definitiva. Não é possível alterá-la.</> : selection ? <><CircleHelp size={15}/> Pode trocar ou desmarcar sua resposta até clicar em “Conferir minha resposta”.</> : <><CircleHelp size={15}/> Escolha uma alternativa. Você pode mudar antes de conferir ou deixar a questão em branco.</>}
         </p>
         <div className="quiz-check-area">
-          <button type="button" className="btn btn-primary full" disabled={!locked || checked} onClick={onCheck}>
+          <button type="button" className="btn btn-primary full" disabled={selection === null || checked} onClick={onCheck}>
             <CheckCircle2 size={18}/>{checked ? 'Resposta conferida' : 'Conferir minha resposta'}
           </button>
-          {!locked && <span className="helper-center">Selecione Certo/Errado ou uma alternativa de A a E para conferir.</span>}
+          {selection === null && <span className="helper-center">Selecione Certo/Errado ou uma alternativa de A a E para conferir.</span>}
         </div>
         {checked && (
           <div className={`quiz-feedback ${right ? 'quiz-feedback-correct' : 'quiz-feedback-wrong'}`} role="status" aria-live="polite">
