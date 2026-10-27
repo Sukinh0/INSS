@@ -1,6 +1,8 @@
-import type { Question } from '../types';
+import type { Attempt, Question } from '../types';
+import { canSaveReflection, cleanReflectionAnswers, reflectionGuide, type ReflectionAnswer } from './reflection';
 
-export type NotebookKind = 'note' | 'question';
+export type NotebookKind = 'note' | 'question' | 'reflection';
+export type NotebookReflection = { attemptId: string; finishedAt: string; subjects: string[]; correct: number; wrong: number; blank: number; questions: ReflectionAnswer[] };
 export type NotebookQuestionRef = {
   id: string;
   statement: string;
@@ -17,6 +19,7 @@ export type NotebookEntry = {
   topic: string;
   studyLater: boolean;
   question?: NotebookQuestionRef;
+  reflection?: NotebookReflection;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
@@ -40,7 +43,7 @@ export function normalizeNotebook(value:unknown): NotebookData {
   for(const raw of entries.slice(-MAX_NOTEBOOK_ENTRIES)) {
     if (!raw || typeof raw !== 'object' || Array.isArray(raw)) continue;
     const item=raw as Partial<NotebookEntry>;
-    if ((item.kind !== 'note' && item.kind !== 'question') || !item.id || typeof item.id!=='string' || item.id.length>200) continue;
+    if ((item.kind !== 'note' && item.kind !== 'question' && item.kind !== 'reflection') || !item.id || typeof item.id!=='string' || item.id.length>200) continue;
     const createdAt=date(item.createdAt), updatedAt=date(item.updatedAt), deletedAt=date(item.deletedAt);
     if (!createdAt || !updatedAt) continue;
     const rawQ=item.question;
@@ -53,12 +56,26 @@ export function normalizeNotebook(value:unknown): NotebookData {
         ...(url(rawQ.sourceUrl) ? {sourceUrl:url(rawQ.sourceUrl)} : {})
       } : undefined;
     if (item.kind==='question' && !question) continue;
+    const rawReflection=item.reflection;
+    const reflection= item.kind==='reflection' && rawReflection && typeof rawReflection==='object'
+      && typeof rawReflection.attemptId==='string' && rawReflection.attemptId.length<=120
+      && date(rawReflection.finishedAt) && Array.isArray(rawReflection.questions)
+      && rawReflection.questions.length===3 && rawReflection.questions.every(x=>x && typeof x.prompt==='string' && typeof x.answer==='string')
+      ? {
+          attemptId:safe(rawReflection.attemptId,120),finishedAt:rawReflection.finishedAt,
+          subjects:Array.isArray(rawReflection.subjects)?rawReflection.subjects.filter((x):x is string=>typeof x==='string').slice(0,20).map(x=>x.slice(0,100)):[],
+          correct:Number.isInteger(rawReflection.correct)&&rawReflection.correct>=0?rawReflection.correct:0,
+          wrong:Number.isInteger(rawReflection.wrong)&&rawReflection.wrong>=0?rawReflection.wrong:0,
+          blank:Number.isInteger(rawReflection.blank)&&rawReflection.blank>=0?rawReflection.blank:0,
+          questions:cleanReflectionAnswers(rawReflection.questions)
+        } : undefined;
+    if (item.kind==='reflection' && !reflection) continue;
     const entry:NotebookEntry={
       id:item.id,kind:item.kind,
       title:safe(item.title,100),text:safe(item.text,NOTEBOOK_BODY_LIMIT),
       subject:safe(item.subject,100),topic:safe(item.topic,100),
       studyLater:item.studyLater===true,createdAt,updatedAt,
-      ...(question?{question}:{}),...(deletedAt?{deletedAt}:{})
+      ...(question?{question}:{}),...(reflection?{reflection}:{}),...(deletedAt?{deletedAt}:{})
     };
     const prev=out.get(entry.id);
     if (!prev || newer(entry,prev)===entry) out.set(entry.id,entry);
@@ -142,4 +159,46 @@ export function deleteNotebookEntry(data:NotebookData,id:string,now=new Date().t
 }
 export function hasNotebookQuestion(data:NotebookData,id:string):boolean {
   return activeNotebook(data).some(e=>e.id==='q:'+id);
+}
+
+/** Registra um único diário por tentativa. Salvar novamente atualiza o mesmo registro. */
+export function saveNotebookReflection(data:NotebookData, attempt:Attempt, responses:ReflectionAnswer[], now=new Date().toISOString()):NotebookData {
+  const clean=normalizeNotebook(data);
+  if (!canSaveReflection(responses)) throw Error('Escreva ao menos uma frase para guardar seu aprendizado.');
+  const id='reflection:'+attempt.id;
+  const existing=clean.entries.find(e=>e.id===id);
+  if (!existing || existing.deletedAt) assertSpace(clean,true);
+  const guide=reflectionGuide(attempt);
+  const questions=guide.questions.map((question,i)=>({
+    prompt:question.prompt, answer:cleanReflectionAnswers(responses)[i]?.answer??''
+  }));
+  const entry:NotebookEntry={
+    id,kind:'reflection',title:`Meu aprendizado de ${new Date(attempt.finishedAt).toLocaleDateString('pt-BR')}`,
+    text:'',subject:guide.focusSubject,topic:guide.focusTopic,
+    studyLater:existing?.studyLater??false,
+    createdAt:existing?.createdAt??now,updatedAt:now,
+    reflection:{
+      attemptId:attempt.id.slice(0,120),finishedAt:attempt.finishedAt,
+      subjects:guide.subjects.slice(0,20),correct:attempt.correct,wrong:attempt.wrong,blank:attempt.blank,
+      questions
+    }
+  };
+  return mergeNotebook(clean,{version:1,entries:[entry]});
+}
+
+/** Permite reescrever respostas no caderno sem precisar recarregar o simulado. */
+export function editNotebookReflection(data:NotebookData,id:string,responses:ReflectionAnswer[],now=new Date().toISOString()):NotebookData {
+  const clean=normalizeNotebook(data);
+  const old=clean.entries.find(e=>e.id===id && e.kind==='reflection' && !e.deletedAt);
+  if (!old?.reflection) throw Error('Registro de aprendizado não encontrado.');
+  if (!canSaveReflection(responses)) throw Error('Escreva ao menos uma frase para salvar.');
+  const answers=cleanReflectionAnswers(responses);
+  const next:NotebookEntry={...old,updatedAt:now,reflection:{...old.reflection,questions:old.reflection.questions.map((x,i)=>({
+    prompt:x.prompt,answer:answers[i]?.answer??''
+  }))}};
+  return mergeNotebook(clean,{version:1,entries:[next]});
+}
+
+export function findNotebookReflection(data:NotebookData,attemptId:string):NotebookEntry|undefined {
+  return activeNotebook(data).find(e=>e.kind==='reflection' && e.reflection?.attemptId===attemptId);
 }
