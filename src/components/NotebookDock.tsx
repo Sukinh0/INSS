@@ -22,9 +22,10 @@ type Props={
   onClose:()=>void;
   onChange:(next:NotebookData)=>void;
   onOpenAttempt?:(attemptId:string)=>void;
+  focusReflections?:boolean;
 };
 
-export default function NotebookDock({data,open,currentQuestion,subjects,onOpen,onClose,onChange,onOpenAttempt}:Props) {
+export default function NotebookDock({data,open,currentQuestion,subjects,onOpen,onClose,onChange,onOpenAttempt,focusReflections=false}:Props) {
   const [filter,setFilter]=useState<Filter>('all');
   const [search,setSearch]=useState('');
   const [editingId,setEditingId]=useState<string|null>(null);
@@ -51,6 +52,10 @@ export default function NotebookDock({data,open,currentQuestion,subjects,onOpen,
     const value=`${e.title} ${e.text} ${e.subject} ${e.topic} ${e.question?.statement??''} ${e.reflection?.questions.map(x=>x.prompt+' '+x.answer).join(' ')??''}`.toLocaleLowerCase('pt-BR');
     return value.includes(search.toLocaleLowerCase('pt-BR'));
   });
+
+  useEffect(()=>{
+    if(open && focusReflections){setFilter('reflections');setSearch('');setEditingId(null);setCreating(false);}
+  },[open,focusReflections]);
 
   useEffect(()=>{
     if(!open)return;
