@@ -54,3 +54,12 @@ export function canSaveReflection(answers: ReflectionAnswer[]): boolean {
 export function reflectionPreview(question: Question):string {
   return [question.subject,question.topic].filter(Boolean).join(' · ');
 }
+
+/** Rascunho local separado por perfil; não afeta histórico nem notas. */
+export type ReflectionDraft = { attemptId:string; step:number; answers:string[] };
+export function normalizeReflectionDraft(value:unknown):ReflectionDraft|null {
+  if(!value || typeof value!=='object' || Array.isArray(value))return null;
+  const v=value as Partial<ReflectionDraft>;
+  if(typeof v.attemptId!=='string' || !v.attemptId.length || v.attemptId.length>120 || !Number.isInteger(v.step) || (v.step??-1)<0 || (v.step??3)>2 || !Array.isArray(v.answers) || v.answers.length!==3 || !v.answers.every(s=>typeof s==='string'))return null;
+  return {attemptId:v.attemptId,step:v.step!,answers:v.answers.map(s=>s.slice(0,MAX_REFLECTION_ANSWER))};
+}
