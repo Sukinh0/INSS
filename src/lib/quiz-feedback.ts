@@ -1,16 +1,20 @@
 import type { ActiveQuiz, Selection } from '../types';
 
 /**
- * Uma escolha é definitiva. Isso também protege simulados antigos
- * retomados com respostas já registradas antes da atualização.
+ * Selecionar uma opção é provisório: até clicar em "Conferir minha resposta",
+ * a estudante pode trocar a alternativa ou voltar a deixar em branco.
+ * A conferência é o ÚNICO evento que torna a resposta definitiva.
  */
 export function chooseQuizAnswer(quiz: ActiveQuiz, answer: Selection): ActiveQuiz {
   const question = quiz.snapshots[quiz.current];
-  if (!question || answer === null || quiz.answers[question.id] != null) return quiz;
-  const allowed = question.options?.length
-    ? 'ABCDE'.slice(0, question.options.length).includes(answer)
-    : answer === 'C' || answer === 'E';
-  if (!allowed) return quiz;
+  if (!question || isQuizAnswerRevealed(quiz, question.id)) return quiz;
+
+  const allowed = answer === null || (
+    question.options?.length
+      ? 'ABCDE'.slice(0, question.options.length).includes(answer)
+      : answer === 'C' || answer === 'E'
+  );
+  if (!allowed || (quiz.answers[question.id] ?? null) === answer) return quiz;
   return { ...quiz, answers: { ...quiz.answers, [question.id]: answer } };
 }
 
