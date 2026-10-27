@@ -92,8 +92,7 @@ export default function NotebookDock({data,open,currentQuestion,subjects,onOpen,
       if(creating)onChange(createNotebookNote(data,draft));
       else if(editingId && editingReflection?.reflection) {
         const questions=editingReflection.reflection.questions.map((q,i)=>({prompt:q.prompt,answer:reflectionAnswers[i]??''}));
-        const updated=editNotebookReflection(data,editingId,questions);
-        onChange(draft.studyLater===editingReflection.studyLater?updated:editNotebookEntry(updated,editingId,{studyLater:draft.studyLater}));
+        onChange(editNotebookReflection(data,editingId,questions,new Date().toISOString(),draft.studyLater));
       } else if(editingId)onChange(editNotebookEntry(data,editingId,draft));
       cancelEditor();
     }catch(e){setError((e as Error).message);}
