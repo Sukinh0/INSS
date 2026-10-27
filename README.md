@@ -1,5 +1,22 @@
 # Rumo ao INSS 🌻
 
+## O que aprendi hoje? 📖 — Diário de Aprendizado
+
+Ao **finalizar um simulado**, a tela de resultados convida a estudante a contar o que aprendeu. A atividade é **opcional** e segue o formato B: **uma pergunta por vez**, com botões **Anterior**, **Continuar** e **Guardar aprendizado**.
+
+- O roteiro tem **3 perguntinhas curtas** e é gerado localmente conforme as matérias e tópicos do simulado. O app escolhe primeiro o assunto com mais erros ou brancos, sem inventar explicações nem exigir serviços de IA.
+- Pergunta 1: o que ficou mais claro sobre o assunto; pergunta 2: como explicaria com suas próprias palavras para uma amiga; pergunta 3: o que ainda quer revisar.
+- Todos os campos são **opcionais**; basta escrever um dos três para salvar. É possível avançar em branco, voltar, deixar para depois ou simplesmente ignorar o convite.
+- O rascunho é guardado **localmente por perfil e tentativa**, permitindo retomar a reflexão sem perder o que foi escrito. Ele não é sincronizado até que a estudante salve o aprendizado.
+- Ao guardar, cria/atualiza **um único registro por simulado** em **Meu Caderninho → Aprendizados**, com perguntas e respostas, data, matérias, número de acertos/erros/brancos e ID da tentativa. A estudante pode editar, pesquisar, marcar **Estudar depois**, excluir e retornar ao resultado do simulado.
+- A reflexão usa a sincronização Firebase/Google e exportação de backup **v4** já existentes no Caderninho. Dados antigos continuam legíveis.
+- **Sem nota, sem IA julgando textos e sem streak extra:** o diário nunca altera o resultado Cebraspe, ranking, histórico, gabaritos ou dias da sequência Girassol.
+- Respostas escritas: máximo 900 caracteres por campo; limite geral de 100 itens ativos no Caderninho.
+
+**QA:** `npm test && npm run build`. Testar C/E e A–E, erros vs. acertos, pular perguntas, sair/retomar rascunho, salvar e editar no Caderninho, abrir simulado vinculado, perfis diferentes, backup e sync após reconexão. Revisar visualmente mobile e desktop antes do merge.
+
+---
+
 ## Conferir minha resposta durante o simulado
 
 - **Selecionar é provisório:** a estudante pode trocar quantas vezes quiser entre Certo/Errado ou A–E. Tocar novamente na alternativa já selecionada a deixa em branco. A escolha provisória permanece salva e pode ser alterada até mesmo ao retornar de outra questão.

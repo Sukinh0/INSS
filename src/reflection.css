@@ -1,0 +1,50 @@
+/* Diário de Aprendizado — conversa breve e acolhedora no pós-simulado */
+.reflection-wrap { margin:24px 0; border:1px solid #EBD7A5; border-radius:20px; overflow:hidden; background:linear-gradient(125deg,#FFF5D9,#FFFDF7 78%); box-shadow:0 8px 26px rgba(123,88,22,.06); }
+.reflection-invite { display:flex;align-items:center;gap:22px;padding:25px 29px; }
+.reflection-art {font-size:68px;display:grid;place-items:center;width:112px;height:112px;flex-shrink:0;background:#FFE9BB;border-radius:24px;}
+.reflection-invite-content {flex:1;min-width:0;}
+.reflection-eyebrow {display:inline-flex;align-items:center;gap:7px;color:#9D6A0E;font-size:10px;font-weight:900;letter-spacing:.09em;}
+.reflection-wrap h2 {color:#4D3610;font-size:clamp(21px,2.7vw,27px);letter-spacing:-.035em;line-height:1.32;margin:9px 0;}
+.reflection-wrap p {font-size:13px;line-height:1.75;color:#766042;margin:9px 0;}
+.reflection-focus {display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#805B13;margin:7px 0 14px;padding:7px 11px;border-radius:99px;background:#FFE9B0;}
+.reflection-invite-actions {display:flex;align-items:center;gap:13px;flex-wrap:wrap;}
+.reflection-skip-text {color:#967D57;font-size:11px;}
+.reflection-writing {max-width:690px;margin:0 auto;padding:30px 28px;text-align:center;}
+.reflection-writing-head {display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.reflection-counter {white-space:nowrap;font-size:11px;color:#97701C;font-weight:850;}
+.reflection-dots {display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0 17px;}
+.reflection-dots span {height:7px;border-radius:99px;background:#F1DFC0;}
+.reflection-dots span.active {background:#E3AF32;}
+.reflection-prompt-art {font-size:52px;margin:7px 0 12px;}
+.reflection-writing .reflection-encouragement {font-size:13px;color:#8C744C;margin:10px auto 20px;}
+.reflection-label {text-align:left;display:block;font-weight:800;color:#74531D;font-size:12px;margin-bottom:9px;}
+.reflection-writing textarea {display:block;width:100%;border:1.5px solid #E0C78E;border-radius:13px;background:#FFFDF8;padding:16px;min-height:145px;resize:vertical;font:inherit;line-height:1.6;font-size:14px;color:#44331A;box-sizing:border-box;}
+.reflection-writing textarea:focus-visible {outline:3px solid #F9D36A;outline-offset:1px;}
+.reflection-count {text-align:right;font-size:10px;color:#937C55;margin-top:6px;}
+.reflection-auto-save {display:flex;justify-content:center;gap:7px;align-items:center;font-size:11px!important;color:#7B6B48!important;}
+.reflection-message {background:#FFF0DE;color:#99520E!important;border-radius:9px;padding:10px;}
+.reflection-controls {display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 0;}
+.reflection-controls .btn {min-width:140px;}
+.reflection-skip {margin:12px auto 0;padding:10px;border:0;background:none;color:#927C58;font-size:12px;text-decoration:underline;text-underline-offset:3px;}
+.reflection-saved {padding:29px;text-align:center;}
+.reflection-saved-illustration {display:block;font-size:55px;margin-bottom:12px;}
+.reflection-saved h2 {max-width:540px;margin:10px auto;}
+.reflection-saved p {max-width:545px;margin:10px auto;}
+.reflection-saved-actions {display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:19px 0;}
+.reflection-kindness {display:inline-flex;align-items:center;gap:6px;color:#907540;font-size:11px;}
+@media(max-width:700px) {
+  .reflection-invite {display:block;padding:20px;}
+  .reflection-art {height:72px;width:72px;font-size:45px;border-radius:16px;margin-bottom:16px;}
+  .reflection-writing {padding:20px 16px;}
+  .reflection-writing-head {align-items:flex-start;}
+  .reflection-controls .btn {min-width:0;flex:1;padding:10px 9px;font-size:12px;}
+  .reflection-saved {padding:20px 17px;}
+  .reflection-saved-actions .btn {width:100%;}
+  .reflection-invite-actions .btn {width:100%;}
+}
+
+.reflection-decline {border:0;background:none;color:#896E43;font-size:12px;text-decoration:underline;text-underline-offset:3px;padding:10px 5px;cursor:pointer;}
+.reflection-dismissed {padding:16px 25px;display:flex;align-items:center;gap:13px;flex-wrap:wrap;}
+.reflection-dismissed>span {font-size:26px;}
+.reflection-dismissed p {margin:0;flex:1;min-width:190px;}
+.reflection-dismissed button {display:flex;align-items:center;gap:6px;border:0;background:none;font-size:12px;color:#775116;font-weight:800;padding:9px 0;}
