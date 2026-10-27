@@ -42,3 +42,9 @@
   .reflection-saved-actions .btn {width:100%;}
   .reflection-invite-actions .btn {width:100%;}
 }
+
+.reflection-decline {border:0;background:none;color:#896E43;font-size:12px;text-decoration:underline;text-underline-offset:3px;padding:10px 5px;cursor:pointer;}
+.reflection-dismissed {padding:16px 25px;display:flex;align-items:center;gap:13px;flex-wrap:wrap;}
+.reflection-dismissed>span {font-size:26px;}
+.reflection-dismissed p {margin:0;flex:1;min-width:190px;}
+.reflection-dismissed button {display:flex;align-items:center;gap:6px;border:0;background:none;font-size:12px;color:#775116;font-weight:800;padding:9px 0;}
