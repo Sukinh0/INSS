@@ -187,13 +187,13 @@ export function saveNotebookReflection(data:NotebookData, attempt:Attempt, respo
 }
 
 /** Permite reescrever respostas no caderno sem precisar recarregar o simulado. */
-export function editNotebookReflection(data:NotebookData,id:string,responses:ReflectionAnswer[],now=new Date().toISOString()):NotebookData {
+export function editNotebookReflection(data:NotebookData,id:string,responses:ReflectionAnswer[],now=new Date().toISOString(),studyLater?:boolean):NotebookData {
   const clean=normalizeNotebook(data);
   const old=clean.entries.find(e=>e.id===id && e.kind==='reflection' && !e.deletedAt);
   if (!old?.reflection) throw Error('Registro de aprendizado não encontrado.');
   if (!canSaveReflection(responses)) throw Error('Escreva ao menos uma frase para salvar.');
   const answers=cleanReflectionAnswers(responses);
-  const next:NotebookEntry={...old,updatedAt:now,reflection:{...old.reflection,questions:old.reflection.questions.map((x,i)=>({
+  const next:NotebookEntry={...old,updatedAt:now,studyLater:studyLater??old.studyLater,reflection:{...old.reflection,questions:old.reflection.questions.map((x,i)=>({
     prompt:x.prompt,answer:answers[i]?.answer??''
   }))}};
   return mergeNotebook(clean,{version:1,entries:[next]});
