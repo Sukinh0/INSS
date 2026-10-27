@@ -1,6 +1,7 @@
 import type { ActiveQuiz, Attempt, Profile, Question } from '../types';
 import { sanitizeCozy, type CozyProgress, type CozySession } from './cozy';
 import { normalizeNotebook, type NotebookData } from './notebook';
+import { normalizeReflectionDraft, type ReflectionDraft } from './reflection';
 
 function get<T>(key: string, fallback: T): T {
   try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) as T : fallback; }
@@ -32,5 +33,7 @@ export const storage = {
   },
   saveCozySession: (profileId: string, data: CozySession | null) => put(`inss:cozy-session:${profileId}:v1`,data),
   notebook: (profileId: string): NotebookData => normalizeNotebook(get<unknown>(`inss:notebook:${profileId}:v1`,null)),
-  saveNotebook: (profileId: string, data: NotebookData) => put(`inss:notebook:${profileId}:v1`, normalizeNotebook(data))
+  saveNotebook: (profileId: string, data: NotebookData) => put(`inss:notebook:${profileId}:v1`, normalizeNotebook(data)),
+  reflectionDraft: (profileId: string): ReflectionDraft | null => normalizeReflectionDraft(get<unknown>(`inss:reflection-draft:${profileId}:v1`,null)),
+  saveReflectionDraft: (profileId: string, value: ReflectionDraft | null) => put(`inss:reflection-draft:${profileId}:v1`, value === null ? null : normalizeReflectionDraft(value))
 };
