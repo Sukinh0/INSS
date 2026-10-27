@@ -31,59 +31,96 @@ function quiz(snapshots: Question[], gradeMode: 'normal' | 'cebraspe' = 'cebrasp
   };
 }
 
-describe('escolha definitiva e conferência individual', () => {
-  it('não permite conferir antes de responder', () => {
+describe('seleção editável até conferir a resposta', () => {
+  it('não permite conferir uma questão em branco', () => {
     const q = quiz([original]);
     expect(revealQuizAnswer(q)).toBe(q);
     expect(isQuizAnswerRevealed(q, original.id)).toBe(false);
   });
 
-  it('trava resposta C/E imediatamente, inclusive em tentativas de limpar ou trocar', () => {
-    const originalQuiz = quiz([original]);
-    const answered = chooseQuizAnswer(originalQuiz, 'E');
-    expect(answered.answers['ce-01']).toBe('E');
-    expect(chooseQuizAnswer(answered, 'C')).toBe(answered);
-    expect(chooseQuizAnswer(answered, null)).toBe(answered);
-    expect(originalQuiz.answers['ce-01']).toBeUndefined();
+  it('permite trocar C/E antes de conferir e voltar a deixar em branco', () => {
+    const initial = quiz([original]);
+    const first = chooseQuizAnswer(initial, 'E');
+    expect(first.answers['ce-01']).toBe('E');
+    const second = chooseQuizAnswer(first, 'C');
+    expect(second.answers['ce-01']).toBe('C');
+    const blank = chooseQuizAnswer(second, null);
+    expect(blank.answers['ce-01']).toBeNull();
+    expect(revealQuizAnswer(blank)).toBe(blank);
+    const again = chooseQuizAnswer(blank, 'E');
+    expect(again.answers['ce-01']).toBe('E');
+    expect(initial.answers['ce-01']).toBeUndefined();
+    expect(chooseQuizAnswer(again, 'E')).toBe(again); // idempotência
   });
 
-  it('trava alternativas A–E e não aceita opções incompatíveis com o enunciado', () => {
+  it('permite trocar A–E até a conferência e ignora opções inválidas', () => {
     const q = quiz([alternative], 'normal');
-    expect(chooseQuizAnswer(q, null)).toBe(q);
-    const answered = chooseQuizAnswer(q, 'A');
-    expect(chooseQuizAnswer(answered, 'B')).toBe(answered);
-    expect(answered.answers['ae-01']).toBe('A');
+    const a = chooseQuizAnswer(q, 'A');
+    const b = chooseQuizAnswer(a, 'B');
+    expect(b.answers['ae-01']).toBe('B');
+    const confirmed = revealQuizAnswer(b);
+    expect(chooseQuizAnswer(confirmed, 'C')).toBe(confirmed);
+    expect(chooseQuizAnswer(confirmed, null)).toBe(confirmed);
     const withTwoOptions = {...alternative, options: ['Opção 1', 'Opção 2']};
-    expect(chooseQuizAnswer(quiz([withTwoOptions]), 'C')).toEqual(quiz([withTwoOptions]));
+    const two = quiz([withTwoOptions]);
+    expect(chooseQuizAnswer(two, 'C')).toBe(two);
+    expect(chooseQuizAnswer(two, 'A').answers['ae-01']).toBe('A');
   });
 
-  it('só revela a questão atual e preserva a conferência ao navegar ou recarregar', () => {
+  it('trava a escolha definitiva somente após Conferir minha resposta', () => {
+    const selected = chooseQuizAnswer(quiz([original]), 'E');
+    const corrected = chooseQuizAnswer(selected, 'C');
+    expect(corrected.answers['ce-01']).toBe('C');
+    const confirmed = revealQuizAnswer(corrected);
+    expect(isQuizAnswerRevealed(confirmed, 'ce-01')).toBe(true);
+    expect(chooseQuizAnswer(confirmed, 'E')).toBe(confirmed);
+    expect(chooseQuizAnswer(confirmed, null)).toBe(confirmed);
+    expect(revealQuizAnswer(confirmed)).toBe(confirmed);
+    expect(confirmed.answers['ce-01']).toBe('C');
+  });
+
+  it('respostas não conferidas continuam editáveis ao voltar para uma questão anterior', () => {
+    const first = chooseQuizAnswer(quiz([original, alternative]), 'E');
+    const next: ActiveQuiz = {...first, current: 1};
+    const second = chooseQuizAnswer(next, 'A');
+    const back: ActiveQuiz = {...second, current: 0};
+    const switched = chooseQuizAnswer(back, 'C');
+    expect(switched.answers['ce-01']).toBe('C');
+    expect(switched.answers['ae-01']).toBe('A');
+    expect(switched.checkedAnswers).toEqual({});
+  });
+
+  it('não altera a resposta de uma questão já conferida ao navegar ou recarregar', () => {
     const first = chooseQuizAnswer(quiz([original, alternative]), 'C');
-    const checked = revealQuizAnswer(first);
-    expect(isQuizAnswerRevealed(checked, 'ce-01')).toBe(true);
-    expect(isQuizAnswerRevealed(checked, 'ae-01')).toBe(false);
-    expect(revealQuizAnswer(checked)).toBe(checked);
-    const next = {...checked, current: 1};
+    const confirmed = revealQuizAnswer(first);
+    const next = {...confirmed, current: 1};
     expect(revealQuizAnswer(next)).toBe(next);
-    const persisted = JSON.parse(JSON.stringify({...next, current: 0})) as ActiveQuiz;
-    expect(isQuizAnswerRevealed(persisted, 'ce-01')).toBe(true);
-    expect(chooseQuizAnswer(persisted, 'E')).toBe(persisted);
+    const serialized = JSON.parse(JSON.stringify({...next, current: 0})) as ActiveQuiz;
+    expect(isQuizAnswerRevealed(serialized, 'ce-01')).toBe(true);
+    expect(chooseQuizAnswer(serialized, 'E')).toBe(serialized);
+    expect(chooseQuizAnswer(serialized, null)).toBe(serialized);
   });
 
-  it('compatível com simulados antigos, sem mapa de conferências', () => {
+  it('compatível com simulados antigos: sem registro de conferência, resposta editável', () => {
     const oldQuiz = quiz([original]);
     delete oldQuiz.checkedAnswers;
     oldQuiz.answers['ce-01'] = 'E';
-    expect(chooseQuizAnswer(oldQuiz, 'C')).toBe(oldQuiz);
-    const checked = revealQuizAnswer(oldQuiz);
+    const changed = chooseQuizAnswer(oldQuiz, 'C');
+    expect(changed.answers['ce-01']).toBe('C');
+    const checked = revealQuizAnswer(changed);
     expect(isQuizAnswerRevealed(checked, 'ce-01')).toBe(true);
+    expect(chooseQuizAnswer(checked, 'E')).toBe(checked);
   });
 
-  it('conferir não altera a nota Cebraspe +1/-1 ou a nota A–E sem desconto', () => {
-    const ce = revealQuizAnswer(chooseQuizAnswer(quiz([original]), 'E'));
-    const ae = revealQuizAnswer(chooseQuizAnswer(quiz([alternative], 'normal'), 'B'));
+  it('correção final mantém o último valor escolhido, com ou sem conferência', () => {
     const time = '2026-10-22T10:05:00.000Z';
-    expect(calculateResult(ce, time).score).toBe(-1);
-    expect(calculateResult(ae, time).score).toBe(1);
+    const ce = chooseQuizAnswer(chooseQuizAnswer(quiz([original]), 'E'), 'C');
+    const ae = chooseQuizAnswer(chooseQuizAnswer(quiz([alternative], 'normal'), 'A'), 'B');
+    expect(calculateResult(ce, time).score).toBe(1); // Cebraspe: +1
+    expect(calculateResult(ae, time).score).toBe(1); // A–E: +1
+    const wrongConfirmed = revealQuizAnswer(chooseQuizAnswer(ce, 'E'));
+    expect(calculateResult(wrongConfirmed, time).score).toBe(-1);
+    const wrongAe = revealQuizAnswer(chooseQuizAnswer(ae, 'E'));
+    expect(calculateResult(wrongAe, time).score).toBe(0);
   });
 });
